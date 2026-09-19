@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assistant Surface</title>
+<style>
+:root{
+  --bg:#f6f5f1; --panel:#ffffff; --ink:#1d1c19; --muted:#6d6b64; --line:#e3e1da; --soft:#efede7;
+  --idle:#a8a59b; --think:#3b82c4; --speak:#dd5a2b; --speak-soft:#fbe7de; --warn:#cf3a3a;
+  --accepted:#2e8f57; --bad_timing:#c98a12; --bad_content:#7b5cd1;
+  --mono:ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151513; --panel:#1e1e1b; --ink:#ecebe6; --muted:#9c9a92; --line:#302f2b; --soft:#282723;
+    --idle:#6b6961; --think:#5ba3e6; --speak:#f07a4a; --speak-soft:#3a2219; --warn:#ef5b5b;
+    --accepted:#4cc07d; --bad_timing:#e0a93a; --bad_content:#9d83ea;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151513; --panel:#1e1e1b; --ink:#ecebe6; --muted:#9c9a92; --line:#302f2b; --soft:#282723;
+  --idle:#6b6961; --think:#5ba3e6; --speak:#f07a4a; --speak-soft:#3a2219; --warn:#ef5b5b;
+  --accepted:#4cc07d; --bad_timing:#e0a93a; --bad_content:#9d83ea;
+}
+*{box-sizing:border-box}
+[hidden],#card:empty,#toast:empty{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.embed body{background:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:440px;margin:0 auto;padding:12px 12px 20px;display:grid;gap:10px}
+
+/* presence */
+.presence{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.dot{position:relative;flex:none;width:10px;height:10px;border-radius:50%;background:var(--idle)}
+.dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid transparent}
+.mode-considering .dot{background:var(--think);animation:breathe 1.6s ease-in-out infinite}
+.mode-ready .dot, .mode-open .dot{background:var(--speak)}
+.mode-ready .dot::after{border-color:var(--speak);animation:ring 1.8s ease-out 2}
+.mode-snoozed .dot{background:none;border:2px solid var(--idle)}
+.mode-offline .dot{background:var(--warn)}
+@keyframes breathe{50%{opacity:.35;transform:scale(.8)}}
+@keyframes ring{from{opacity:.9;transform:scale(.6)}to{opacity:0;transform:scale(1.8)}}
+@media (prefers-reduced-motion:reduce){.dot,.dot::after{animation:none!important}}
+.txt{flex:1;min-width:0}
+.title{font-weight:600}
+.sub{color:var(--muted);font-size:12px}
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:5px 10px;white-space:nowrap}
+.btn:hover:not(:disabled){background:var(--soft)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.primary{background:var(--speak);border-color:var(--speak);color:#fff;font-weight:600}
+.btn.primary:hover{filter:brightness(1.08);background:var(--speak)}
+
+/* the thought */
+.card{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--speak);border-radius:12px;padding:12px}
+.card-top{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}
+.card-top .x{margin-left:auto;border:0;background:none;padding:2px 6px;border-radius:6px;font-size:16px;line-height:1;color:var(--muted)}
+.card-top .x:hover{background:var(--soft);color:var(--ink)}
+.content{margin:8px 0 10px;font-size:14px}
+code{font-family:var(--mono);font-size:.9em;background:var(--soft);padding:0 3px;border-radius:4px}
+.why{background:var(--soft);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--muted)}
+.why b{color:var(--ink);font-weight:600}
+.sigs{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.sig{font-size:11px;border:1px solid var(--line);border-radius:99px;padding:0 6px;background:var(--panel)}
+.actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.actions .btn{border-color:var(--c);color:var(--c)}
+.more{font-size:12px;color:var(--muted);margin-top:8px}
+
+.toast{font-size:12px;color:var(--muted);padding:0 4px;min-height:1em}
+
+/* missed help */
+.help{border-top:1px solid var(--line);padding-top:10px}
+.link{border:0;background:none;padding:0;color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+.link:hover{color:var(--ink)}
+.help form{display:grid;gap:6px;margin-top:8px}
+textarea{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 9px;resize:vertical;min-height:54px}
+.row{display:flex;gap:6px;justify-content:flex-end}
+.foot{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+.foot a{color:inherit}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section id="presence" class="presence mode-watching" aria-live="polite">
+    <span class="dot" aria-hidden="true"></span>
+    <div class="txt"><div class="title">Connecting…</div><div class="sub"></div></div>
+    <span id="presence-action"></span>
+  </section>
+
+  <div id="card"></div>
+  <div id="toast" class="toast" role="status"></div>
+
+  <section class="help">
+    <button id="help-toggle" class="link" type="button">Wish I'd spoken up? Tell me</button>
+    <form id="help-form" hidden>
+      <textarea id="help-note" placeholder="What were you stuck on? (optional)" aria-label="What were you stuck on?"></textarea>
+      <div class="row">
+        <button class="btn" type="button" id="help-cancel">Cancel</button>
+        <button class="btn primary" type="submit">Log a miss</button>
+      </div>
+    </form>
+  </section>
+
+  <div class="foot">
+    <span id="tally"></span>
+    <a href="/" target="_blank" rel="noopener">Restraint log ↗</a>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+if (params.get("theme")) document.documentElement.dataset.theme = params.get("theme");
+if (params.has("embed")) document.documentElement.classList.add("embed");
+
+const EXPIRE_MS = 10 * 60 * 1000;        // unopened thoughts become IGNORED after this
+const CONSIDER_STALE_MS = 30 * 1000;     // judge crashed mid-call? stop pulsing
+const SNOOZE_MS = 15 * 60 * 1000;
+const LABEL = {accepted: "helpful", dismissed: "dismissed", ignored: "ignored",
+               bad_timing: "right idea, wrong time", bad_content: "not useful", wanted_help: "a miss"};
+
+const $ = s => document.querySelector(s);
+let recs = {decisions: [], feedback: []};
+let st = {considering: null, snoozed_until: 0, now: Date.now()};
+let skew = 0;                 // server clock minus browser clock
+let online = null;
+let openId = null;            // thought the developer pulled up
+const shownAt = {};           // decision_id -> ms it first appeared as "ready" here
+const sending = new Set();    // decision_ids with feedback in flight
+let lastKey = "";
+
+function el(tag, props = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (v == null || v === false) continue;
+    if (k === "class") n.className = v;
+    else if (k === "style") n.style.cssText = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k, v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) n.append(c.nodeType ? c : String(c));
+  return n;
+}
+const now = () => Date.now() + skew;
+const human = s => s ? s.replace(/_/g, " ").replace(/^./, c => c.toUpperCase()) : "";
+const clock = ms => new Date(ms).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
+const rich = text => (text || "").split(/(`[^`]+`)/).map(p =>
+  p.length > 1 && p.startsWith("`") && p.endsWith("`") ? el("code", {}, p.slice(1, -1)) : p);
+
+function currentSession() {
+  if (params.get("session")) return params.get("session");
+  let best = null, bestTs = -1;
+  for (const r of recs.decisions) if (r.decision.ts > bestTs) { bestTs = r.decision.ts; best = r.session_id; }
+  return best;
+}
+
+function sessionData() {
+  const s = currentSession();
+  const ds = recs.decisions.filter(r => r.session_id === s).sort((a, b) => a.decision.ts - b.decision.ts);
+  const answered = new Set(recs.feedback.filter(f => f.session_id === s && f.decision_id).map(f => f.decision_id));
+  const pending = ds.filter(r => {
+    const id = r.decision.decision_id;
+    if (!r.decision.should_speak || answered.has(id) || sending.has(id)) return false;
+    return id in shownAt || now() - r.decision.ts < EXPIRE_MS;
+  });
+  return {s, ds, pending};
+}
+
+function view() {
+  if (online === false) return {mode: "offline"};
+  if (online === null) return {mode: "connecting"};
+  const {ds, pending} = sessionData();
+  const spoke = ds.filter(r => r.decision.should_speak).length;
+  const base = {quiet: ds.length - spoke, spoke};
+  if (st.snoozed_until > now()) return {...base, mode: "snoozed"};
+  const open = pending.find(r => r.decision.decision_id === openId);
+  if (open) return {...base, mode: "open", rec: open, more: pending.length - 1};
+  if (pending.length) return {...base, mode: "ready", rec: pending[pending.length - 1], more: pending.length - 1};
+  const c = st.considering;
+  if (c && now() - c.since < CONSIDER_STALE_MS) return {...base, mode: "considering"};
+  return {...base, mode: "watching"};
+}
+
+function render() {
+  const v = view();
+  if (v.mode === "ready" || v.mode === "open")
+    for (const r of sessionData().pending) shownAt[r.decision.decision_id] ??= now();
+
+  $("#tally").textContent = !v.quiet && !v.spoke ? "No moments yet"
+                                                 : `Stayed quiet ${v.quiet}× · spoke ${v.spoke}×`;
+  const key = [v.mode, v.rec && v.rec.decision.decision_id, v.more, v.quiet, st.snoozed_until].join("|");
+  if (key === lastKey) return;
+  lastKey = key;
+
+  const p = $("#presence");
+  p.className = "presence mode-" + v.mode;
+  const [title, sub, action] = presenceText(v);
+  p.querySelector(".title").textContent = title;
+  p.querySelector(".sub").textContent = sub;
+  $("#presence-action").replaceChildren(action || "");
+  $("#card").replaceChildren(v.mode === "open" ? card(v.rec, v.more) : "");
+}
+
+function presenceText(v) {
+  const snooze = el("button", {class: "btn", type: "button", onclick: () => setSnooze(now() + SNOOZE_MS)}, "Snooze 15m");
+  switch (v.mode) {
+    case "connecting": return ["Connecting…", "", null];
+    case "offline": return ["Can't reach the assistant", "Is the mailbox server running on :8766?", null];
+    case "snoozed": return ["Snoozed", `Holding everything until ${clock(st.snoozed_until)}`,
+      el("button", {class: "btn", type: "button", onclick: () => setSnooze(0)}, "Resume")];
+    case "considering": return ["Considering something…", "Weighing whether it's worth interrupting you", snooze];
+    case "ready": {
+      const cited = (v.rec.decision.signals_cited || [])[0] || (v.rec.candidate.signals[0] || {}).kind;
+      return ["I have a thought", "Ready when you are" + (cited ? ` · about ${human(cited).toLowerCase()}` : ""),
+        el("button", {class: "btn primary", type: "button", onclick: () => { openId = v.rec.decision.decision_id; render(); }}, "Show")];
+    }
+    case "open": return ["Here's what I noticed", "", null];
+    default: return ["Watching quietly", "I'll only speak up if it's worth breaking your focus", snooze];
+  }
+}
+
+function card(r, more) {
+  const d = r.decision, id = d.decision_id;
+  const signals = r.candidate.signals.filter(s => !(d.signals_cited || []).length || d.signals_cited.includes(s.kind));
+  const act = (kind, text) => el("button", {class: "btn", type: "button", style: `--c:var(--${kind})`,
+    onclick: () => respond(r, kind)}, text);
+  return el("article", {class: "card", "aria-label": "Assistant suggestion"},
+    el("div", {class: "card-top"}, el("span", {}, `${clock(d.ts)} · ${Math.round(d.confidence * 100)}% sure`),
+      el("button", {class: "x", type: "button", title: "Dismiss", "aria-label": "Dismiss", onclick: () => respond(r, "dismissed")}, "×")),
+    el("p", {class: "content"}, rich(d.content)),
+    el("div", {class: "why"}, el("b", {}, "Why now: "), rich(d.reasoning),
+      signals.length ? el("div", {class: "sigs"}, signals.map(s => el("span", {class: "sig", title: s.detail}, human(s.kind)))) : null),
+    el("div", {class: "actions"},
+      act("accepted", "Helpful"),
+      act("bad_timing", "Right idea, wrong time"),
+      act("bad_content", "Not useful")),
+    more > 0 ? el("div", {class: "more"}, `${more} more waiting`) : null);
+}
+
+async function sendFeedback(sessionId, contractVersion, kind, decisionId, note) {
+  const rec = {contract_version: contractVersion || "1.0.0", session_id: sessionId,
+               ts: now(), decision_id: decisionId, kind, note: note || null};
+  try {
+    const r = await fetch("/log", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(rec)});
+    return r.ok && (await r.json()).ok;
+  } catch { return false; }
+}
+
+async function respond(r, kind) {
+  const id = r.decision.decision_id;
+  sending.add(id);
+  if (openId === id) openId = null;
+  render();
+  const ok = await sendFeedback(r.session_id, r.contract_version, kind, id);
+  if (ok) await poll();
+  sending.delete(id);
+  toast(ok ? `Logged as ${LABEL[kind]}. Thanks.` : "Couldn't reach the server, so that wasn't logged.");
+  render();
+}
+
+let toastTimer;
+function toast(text) {
+  $("#toast").textContent = text;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $("#toast").textContent = "", 4000);
+}
+
+async function setSnooze(until) {
+  try {
+    const r = await fetch("/snooze", {method: "POST", headers: {"Content-Type": "application/json"},
+                                      body: JSON.stringify({until: Math.round(until)})});
+    Object.assign(st, await r.json());
+  } catch { toast("Couldn't reach the server."); }
+  render();
+}
+
+// Thoughts that sat unopened past EXPIRE_MS are logged as IGNORED, but only
+// ones this surface actually displayed — never ones it never showed.
+async function expireIgnored() {
+  const {pending} = sessionData();
+  for (const r of pending) {
+    const id = r.decision.decision_id;
+    if (id !== openId && id in shownAt && now() - shownAt[id] > EXPIRE_MS) await respond(r, "ignored");
+  }
+}
+
+async function poll() {
+  try {
+    const [a, b] = await Promise.all([fetch("/records", {cache: "no-store"}), fetch("/state", {cache: "no-store"})]);
+    recs = await a.json();
+    st = await b.json();
+    skew = st.now - Date.now();
+    online = true;
+  } catch {
+    online = false;
+  }
+  render();
+}
+
+$("#help-toggle").addEventListener("click", () => {
+  $("#help-form").hidden = !$("#help-form").hidden;
+  if (!$("#help-form").hidden) $("#help-note").focus();
+});
+$("#help-cancel").addEventListener("click", () => { $("#help-form").hidden = true; $("#help-note").value = ""; });
+$("#help-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const s = currentSession();
+  if (!s) { toast("No session yet, so there's nothing to attach this to."); return; }
+  const any = recs.decisions.find(r => r.session_id === s);
+  const ok = await sendFeedback(s, any && any.contract_version, "wanted_help", null, $("#help-note").value.trim());
+  if (ok) { $("#help-form").hidden = true; $("#help-note").value = ""; await poll(); }
+  toast(ok ? "Logged as a miss. That's how I learn when to speak." : "Couldn't reach the server, so that wasn't logged.");
+});
+
+poll();
+setInterval(poll, 1500);
+setInterval(expireIgnored, 15000);
+</script>
+</body>
+</html>
