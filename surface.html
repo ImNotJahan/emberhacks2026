@@ -101,6 +101,11 @@ textarea{font:inherit;color:var(--ink);background:var(--panel);border:1px solid 
 /* on/off switch: always in reach at the top */
 .head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 4px 0}
 .brand{font:600 13px var(--pixel);letter-spacing:.05em}
+.back{display:inline-flex;align-items:center;gap:7px;padding:5px 9px 5px 7px;border:1px solid var(--line-2);border-radius:7px;background:var(--raise);
+      font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.back:hover{color:var(--ink);border-color:var(--muted)}
+.back .arrow{font:13px/1 var(--mono);transition:transform .15s}
+.back:hover .arrow{transform:translateX(-2px)}
 .switch{display:inline-flex;align-items:center;gap:9px;border:0;background:none;padding:4px 2px;
         font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .switch .rail{position:relative;width:38px;height:22px;border-radius:99px;background:var(--line-2);border:1px solid var(--line-2);transition:background .2s,border-color .2s}
@@ -117,7 +122,8 @@ textarea{font:inherit;color:var(--ink);background:var(--panel);border:1px solid 
 <body>
 <div class="wrap">
   <header class="head">
-    <span class="brand">BIG BROTHER</span>
+    <a class="back" id="back" href="/" hidden><span class="arrow" aria-hidden="true">←</span>Restraint log</a>
+    <span class="brand" id="brand">BIG BROTHER</span>
     <button id="power" class="switch" type="button" role="switch" aria-checked="true" disabled>
       <span class="state">On</span><span class="rail" aria-hidden="true"><span class="knob"></span></span>
     </button>
@@ -403,9 +409,21 @@ $("#help-form").addEventListener("submit", async e => {
   toast(ok ? "Logged as a miss. That's how I learn when to speak." : "Couldn't reach the server, so that wasn't logged.");
 });
 
+const embedded = params.has("embed") && window.parent !== window;
+
+// In a browser tab: a way back to the restraint log, in the same tab.
+if (!embedded) {
+  $("#back").hidden = false;
+  $("#brand").hidden = true;
+  const foot = document.querySelector(".foot a");
+  foot.removeAttribute("target");
+  foot.removeAttribute("rel");
+  foot.textContent = "Restraint log";
+}
+
 // Inside VS Code this page sits in a sandboxed iframe that can't open tabs,
 // so ask the host (surface_webview.js) to open the restraint log instead.
-if (params.has("embed") && window.parent !== window)
+if (embedded)
   document.querySelector(".foot a").addEventListener("click", e => {
     e.preventDefault();
     window.parent.postMessage({type: "big-brother:open", url: new URL("/", location.href).href}, "*");
