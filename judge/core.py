@@ -1,13 +1,16 @@
 """The judge: CandidateMoment -> InterventionDecision, logged every time.
 
-    judge = Judge(session_id="sess_x")
+    judge = Judge(session_id="sess_x")            # no budget
+    judge = Judge("sess_x", "judge-v5", per_hour=3)   # v1-v7 era: 3/hour
     decision = judge.decide(candidate)
 
 Order of operations per candidate:
   1. budget: the bucket (not the caller) is authoritative; its state replaces
-     candidate.budget so the log shows exactly what the model saw
-  2. gates: empty bucket -> budget_exhausted; spoke < cooldown ago -> too_soon.
-     Both skip the model call entirely
+     candidate.budget so the log shows exactly what the model saw. With
+     per_hour=None (the default since v8) there is no budget: the bucket only
+     counts interruptions and each moment is judged on its own merits
+  2. gates: empty bucket (only if budgeted) -> budget_exhausted; spoke less
+     than cooldown ago -> too_soon. Both skip the model call entirely
   3. judge call (timing), with the judge's memory of its last interruption
   4. content call (what to say) — only on should_speak=True
   5. spend a token, append to the decision log
@@ -21,6 +24,7 @@ Any failure fails SILENT: a broken judge must never interrupt anyone.
 from __future__ import annotations
 
 import time
+from dataclasses import asdict
 from typing import Any, Optional
 
 from contract import (
@@ -34,13 +38,13 @@ from judge import content as content_gen
 from judge import gemini
 from judge.budget import TokenBucket
 from judge.log import DecisionLog
-from judge.prompts import LATEST, PROMPTS, schema_for
+from judge.prompts import LATEST, PROMPTS, WITH_HINTS, schema_for
 from judge.render import LastSpoken, render_candidate
 from judge.schema import validate_verdict
 
 
 class Judge:
-    def __init__(self, session_id: str, prompt_version: str = LATEST, per_hour: int = 3,
+    def __init__(self, session_id: str, prompt_version: str = LATEST, per_hour: Optional[int] = None,
                  log: Optional[DecisionLog] = None, with_content: bool = True,
                  model: str = gemini.DEFAULT_MODEL, cooldown_s: float = 240.0,
                  mailbox: bool = False) -> None:
@@ -75,7 +79,7 @@ class Judge:
             self._record(cand, decision, extra)
             return decision
 
-        if cand.budget.remaining < 1:
+        if not self.bucket.unlimited and cand.budget.remaining < 1:
             decision = self._decline(
                 cand, DeclineReason.BUDGET_EXHAUSTED, Trajectory.UNKNOWN, 1.0,
                 f"You've had all {cand.budget.per_hour} interruptions this hour, so "
@@ -89,8 +93,10 @@ class Judge:
             mins = (cand.ts - self.last_spoken.ts) / 60000
             decision = self._decline(
                 cand, DeclineReason.TOO_SOON, Trajectory.UNKNOWN, 1.0,
-                f"I interrupted you {mins:.1f} min ago, so I'm saving the remaining "
-                f"{cand.budget.remaining} interruption(s) rather than stacking another.",
+                (f"I interrupted you {mins:.1f} min ago, so I'm giving you time to act on "
+                 "that rather than stacking another message.") if self.bucket.unlimited else
+                (f"I interrupted you {mins:.1f} min ago, so I'm saving the remaining "
+                 f"{cand.budget.remaining} interruption(s) rather than stacking another."),
                 signal_kinds, t0)
             extra["override"] = f"cooldown ({self.cooldown_ms // 1000}s); judge not called"
             self._record(cand, decision, extra)
@@ -99,7 +105,8 @@ class Judge:
         if self.mailbox:
             self.mailbox.considering(cand)
         try:
-            res = gemini.call(self.system, render_candidate(cand, last_spoken=self.last_spoken),
+            res = gemini.call(self.system, render_candidate(cand, last_spoken=self.last_spoken,
+                                                           hints=self.prompt_version in WITH_HINTS),
                               schema=self.schema,
                               temperature=0.0,
                               model=self.model)
@@ -175,7 +182,9 @@ class Judge:
                 extra: dict[str, Any]) -> None:
         rec = self.log.append(cand, decision, extra)
         if self.mailbox:
-            self.mailbox.log(rec)      # never raises; falls back to unsent.jsonl
+            # Same shape as the local log line: the DecisionRecord plus the judge's
+            # extras, so the dashboard can show evidence, overrides and latencies.
+            self.mailbox.log({**asdict(rec), "judge": extra})   # never raises
 
     def _decline(self, cand: CandidateMoment, reason: DeclineReason, traj: Trajectory,
                  conf: float, why: str, cited: list[SignalKind], t0: float

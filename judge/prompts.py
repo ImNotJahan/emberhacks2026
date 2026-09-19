@@ -157,6 +157,49 @@ traces, because live edits carry sizes, not text):
 - "blocked" needs 30s+ with no edits after 4+ identical failed attempts.
 """
 
+_V7_KNOWLEDGE = """
+BASELINE KNOWLEDGE (v7 — live traces were misread literally, e.g. an
+infinite loop stopped with Ctrl+C was treated as "a KeyboardInterrupt error"):
+- The context may end with "## Known patterns": deterministic matches from
+  the terminal output (exit codes, repeated output, known exception causes).
+  Trust them over a literal reading of the last error line, and use them in
+  trajectory_evidence and reasoning.
+- KeyboardInterrupt / exit 130 means the developer stopped the program. If
+  it was looping or hanging, that is the real failure; runs stopped the same
+  way count as the same failure.
+- A known pattern with a concrete fix raises the benefit of speaking only
+  if the history shows they have NOT already applied it. It never overrides
+  the attempt-count and trajectory rules above.
+"""
+
+_V8_CASE_BY_CASE = """
+NO QUOTA (v8): there is no interruption budget. Judge THIS moment on its own
+merits; never hold back to save interruptions for later, and never mention
+budgets or remaining interruptions. The cost-benefit bar above still applies
+in full: speak when the developer is genuinely stuck and you can add
+something concrete, stay silent otherwise.
+- The context shows your previous interruptions. If you already spoke during
+  THIS episode about the same problem, they have heard you: speak again only
+  if the situation has clearly changed or your earlier point was evidently
+  not the issue.
+"""
+
+_OUTPUT_V8 = """
+Fill the fields in order:
+- trajectory_evidence: stage one, the concrete comparison across attempts.
+- same_failure_attempts: count them from the history, do not estimate.
+- oscillating: did any edit restore earlier text or repeat a change?
+- trajectory: apply the rules above to the two numbers you just wrote.
+- should_speak: stage two, the cost-benefit verdict given the trajectory
+  and the moment (mid-flow vs breakpoint).
+- confidence: how sure you are of THIS verdict (either direction).
+- reasoning: 1-2 sentences to the developer ("you"), naming the concrete
+  evidence and, when speaking, what makes it worth interrupting now.
+  Shown verbatim.
+- signals_cited: the signals that actually drove the call (at least one).
+- decline_reason: why you stayed quiet; "not_applicable" only if speaking.
+"""
+
 PROMPTS: dict[str, str] = {
     # Step 2: pure cost-benefit framing, default silence, cite signals.
     "judge-v1": _COST_BENEFIT + _FIELDS_V1,
@@ -171,12 +214,27 @@ PROMPTS: dict[str, str] = {
     # First contact with Person 1's real traces: size-only edits.
     "judge-v6": _COST_BENEFIT + _TRAJECTORY_V3 + _V4_ATTEMPTS + _V5_COUNTED + _V6_REAL_EDITS
                 + _BUDGET + _OUTPUT_V5,
+    # Live Ctrl+C-on-infinite-loop misread: + deterministic known-pattern hints.
+    "judge-v7": _COST_BENEFIT + _TRAJECTORY_V3 + _V4_ATTEMPTS + _V5_COUNTED + _V6_REAL_EDITS
+                + _V7_KNOWLEDGE + _BUDGET + _OUTPUT_V5,
+    # Budget removed by request: each moment on its merits; memory of past
+    # interruptions kept so it doesn't repeat itself.
+    "judge-v8": _COST_BENEFIT + _TRAJECTORY_V3 + _V4_ATTEMPTS.replace(
+                    "- Speaking early is doubly expensive: it also triggers a cooldown that\n"
+                    "  blocks you from speaking later when they really are stuck.\n", "")
+                + _V5_COUNTED + _V6_REAL_EDITS + _V7_KNOWLEDGE + _V8_CASE_BY_CASE + _OUTPUT_V8,
 }
 
-SCHEMAS: dict[str, dict] = {"judge-v5": JUDGE_SCHEMA_COUNTED, "judge-v6": JUDGE_SCHEMA_COUNTED}
+# Versions whose context includes judge.knowledge's "## Known patterns".
+WITH_HINTS = {"judge-v7", "judge-v8"}
+# Versions designed around the 3/hour budget; calibration scores them with it.
+BUDGETED = {f"judge-v{i}" for i in range(1, 8)}
+
+SCHEMAS: dict[str, dict] = {"judge-v5": JUDGE_SCHEMA_COUNTED, "judge-v6": JUDGE_SCHEMA_COUNTED,
+                             "judge-v7": JUDGE_SCHEMA_COUNTED, "judge-v8": JUDGE_SCHEMA_COUNTED}
 
 
 def schema_for(version: str) -> dict:
     return SCHEMAS.get(version, JUDGE_SCHEMA)
 
-LATEST = "judge-v5"
+LATEST = "judge-v8"

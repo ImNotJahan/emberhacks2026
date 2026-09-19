@@ -53,6 +53,10 @@ def summarize(line: dict) -> dict:
     }
 
 
+def _budget(b: dict) -> str:
+    return f"{b['remaining']}/{b['per_hour']}" if b.get("per_hour") else "none"
+
+
 def pretty(path: str) -> str:
     out = []
     for line in read_jsonl(path):
@@ -61,7 +65,7 @@ def pretty(path: str) -> str:
         t = time.strftime("%H:%M:%S", time.localtime(s["timestamp"] / 1000))
         out.append(
             f"{t}  {s['episode_id']:<16} {s['decision']:<32} conf={s['confidence']:.2f} "
-            f"traj={d['trajectory']:<10} budget={line['candidate']['budget']['remaining']} "
+            f"traj={d['trajectory']:<10} budget={_budget(line['candidate']['budget'])} "
             f"{d.get('latency_ms') or '-'}ms\n"
             f"          signals: {', '.join(s['signals'])}  cited: {', '.join(d['signals_cited'])}\n"
             f"          why: {s['reasoning']}"

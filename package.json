@@ -44,6 +44,10 @@
       {
         "command": "restraint.testNotification",
         "title": "Restraint: Test Notification"
+      },
+      {
+        "command": "restraint.openSidebar",
+        "title": "Restraint: Open Sidebar"
       }
     ],
     "configuration": {
@@ -76,13 +80,8 @@
         },
         "restraint.prompt": {
           "type": "string",
-          "default": "judge-v6",
+          "default": "judge-v8",
           "description": "Judge prompt version passed to judge.live (see judge/prompts.py). Empty = the judge's default."
-        },
-        "restraint.perHour": {
-          "type": "number",
-          "default": 3,
-          "description": "Interruption budget: at most this many interventions per hour."
         },
         "restraint.verbose": {
           "type": "boolean",
@@ -92,11 +91,25 @@
       }
     },
     "views": {
-      "explorer": [
+      "restraint": [
+        {
+          "type": "webview",
+          "id": "restraint.control",
+          "name": "Control"
+        },
         {
           "type": "webview",
           "id": "restraint.surface",
-          "name": "Restraint"
+          "name": "Big Brother"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "restraint",
+          "title": "Restraint",
+          "icon": "media/restraint.svg"
         }
       ]
     }

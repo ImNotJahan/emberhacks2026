@@ -2,7 +2,7 @@
 
 A VS Code extension that watches how you work and decides **when**, and almost never, to interrupt you with help.
 
-Most AI coding tools work on *what* to say. Restraint works on *when* to say it. It tells a developer who is converging on a fix or exploring on purpose (leave them alone) apart from one who is thrashing or blocked (a short nudge helps). It is capped at 3 interruptions per hour. Every decision is logged, including every time it stayed silent and why. We call that log the restraint log.
+Most AI coding tools work on *what* to say. Restraint works on *when* to say it. It tells a developer who is converging on a fix or exploring on purpose (leave them alone) apart from one who is thrashing or blocked (a short nudge helps). There is no quota: each moment is judged on its own merits, and it stays silent by default. Every decision is logged, including every time it stayed silent and why. We call that log the restraint log.
 
 Built for EmberHacks 2026.
 
@@ -11,7 +11,7 @@ Built for EmberHacks 2026.
 ```
 VS Code (extension.js)          capture engine (extention.py)            judge (judge/)
 ───────────────────────         ────────────────────────────────         ───────────────────────
-edits, saves, focus,     ─raw─▶ redact → fingerprint → Event      ─HTTP─▶ budget + cooldown gates
+edits, saves, focus,     ─raw─▶ redact → fingerprint → Event      ─HTTP─▶ snooze + cooldown gates  
 diagnostics, terminal     JSONL  → episode → ring buffer → signals  :8765  → Gemini timing call
 commands and output      stdin   → CandidateMoment                        → content call (if speaking)
                                                                           → logs/<session>.jsonl
@@ -27,9 +27,9 @@ commands and output      stdin   → CandidateMoment                        → 
 
    Candidates are served on `http://127.0.0.1:8765`.
 3. **Judge**: [judge/](judge/). For each candidate, it applies these checks in order:
-   - If the token bucket is empty, it declines with `budget_exhausted`.
+   - If the developer snoozed it from the surface, it declines with `user_suppressed`.
    - If it spoke less than 240s ago, it declines with `too_soon`.
-   - Otherwise it asks Gemini to classify the trajectory (converging / exploring / thrashing / blocked) and whether to speak.
+   - Otherwise it matches the terminal output against a playbook of known debugging patterns ([judge/knowledge.py](judge/knowledge.py)), such as an infinite loop stopped with Ctrl+C, exit codes, and common Python/JS/pytest errors. It then asks Gemini to classify the trajectory (converging / exploring / thrashing / blocked) and whether to speak.
    - Only when the answer is yes, a second call writes the message.
 
    If anything fails, the judge stays silent: a broken judge must never interrupt anyone.
@@ -38,7 +38,7 @@ commands and output      stdin   → CandidateMoment                        → 
    - The judge posts `considering` before each model call.
    - The judge checks the snooze state first; while snoozed it declines with `user_suppressed`.
    - The mailbox serves:
-     - the intervention surface (`/surface`), shown in the **Restraint** view in the Explorer sidebar through [surface_webview.js](surface_webview.js)
+     - the intervention surface (`/surface`), shown as the **Big Brother** view in the Restraint sidebar through [surface_webview.js](surface_webview.js)
      - the restraint-log dashboard (`/`, or **Restraint: Open Dashboard**)
    - Feedback from either page comes back as `FeedbackRecord`s. The mailbox persists everything to `logs/mailbox.jsonl`.
 
@@ -75,8 +75,7 @@ Extension settings (`restraint.*`):
 |---|---|---|
 | `autoStart` | `true` | Start the capture engine and judge when VS Code starts |
 | `python` | *(empty)* | Python interpreter to use. When empty, the extension auto-detects one, trying in order: `.venv` or `venv` in the repo, then `python3`, `python`, `py` |
-| `prompt` | `judge-v6` | Prompt version passed to the live judge |
-| `perHour` | `3` | Interruption budget (maximum interventions per hour) |
+| `prompt` | `judge-v8` | Prompt version passed to the live judge |
 | `redaction.enabled` | `true` | Strip secrets before anything leaves the editor process |
 | `port` | `8765` | Port the capture engine listens on for candidates |
 | `verbose` | `false` | Log every raw editor event to the output channel |
@@ -85,6 +84,17 @@ Extension settings (`restraint.*`):
 ## Running it live (one click)
 
 Open this repo in VS Code and press **F5** ("Run Restraint"). In the window that opens, open the project you want to observe.
+
+The **Restraint** icon in the activity bar opens a sidebar with two views:
+- **Control** shows:
+  - whether the engine, judge and surface server are running in this window
+  - the engine's event and candidate counts
+  - the number of spoken and silent decisions, and the last decision with its reasoning
+  - the Python interpreter, prompt version and redaction state
+  - any setup problems
+
+  It has **Start in this window**, **Stop** and **Restart** buttons.
+- **Big Brother** is Person 3's intervention surface.
 
 The extension then starts everything itself:
 1. It finds a Python interpreter.
@@ -158,7 +168,7 @@ python -m judge.latency [--prompt judge-v5] [--repeats 2]
 
 ### Metrics
 
-These are computed in [judge/calibrate.py](judge/calibrate.py). Each prompt version is replayed 3 times, with the budget at 3/hour and content generation off.
+These are computed in [judge/calibrate.py](judge/calibrate.py). Each prompt version is replayed 3 times with content generation off. Versions v1–v7 are scored with the old 3/hour budget, and v8+ without one.
 
 - **False-positive rate (productive)**: how often it spoke on traces where the developer should be left alone. This is the headline number.
 - **Hit rate**: how many of the labeled should-speak moments it spoke on. A `too_soon` hold right after a hit in the same episode counts as covered.
@@ -217,8 +227,12 @@ The prompts are defined in [judge/prompts.py](judge/prompts.py). Each version ad
 | `judge-v4` | Counts attempts; fewer than 4 attempts with the same failure is never thrashing |
 | `judge-v5` | Makes the counts schema fields the trajectory rule depends on |
 | `judge-v6` | Adds guidance for real editor data, which records edit sizes only |
+| `judge-v7` | Adds known-pattern hints from `judge/knowledge.py`. Fixes the judge reading an infinite loop stopped with Ctrl+C as "a KeyboardInterrupt error" |
+| `judge-v8` | Removes the interruption budget. Judges each moment on its merits and keeps memory of past interruptions |
 
-`LATEST` is still `judge-v5`, so the CLIs use it by default. Pass `--prompt judge-v6` to use the newest version.
+`LATEST` is `judge-v8`. The content generator (`content-v4`) always gets the known-pattern hints.
+
+A 240s cooldown after speaking is still in place (`too_soon`), so a stuck episode doesn't produce a message every minute. Pass `cooldown_s=0` to `Judge` to remove it. `--per-hour N` on `judge.live`/`judge.replay` brings the old budget back. `judge.checks budget` only makes sense with v1–v7, e.g. `--prompt judge-v7`.
 
 ## Privacy
 
@@ -237,10 +251,10 @@ The prompts are defined in [judge/prompts.py](judge/prompts.py). Each version ad
 - **Telling exploration from being stuck is hard on real traces.** The judge has only been calibrated on synthetic traces.
 - **The surface only shows the most recent session.** A live session and a replay sent with `--mailbox` share one mailbox. Pass `?session=<id>` to pick a session.
 - **The judge doesn't read feedback yet.** `FeedbackRecord`s (`bad_timing`, `wanted_help`, …) are stored for evaluation but don't change the judge's behaviour.
-- **No personalization.** The thresholds (budget, cooldown, signal gates) are the same for everyone.
+- **No personalization.** The thresholds (cooldown, signal gates) are the same for everyone.
 - **Single-language scope.** Error fingerprinting and test-count parsing are built around Python and pytest output.
 - **Terminals without shell integration produce no events.** An example is `cmd.exe`.
-- **Frequent interventions risk learned helplessness.** This is why the budget exists.
+- **Frequent interventions risk learned helplessness.** With the budget removed, only the judge's cost-benefit bar and the cooldown prevent this.
 - **No `npm` scripts.** Outside the F5 flow, every command is a Python module invocation.
 
 ## Repo layout
@@ -250,7 +264,8 @@ contract.py            shared data contract (stdlib only)
 extension.js           VS Code collector + command wiring
 runner.js              one-click lifecycle: Python detection, setup checks, engine + judge processes, status bar
 testSurface.js         TEMPORARY decision notifications (still on alongside the real surface)
-surface_webview.js     hosts the surface page in the Explorer sidebar
+surface_webview.js     hosts the surface page in the Restraint sidebar
+controlView.js         sidebar Control view: start/stop in this window + status
 p3_server.py           surface mailbox: /log, /records, /considering, /snooze, /state, pages
 p3_send.py             stdlib client the judge uses to reach the mailbox
 dashboard.html         restraint-log timeline (served at /)
@@ -265,7 +280,8 @@ judge/
   render.py            CandidateMoment → compact prompt text
   gemini.py            the single place model calls happen (timed)
   content.py           what to say, once the judge decides to speak
-  budget.py            token bucket, N/hour, trace-clock driven
+  budget.py            token bucket, N/hour, trace-clock driven (per_hour=None: counts only)
+  knowledge.py         baseline debugging knowledge: known-pattern hints
   log.py               decision log writer/reader
   schema.py            model verdict validation
   codec.py             JSON → contract objects

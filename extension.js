@@ -6,6 +6,7 @@ const vscode = require('vscode');
 const path = require('path');
 const { Runner } = require('./runner');
 const { SurfaceView } = require('./surface_webview');
+const { ControlView } = require('./controlView');
 const testSurface = require('./testSurface'); // TEMP: remove with testSurface.js
 
 const MAX_TEXT = 1500;
@@ -44,7 +45,7 @@ function activate(context) {
   runner = new Runner(context, log);
   let surface = null;
   if (vscode.workspace.getConfiguration('restraint').get('testSurface.enabled', true))
-    surface = testSurface.start(context, log, spoke => runner.noteDecision(spoke)); // TEMP: remove with testSurface.js
+    surface = testSurface.start(context, log); // TEMP: remove with testSurface.js. Counts come from the judge's own output (runner.parseJudgeLine)
 
   context.subscriptions.push(
     vscode.commands.registerCommand('restraint.showLog', () => out.show(true)),
@@ -54,7 +55,9 @@ function activate(context) {
     vscode.commands.registerCommand('restraint.restart', () => runner.restart()),
     vscode.commands.registerCommand('restraint.openDecisionLog', () => runner.openDecisionLog()),
     vscode.commands.registerCommand('restraint.openDashboard', () => runner.openDashboard()),
+    vscode.commands.registerCommand('restraint.openSidebar', () => vscode.commands.executeCommand('workbench.view.extension.restraint')),
     vscode.window.registerWebviewViewProvider(SurfaceView.id, new SurfaceView()),
+    vscode.window.registerWebviewViewProvider(ControlView.id, new ControlView(runner)),
     vscode.commands.registerCommand('restraint.testNotification', () =>
       surface ? surface.test() : vscode.window.showInformationMessage('Restraint: the test surface is disabled (restraint.testSurface.enabled).')),
   );

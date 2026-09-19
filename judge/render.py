@@ -7,10 +7,12 @@ the same as live ones), and empty fields are dropped.
 
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass, replace
 from typing import Optional
 
 from contract import CandidateMoment, Event, EventKind
+from judge.knowledge import clean_lines, collapse_repeats, render_hints
 
 MAX_EVENTS = 40
 MAX_TEXT = 160
@@ -53,7 +55,15 @@ def _event_line(e: Event, now: int, n: int = 1, added: int = 0, removed: int = 0
         parts.append(f"pass={e.tests_passed or 0} fail={e.tests_failed or 0}")
     if e.error_fingerprint:
         parts.append(f"err={e.error_fingerprint}")
-    if e.text:
+    if e.text and e.kind is EventKind.TERMINAL_OUT:
+        # Output: repeats collapsed, and the TAIL, where the error/summary is.
+        t = " | ".join(collapse_repeats(e.text).splitlines())
+        if len(t) > MAX_TEXT:   # the dominant repeated line, if any, + the tail
+            top = Counter(clean_lines(e.text)).most_common(1)
+            head = f"{top[0][0][:50]} [x{top[0][1]} in total]" if top and top[0][1] >= 3 else ""
+            t = f"{head} … {t[-(MAX_TEXT - len(head)):]}"
+        parts.append(f'"{t}"')
+    elif e.text:
         t = " ".join(e.text.split())
         parts.append(f'"{t[:MAX_TEXT]}{"…" if len(t) > MAX_TEXT else ""}"')
     return " ".join(parts)
@@ -68,7 +78,8 @@ class LastSpoken:
 
 
 def render_candidate(c: CandidateMoment, max_events: int = MAX_EVENTS,
-                     last_spoken: Optional[LastSpoken] = None) -> str:
+                     last_spoken: Optional[LastSpoken] = None, hints: bool = False) -> str:
+    """hints=True appends judge.knowledge's matched debugging patterns."""
     now = c.ts
     s = c.snapshot
     ep = s.episode
@@ -100,22 +111,30 @@ def render_candidate(c: CandidateMoment, max_events: int = MAX_EVENTS,
 
     if s.last_error_text:
         # Tail, not head: test runners put the failure and summary at the end.
-        err = s.last_error_text.strip()
+        err = collapse_repeats(s.last_error_text).strip()
         lines.append(f"\n## Last error\n{'…' if len(err) > 600 else ''}{err[-600:]}")
     if s.last_test_summary:
         lines.append(f"\n## Last test summary\n{s.last_test_summary[:400]}")
 
     b = c.budget
-    lines.append("\n## Interruption budget")
     since = (
         f"{(now - b.last_intervention_ms) / 60000:.1f}min ago"
         if b.last_intervention_ms is not None else "never this session"
     )
-    lines.append(
-        f"{b.remaining} of {b.per_hour} interruptions left this hour; "
-        f"last interruption {since}; {b.interventions_this_session} so far this session"
-    )
+    if b.per_hour:
+        lines.append("\n## Interruption budget")
+        lines.append(
+            f"{b.remaining} of {b.per_hour} interruptions left this hour; "
+            f"last interruption {since}; {b.interventions_this_session} so far this session"
+        )
+    else:   # no budget (v8+): only the history, so the judge can avoid repeating itself
+        lines.append("\n## Your previous interruptions")
+        lines.append(f"last interruption {since}; {b.interventions_this_session} so far this session")
     if last_spoken is not None:
         where = "THIS episode" if last_spoken.episode_id == ep.episode_id else "an earlier episode"
         lines.append(f"Last interruption was in {where}: \"{(last_spoken.content or '')[:200]}\"")
+    if hints:
+        h = render_hints(c)
+        if h:
+            lines.append(h)
     return "\n".join(lines)
