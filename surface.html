@@ -204,7 +204,7 @@ function presenceText(v) {
   const snooze = el("button", {class: "btn", type: "button", onclick: () => setSnooze(now() + SNOOZE_MS)}, "Snooze 15m");
   switch (v.mode) {
     case "connecting": return ["Connecting…", "", null];
-    case "offline": return ["Can't reach the assistant", "Is the mailbox server running on :8765?", null];
+    case "offline": return ["Can't reach the assistant", "Is the mailbox server running on :8766?", null];
     case "snoozed": return ["Snoozed", `Holding everything until ${clock(st.snoozed_until)}`,
       el("button", {class: "btn", type: "button", onclick: () => setSnooze(0)}, "Resume")];
     case "considering": return ["Considering something…", "Weighing whether it's worth interrupting you", snooze];

@@ -1,8 +1,8 @@
 """
-seed_demo.py — send a fake 30-minute session to the mailbox so the dashboard
+p3_seed_demo.py — send a fake 30-minute session to the mailbox so the dashboard
 has something to show before the real judge is wired up.
 
-    py seed_demo.py
+    py p3_seed_demo.py
 """
 
 import random
@@ -10,7 +10,7 @@ import random
 from contract import (Episode, ActivitySnapshot, Signal, SignalKind, BudgetState,
     CandidateMoment, InterventionDecision, Trajectory, DeclineReason,
     DecisionRecord, FeedbackRecord, FeedbackKind, new_id, now_ms)
-from send_log import log
+from p3_send import log
 
 S, T, D = SignalKind, Trajectory, DeclineReason
 SESSION = "sess_demo"

@@ -1,8 +1,8 @@
 """
-demo_live.py — play a few moments in real time so you can watch the surface
+p3_live_demo.py — play a few moments in real time so you can watch the surface
 react: considering -> stays quiet, considering -> stays quiet, considering -> speaks.
 
-    py demo_live.py            (with /surface open)
+    py p3_live_demo.py            (with /surface open)
 """
 
 import time
@@ -10,7 +10,7 @@ import time
 from contract import (Episode, ActivitySnapshot, Signal, SignalKind, BudgetState,
     CandidateMoment, InterventionDecision, Trajectory, DeclineReason,
     DecisionRecord, new_id, now_ms)
-from send_log import log, considering, snoozed
+from p3_send import log, considering, snoozed
 
 SESSION = "sess_live_" + time.strftime("%H%M%S")
 THINK_SECONDS = 3

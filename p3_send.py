@@ -1,7 +1,7 @@
 """
-send_log.py — one-line logging to the Surface mailbox (hacky.py).
+p3_send.py — one-line logging to the Surface mailbox (p3_server.py).
 
-    from send_log import log, considering, snoozed
+    from p3_send import log, considering, snoozed
 
     if snoozed():                 # dev hit snooze: decline with USER_SUPPRESSED
         ...
@@ -14,7 +14,7 @@ None of these raise. If the mailbox is down, log() appends the record to
 unsent.jsonl instead and returns False.
 
 Point it at another machine with the MAILBOX_URL env var, e.g.
-    MAILBOX_URL=http://192.168.1.20:8765/log
+    MAILBOX_URL=http://192.168.1.20:8766/log
 """
 
 import json
@@ -23,7 +23,7 @@ import urllib.request
 
 from contract import now_ms, to_json, write_jsonl
 
-MAILBOX_URL = os.environ.get("MAILBOX_URL", "http://localhost:8765/log")
+MAILBOX_URL = os.environ.get("MAILBOX_URL", "http://localhost:8766/log")
 BASE_URL = MAILBOX_URL.rsplit("/log", 1)[0]
 FALLBACK_PATH = "unsent.jsonl"
 
