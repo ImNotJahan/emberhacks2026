@@ -94,95 +94,148 @@ code{font-family:var(--mono);font-size:.88em;background:var(--raise);border:1px 
 
 /* ---- tiles ---- */
 .tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.tile{padding:14px 16px 18px}
-.tile .n{font-family:var(--display);font-weight:800;font-stretch:80%;font-size:48px;line-height:1;letter-spacing:-.01em;margin-top:24px;font-variant-numeric:tabular-nums}
+.tile{display:flex;flex-direction:column;min-height:196px;padding:14px 16px 16px}
+.tile .chip{align-self:flex-start}
+.tile .n{margin-top:auto;padding-top:20px;font-family:var(--display);font-weight:800;font-stretch:80%;font-size:54px;line-height:1;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
 .tile .n.lime{color:var(--lime)}
-.tile .sub{font:12px var(--mono);color:var(--muted);margin-top:8px}
+.tile .sub{margin-top:6px;font:12px var(--mono);color:var(--muted)}
+.tile .viz{margin-top:14px;min-height:16px}
+.pixels{display:flex;flex-wrap:wrap;gap:3px}
+.pixels i{width:8px;height:8px;border-radius:1px;background:var(--line-2)}
+.pixels i.on{background:var(--lime);box-shadow:0 0 6px rgba(225,242,74,.55)}
+.cells{display:flex;gap:5px}
+.cells i{flex:1;height:16px;border-radius:3px;border:1px solid var(--line-2)}
+.cells i.on{background:var(--lime);border-color:var(--lime);box-shadow:0 0 8px rgba(225,242,74,.35)}
+.stack{display:flex;gap:2px;height:8px;border-radius:4px;overflow:hidden}
+.stack i{background:var(--c)}
+.kv{display:grid;gap:4px;font:11.5px var(--mono);color:var(--muted)}
+.kv span{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--line-2);padding-bottom:3px}
+.kv b{font-weight:500;color:var(--ink)}
+.kv.inline{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:8px}
+.kv.inline span{border:0;padding:0;justify-content:flex-start;align-items:center;gap:6px}
+.kv.inline em{width:7px;height:7px;border-radius:50%;background:var(--c)}
 
 /* ---- timeline ---- */
 .pad{padding:16px 18px}
-.head{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap}
-.legend{display:flex;gap:6px 14px;flex-wrap:wrap;flex-basis:100%;margin-top:4px;font:11px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.tl-head{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap}
+.tl-meta{margin-left:auto;font:11.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.track{position:relative;height:176px;--base:112px;margin-top:14px;border-radius:8px;
+       background-image:radial-gradient(circle,rgba(255,255,255,.075) 1px,transparent 1.3px);background-size:14px 14px;background-position:7px 7px}
+.baseline{position:absolute;left:0;right:0;top:var(--base);height:1px;background:var(--line-2)}
+.tick{position:absolute;top:0;height:100%;width:16px;margin-left:-8px;border:0;background:none;padding:0;border-radius:6px}
+.tick .bar{position:absolute;left:7px;width:2px;height:28px;bottom:calc(100% - var(--base));background:var(--quiet);border-radius:2px;transition:filter .15s}
+.tick.spoke .bar{left:6px;width:4px;height:74px;background:var(--speak)}
+.tick.spoke .bar::before{content:"";position:absolute;top:-6px;left:-4px;width:12px;height:12px;border-radius:50%;background:var(--speak);box-shadow:0 0 14px var(--speak)}
+.tick.gated .bar{height:14px;opacity:.5}
+.tick.held .bar{height:50px}
+.tick.held .bar::before{content:"";position:absolute;top:-10px;left:-4px;width:10px;height:10px;border-radius:50%;border:2px solid var(--speak);background:var(--panel);box-sizing:border-box}
+.tick:hover .bar,.tick:focus-visible .bar{filter:brightness(1.4)}
+.tick.sel{background:linear-gradient(rgba(225,242,74,.10),rgba(225,242,74,0) 80%)}
+.tick .fb{position:absolute;left:4px;width:8px;height:8px;border-radius:50%;background:var(--c)}
+.miss-line{position:absolute;top:0;bottom:0;border-left:2px dashed var(--wanted_help)}
+.miss-line span{position:absolute;bottom:0;left:5px;font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wanted_help);white-space:nowrap}
+.miss-line.flip span{left:auto;right:7px}
+.tip{position:absolute;bottom:calc(100% - 22px);z-index:5;width:280px;padding:10px 12px;background:#0c0c0c;border:1px solid var(--line-2);border-radius:8px;
+     box-shadow:0 14px 34px rgba(0,0,0,.6);pointer-events:none;font-size:12.5px}
+.tip .t{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.tip p{margin:0;color:#cfcfc9;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.axis{position:relative;height:18px;margin-top:8px;font:11px var(--mono);color:var(--dim)}
+.axis span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.axis span:first-child{transform:none} .axis span:last-child{transform:translateX(-100%)}
+.legend{display:flex;gap:6px 16px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);
+        font:10.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c)}
 .legend i.bar{width:3px;height:12px;border-radius:2px}
 .legend i.bar.faint{height:7px;opacity:.5}
 .legend i.ring{background:none;border:2px solid var(--speak);width:9px;height:9px}
-.track{position:relative;height:140px;--base:84px;margin:14px 8px 0}
-.baseline{position:absolute;left:0;right:0;top:var(--base);height:1px;background:var(--line-2)}
-.tick{position:absolute;top:0;height:100%;width:14px;margin-left:-7px;border:0;background:none;padding:0;border-radius:6px}
-.tick .bar{position:absolute;left:6px;width:2px;height:24px;bottom:calc(100% - var(--base));background:var(--quiet);border-radius:2px}
-.tick.spoke .bar{left:5px;width:4px;height:60px;background:var(--speak)}
-.tick.spoke .bar::before{content:"";position:absolute;top:-5px;left:-3px;width:10px;height:10px;border-radius:50%;background:var(--speak);box-shadow:0 0 12px var(--speak)}
-.tick.gated .bar{height:12px;opacity:.5}
-.tick.held .bar{height:40px}
-.tick.held .bar::before{content:"";position:absolute;top:-9px;left:-4px;width:10px;height:10px;border-radius:50%;border:2px solid var(--speak);background:var(--panel);box-sizing:border-box}
-.tick:hover .bar{filter:brightness(1.35)}
-.tick.sel{background:var(--raise)}
-.tick .fb{position:absolute;left:3px;width:8px;height:8px;border-radius:50%;background:var(--c)}
-.miss-line{position:absolute;top:0;bottom:0;border-left:2px dashed var(--wanted_help)}
-.miss-line span{position:absolute;bottom:0;left:5px;font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wanted_help);white-space:nowrap}
-.miss-line.flip span{left:auto;right:7px}
-.axis{position:relative;height:18px;margin:6px 8px 0;font:11px var(--mono);color:var(--dim)}
-.axis span{position:absolute;transform:translateX(-50%);white-space:nowrap}
-.axis span:first-child{transform:none} .axis span:last-child{transform:translateX(-100%)}
-.empty{margin:0;padding:44px 0;text-align:center;font:15px var(--pixel);color:var(--dim)}
+.empty{margin:0;padding:52px 0;text-align:center;font:15px var(--pixel);color:var(--dim)}
 
 /* ---- moments + detail ---- */
-.split{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:8px;align-items:start}
-.list{list-style:none;margin:12px 0 0;padding:0;max-height:660px;overflow:auto}
-.row{display:grid;grid-template-columns:auto auto 1fr;gap:4px 12px;align-items:baseline;width:100%;padding:10px 8px;border:0;border-top:1px solid var(--line);
-     border-radius:0;background:none;text-align:left}
-.list li:first-child .row{border-top-color:transparent}
-.row:hover,.row.sel{background:var(--raise);border-radius:8px;border-top-color:transparent}
+.split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:8px;align-items:start}
+.list-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.seg{margin-left:auto;display:inline-flex;flex-wrap:wrap;gap:2px;padding:2px;border:1px solid var(--line-2);border-radius:7px;background:var(--bg)}
+.seg button{border:0;background:none;border-radius:5px;padding:4px 9px;font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.seg button .c{margin-left:6px;color:var(--dim)}
+.seg button:hover{color:var(--ink)}
+.seg button.on{background:var(--raise);color:var(--ink)}
+.seg button.on .c{color:var(--lime)}
+.list{list-style:none;margin:12px 0 0;padding:0;max-height:760px;overflow:auto;display:grid;gap:3px}
+.row{position:relative;display:grid;grid-template-columns:92px minmax(0,1fr);gap:12px;width:100%;padding:11px 12px 11px 18px;
+     border:1px solid transparent;border-radius:8px;background:none;text-align:left}
+.row::before{content:"";position:absolute;left:6px;top:12px;bottom:12px;width:3px;border-radius:2px;background:var(--line-2)}
+.row.spoke::before{background:var(--lime);box-shadow:0 0 8px rgba(225,242,74,.5)}
+.row.held::before{background:rgba(225,242,74,.45)}
+.row.skipped::before{background:repeating-linear-gradient(var(--line-2) 0 3px,transparent 3px 6px)}
+.row:hover{background:var(--raise)}
+.row.sel{background:var(--raise);border-color:var(--line-2)}
+.row .meta{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.row .label{font-weight:600}
+.row .why{margin-top:2px}
 .time{font:12px var(--mono);color:var(--dim);white-space:nowrap}
 .badge{font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:5px;border:1px solid var(--line-2);color:var(--muted);white-space:nowrap}
 .badge.spoke{background:var(--lime);border-color:var(--lime);color:var(--lime-ink)}
 .badge.held{border-color:var(--lime);color:var(--lime)}
-.badge.big{font-size:12px;padding:4px 10px}
-.why{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#c9c9c3}
-.why strong{color:var(--ink);font-weight:600}
-.chips{grid-column:3;display:flex;gap:6px;flex-wrap:wrap}
+.why{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#b9b9b3}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
 .fbchip{font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--c);border:1px solid var(--c);border-radius:5px;padding:0 6px}
+.none-note{padding:28px 8px;text-align:center;font:14px var(--pixel);color:var(--dim)}
 
-.detail .ph{margin:12px 0 4px;font:17px/1.4 var(--pixel);color:var(--dim)}
-.d-head{display:flex;align-items:center;gap:10px;margin:14px 0}
-.said{margin:0 0 16px;padding:12px 14px;border-left:3px solid var(--lime);background:rgba(225,242,74,.06);border-radius:0 8px 8px 0;font-size:15px}
-.callout{margin:0 0 14px;padding:9px 12px;border-left:3px solid var(--quiet);background:var(--raise);border-radius:0 8px 8px 0;font-size:13px}
+.detail{position:sticky;top:8px;max-height:calc(100vh - 16px);overflow:auto}
+.detail .ph{margin:18px 0 6px;font:18px/1.45 var(--pixel);color:var(--dim)}
+.d-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.status{margin:16px 0 0;font:600 34px/1.05 var(--pixel);color:var(--muted)}
+.status.spoke{color:var(--lime);text-shadow:0 0 22px rgba(225,242,74,.25)}
+.status.held{color:#c3d23d}
+.said{margin:16px 0 0;padding:14px 16px;border:1px solid rgba(225,242,74,.28);background:rgba(225,242,74,.05);border-radius:8px;font-size:15.5px;line-height:1.55}
+.callout{margin:14px 0 0;padding:9px 12px;border-left:3px solid var(--quiet);background:var(--raise);border-radius:0 8px 8px 0;font-size:13px}
 .callout.held{border-left-color:var(--lime)}
 .callout.err{border-left-color:var(--wanted_help)}
 .callout code{word-break:break-word}
-.sec{margin-top:16px}
+.sec{margin-top:18px}
 .sec p{margin:0}
 .evidence{color:var(--muted)}
-.facts{display:grid;grid-template-columns:auto 1fr;gap:7px 16px;margin:16px 0 0;font-size:13px}
-.facts dt{font:500 11px/1.9 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
-.facts dd{margin:0}
-.conf{display:inline-flex;align-items:center;gap:8px}
-.meter{height:4px;border-radius:2px;background:var(--line-2);overflow:hidden;width:90px}
+.cells-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:18px}
+.cell{min-width:0;padding:9px 11px;background:var(--raise);border:1px solid var(--line);border-radius:8px}
+.cell .k{font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.cell .v{margin-top:4px;font-size:13.5px;overflow-wrap:anywhere}
+.meter{height:4px;border-radius:2px;background:var(--line-2);overflow:hidden}
 .meter i{display:block;height:100%;background:var(--lime)}
-.signals{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.cell .meter{margin-top:6px}
+.signals{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.signals li{padding:10px 12px;background:var(--raise);border:1px solid var(--line);border-radius:8px}
 .sig-top{display:flex;align-items:center;gap:8px}
 .sig-kind{font-weight:600}
 .cited{font:600 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--lime);border:1px solid rgba(225,242,74,.4);border-radius:4px;padding:0 5px}
 .sig-n{margin-left:auto;font:12px var(--mono);color:var(--dim)}
-.signals .meter{width:100%;margin:5px 0}
-.sig-detail{color:var(--muted);font-size:13px}
+.signals .meter{margin:7px 0 6px}
+.sig-detail{margin:0;color:var(--muted);font-size:13px}
 .fb-list{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:6px}
 .fb-list li{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
 .note{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line-2);border-radius:8px;padding:8px 10px}
 .note:focus{outline:1px solid var(--lime);border-color:var(--lime)}
 .fb-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.fb-actions button{border:1px solid var(--c);background:none;color:var(--c);border-radius:6px;padding:5px 10px;font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.fb-actions button{border:1px solid var(--c);background:none;color:var(--c);border-radius:6px;padding:6px 10px;font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase}
 .fb-actions button:hover:not(:disabled){background:var(--raise)}
 .fb-actions button:disabled{opacity:.4;cursor:default}
 .err{color:var(--wanted_help);font-size:13px;margin-top:6px}
 .quiet-note{margin:0;color:var(--muted);font-size:13px}
 
+/* ---- empty: getting started ---- */
+.flow{display:grid;gap:8px}
+[hidden]{display:none!important}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
+.step{display:flex;flex-direction:column;gap:8px;padding:16px;background:var(--raise);border:1px solid var(--line);border-radius:8px}
+.step .num{font:600 30px/1 var(--pixel);color:var(--lime)}
+.step h3{margin:4px 0 0;font:600 15px var(--sans)}
+.step p{margin:0;color:var(--muted);font-size:13px}
+.step code{display:block;margin-top:auto;padding:8px 10px;background:var(--bg);border-radius:6px;font-size:12px;overflow-x:auto;white-space:nowrap}
+
 button:focus-visible,a:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
 
 @media (max-width:1100px){
   .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .steps{grid-template-columns:1fr}
 }
 @media (max-width:900px){
   .app{grid-template-columns:1fr}
@@ -192,12 +245,18 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--lime);outline-offse
   .side-foot{display:none}
   .hero,.split{grid-template-columns:1fr}
   .headline,.glow{min-height:250px}
-  .detail{order:-1}
+  .detail{order:-1;position:static;max-height:none}
 }
 @media (max-width:600px){
   .headline{padding:18px 18px 22px}
   .axis span:nth-child(2n){display:none}
   .topbar{gap:10px 20px}
+  .tile{min-height:170px}
+  .tile .n{font-size:44px}
+  .row{grid-template-columns:1fr;gap:6px}
+  .row .meta{flex-direction:row;align-items:center}
+  .cells-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .seg{margin-left:0}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -236,11 +295,40 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--lime);outline-offse
       </div>
     </section>
 
-    <section class="tiles" id="tiles"></section>
+    <section class="panel pad" id="onboard" hidden>
+      <span class="chip" data-icon="activity">Get started</span>
+      <div class="steps">
+        <div class="step">
+          <div class="num">01</div>
+          <h3>Go live</h3>
+          <p>Run the judge while you code. Every decision it makes, spoken or not, shows up here.</p>
+          <code>python -m judge.live</code>
+        </div>
+        <div class="step">
+          <div class="num">02</div>
+          <h3>Replay a recorded session</h3>
+          <p>Run a saved trace through the real judge and send it straight here.</p>
+          <code>python -m judge.replay traces/thrash.candidates.jsonl --mailbox</code>
+        </div>
+        <div class="step">
+          <div class="num">03</div>
+          <h3>Load demo data</h3>
+          <p>A made-up 30 minute session. No Gemini key needed.</p>
+          <code>python p3_seed_demo.py</code>
+        </div>
+      </div>
+    </section>
 
-    <section class="panel pad">
-      <div class="head">
-        <span class="chip" data-icon="clock">Timeline</span>
+    <div class="flow" id="data">
+      <section class="tiles" id="tiles"></section>
+
+      <section class="panel pad">
+        <div class="tl-head">
+          <span class="chip" data-icon="clock">Timeline</span>
+          <span class="tl-meta" id="tl-meta"></span>
+        </div>
+        <div class="track" id="track"></div>
+        <div class="axis" id="axis"></div>
         <div class="legend">
           <span><i class="bar" style="--c:var(--speak)"></i>Spoke</span>
           <span><i class="bar" style="--c:var(--quiet)"></i>Stayed quiet</span>
@@ -253,17 +341,18 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--lime);outline-offse
           <span><i style="--c:var(--bad_content)"></i>Bad content</span>
           <span><i style="--c:var(--wanted_help)"></i>Missed</span>
         </div>
-      </div>
-      <div class="track" id="track"></div>
-      <div class="axis" id="axis"></div>
-    </section>
-
-    <div class="split">
-      <section class="panel pad">
-        <span class="chip" data-icon="list">Moments</span>
-        <ol class="list" id="list"></ol>
       </section>
-      <section class="panel pad detail" id="detail"></section>
+
+      <div class="split">
+        <section class="panel pad">
+          <div class="list-head">
+            <span class="chip" data-icon="list">Moments</span>
+            <div class="seg" id="seg" role="group" aria-label="Filter moments"></div>
+          </div>
+          <ol class="list" id="list"></ol>
+        </section>
+        <section class="panel pad detail" id="detail"></section>
+      </div>
     </div>
   </div>
 </div>
@@ -288,7 +377,7 @@ const ICONS = {
 };
 
 let data = {decisions: [], feedback: []};
-let session = null, selected = null, lastSig = "";
+let session = null, selected = null, lastSig = "", filter = "all";
 
 function el(tag, props = {}, ...kids) {
   const n = document.createElement(tag);
@@ -332,14 +421,32 @@ function guardrail(r) {
   const o = (r.judge || {}).override;
   if (!o) return null;
   const cool = o.match(/^cooldown \((\d+)s\)/);
-  if (cool) return {kind: "gated", text: `Gemini wasn't asked: it already spoke less than ${Math.round(cool[1] / 60)} min ago.`};
-  if (o.startsWith("budget exhausted")) return {kind: "gated", text: "Gemini wasn't asked: this hour's interruption budget was already spent."};
-  if (o.startsWith("snoozed")) return {kind: "gated", text: "Gemini wasn't asked: you had snoozed it from the surface."};
-  if (/judge not called/.test(o)) return {kind: "gated", text: `Gemini wasn't asked: ${o.replace(/;\s*judge not called/, "")}.`};
-  if (o === "judge said speak but bucket was empty") return {kind: "held", text: "Gemini wanted to speak, but the interruption budget was empty."};
+  if (cool) return {kind: "gated", tag: "cooldown", text: `Gemini wasn't asked: it already spoke less than ${Math.round(cool[1] / 60)} min ago.`};
+  if (o.startsWith("budget exhausted")) return {kind: "gated", tag: "budget", text: "Gemini wasn't asked: this hour's interruption budget was already spent."};
+  if (o.startsWith("snoozed")) return {kind: "gated", tag: "snooze", text: "Gemini wasn't asked: you had snoozed it from the surface."};
+  if (/judge not called/.test(o)) return {kind: "gated", tag: "other", text: `Gemini wasn't asked: ${o.replace(/;\s*judge not called/, "")}.`};
+  if (o === "judge said speak but bucket was empty") return {kind: "held", tag: "budget", text: "Gemini wanted to speak, but the interruption budget was empty."};
   if (o === "judge said speak but content generation produced nothing")
-    return {kind: "held", text: "Gemini wanted to speak, but couldn't write anything grounded enough to say."};
-  return {kind: r.decision.should_speak ? "note" : "held", text: o};
+    return {kind: "held", tag: "nothing to say", text: "Gemini wanted to speak, but couldn't write anything grounded enough to say."};
+  return {kind: r.decision.should_speak ? "note" : "held", tag: "other", text: o};
+}
+
+// spoke / held / skipped / quiet: what the list filter and row rails use
+function category(r) {
+  if (r.decision.should_speak) return "spoke";
+  const g = guardrail(r);
+  return g && g.kind === "held" ? "held" : g && g.kind === "gated" ? "skipped" : "quiet";
+}
+
+function badgeFor(r) {
+  const c = category(r);
+  return el("span", {class: `badge ${c === "spoke" ? "spoke" : c === "held" ? "held" : ""}`},
+    {spoke: "Spoke", held: "Held", skipped: "Skipped", quiet: "Quiet"}[c]);
+}
+
+function duration(ms) {
+  const m = Math.round(ms / 60000);
+  return ms < 60000 ? `${Math.round(ms / 1000)} s` : m < 60 ? `${m} min` : `${Math.floor(m / 60)} h ${m % 60} min`;
 }
 
 async function poll() {
@@ -380,6 +487,8 @@ function render() {
       el("span", {class: "n", title: "moments · spoke"}, tally[s] ? `${tally[s].n} · ${tally[s].spoke}` : "—"))))
     : [el("li", {class: "none"}, "None yet")]));
   $("#bar-session").lastElementChild.textContent = session || "No session";
+  $("#onboard").hidden = sessions.length > 0;
+  $("#data").hidden = sessions.length === 0;
 
   const ds = data.decisions.filter(r => r.session_id === session).sort((a, b) => at(a) - at(b));
   const fbs = data.feedback.filter(f => f.session_id === session);
@@ -399,7 +508,6 @@ function renderHero(ds, fbs, misses) {
   const n = ds.length;
   const spoke = ds.filter(r => r.decision.should_speak).length;
   const quiet = n - spoke;
-  const capped = ds.filter(r => { const g = guardrail(r); return g && g.kind !== "note"; }).length;
   const b = n ? ds[n - 1].candidate.budget : null;
   const s = k => k === 1 ? "" : "s";
 
@@ -409,13 +517,44 @@ function renderHero(ds, fbs, misses) {
   $("#quiet-pct").textContent = n ? Math.round(quiet / n * 100) + "%" : "—";
   $("#quiet-under").textContent = n ? `${quiet} of ${n} moments, it said nothing` : "no moments yet";
 
-  const tile = (ico, label, value, sub, cls) => el("div", {class: "tile panel"},
-    chip(ico, label), el("div", {class: "n " + (cls || "")}, value), el("div", {class: "sub"}, sub || " "));
+  const tile = (ico, label, value, sub, viz, cls) => el("div", {class: "tile panel"},
+    chip(ico, label), el("div", {class: "n " + (cls || "")}, value),
+    el("div", {class: "sub"}, sub || " "), el("div", {class: "viz"}, viz));
+
+  // Spoke: one pixel per moment, lit where it spoke
+  const pixels = el("div", {class: "pixels", "aria-hidden": "true"},
+    ds.slice(-120).map(r => el("i", {class: r.decision.should_speak ? "on" : null})));
+
+  // Held back: which guardrail fired, most common first
+  const tags = {};
+  for (const r of ds) {
+    const g = guardrail(r);
+    if (g && g.kind !== "note") tags[g.tag] = (tags[g.tag] || 0) + 1;
+  }
+  const held = Object.values(tags).reduce((a, k) => a + k, 0);
+  const breakdown = held ? el("div", {class: "kv"},
+    Object.entries(tags).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([t, k]) => el("span", {}, t, el("b", {}, k)))) : null;
+
+  // Budget left: one cell per interruption this hour
+  const cells = b ? el("div", {class: "cells", "aria-hidden": "true"},
+    Array.from({length: b.per_hour}, (_, i) => el("i", {class: i < b.remaining ? "on" : null}))) : null;
+
+  // Feedback: share of each kind
+  const kinds = {};
+  for (const f of fbs) kinds[f.kind] = (kinds[f.kind] || 0) + 1;
+  const SHORT = {accepted: "helpful", dismissed: "dismissed", ignored: "ignored",
+                 bad_timing: "timing", bad_content: "content", wanted_help: "missed"};
+  const order = Object.entries(kinds).sort((a, b) => b[1] - a[1]);
+  const mix = fbs.length ? [
+    el("div", {class: "stack", "aria-hidden": "true"}, order.map(([k, c]) => el("i", {style: `--c:var(--${k});flex:${c}`}))),
+    el("div", {class: "kv inline"}, order.slice(0, 4).map(([k, c]) => el("span", {}, el("em", {style: `--c:var(--${k})`}), `${c} ${SHORT[k] || k}`)))] : null;
+
   $("#tiles").replaceChildren(
-    tile("speak", "Spoke", spoke, n ? `of ${n} moments` : null, "lime"),
-    tile("hand", "Held back", capped, capped ? "by budget, cooldown or snooze" : "no guardrail fired"),
-    tile("shield", "Budget left", b ? `${b.remaining}/${b.per_hour}` : "—", "interruptions this hour"),
-    tile("message", "Feedback", fbs.length, misses.length ? `${misses.length} missed (wanted help)` : "none missed"));
+    tile("speak", "Spoke", spoke, n ? `of ${n} moments` : null, pixels, "lime"),
+    tile("hand", "Held back", held, held ? "by the judge's guardrails" : "no guardrail fired", breakdown),
+    tile("shield", "Budget left", b ? `${b.remaining}/${b.per_hour}` : "—", "interruptions this hour", cells),
+    tile("message", "Feedback", fbs.length,
+         misses.length ? `${misses.length} missed (wanted help)` : fbs.length ? "none missed" : "no feedback yet", mix));
 }
 
 function renderTimeline(ds, byDec, misses) {
@@ -423,13 +562,28 @@ function renderTimeline(ds, byDec, misses) {
   if (!ds.length && !misses.length) {
     track.replaceChildren(el("p", {class: "empty"}, "no moments yet. waiting for the judge."));
     axis.replaceChildren();
+    $("#tl-meta").textContent = "";
     return;
   }
   const times = [...ds.map(at), ...misses.map(f => f.ts)];
   let t0 = Math.min(...times), t1 = Math.max(...times);
+  $("#tl-meta").textContent = `${ds.length} moment${ds.length === 1 ? "" : "s"} · ${duration(t1 - t0)}`;
   if (t1 - t0 < 60000) { const mid = (t0 + t1) / 2; t0 = mid - 30000; t1 = mid + 30000; }
   const pad = (t1 - t0) * 0.03; t0 -= pad; t1 += pad;
   const x = t => ((t - t0) / (t1 - t0) * 100).toFixed(3) + "%";
+
+  // hover card: what it decided and why, without clicking
+  const tip = el("div", {class: "tip", hidden: ""});
+  const showTip = (btn, r) => {
+    const d = r.decision, g = guardrail(r);
+    tip.replaceChildren(
+      el("div", {class: "t"}, badgeFor(r), el("span", {class: "time"}, clock(at(r)))),
+      el("p", {}, !d.should_speak && g && g.kind !== "note" ? g.text : rich(d.reasoning)));
+    tip.hidden = false;
+    const cx = btn.offsetLeft + btn.offsetWidth / 2;
+    tip.style.left = Math.max(0, Math.min(track.clientWidth - tip.offsetWidth, cx - tip.offsetWidth / 2)) + "px";
+  };
+  const hideTip = () => { tip.hidden = true; };
 
   const nodes = [el("div", {class: "baseline"})];
   for (const m of misses)
@@ -440,11 +594,14 @@ function renderTimeline(ds, byDec, misses) {
     const label = `${clock(at(r))} · ${d.should_speak ? "Spoke" : g && g.kind !== "note" ? g.text : "Stayed quiet: " + human(d.decline_reason)}`;
     nodes.push(el("button", {
         class: `tick ${d.should_speak ? "spoke" : "quiet"} ${g ? g.kind : ""} ${id === selected ? "sel" : ""}`,
-        style: `left:${x(at(r))}`, title: label, "aria-label": label, onclick: () => pick(id)},
+        style: `left:${x(at(r))}`, "aria-label": label, onclick: () => pick(id),
+        onmouseenter: e => showTip(e.currentTarget, r), onmouseleave: hideTip,
+        onfocus: e => showTip(e.currentTarget, r), onblur: hideTip},
       el("i", {class: "bar"}),
       (byDec[id] || []).map((f, i) =>
         el("b", {class: "fb", style: `--c:var(--${f.kind});top:calc(var(--base) + ${8 + i * 11}px)`}))));
   }
+  nodes.push(tip);
   track.replaceChildren(...nodes);
   const label = t1 - t0 < 5 * 60000 ? clock : hhmm;   // short spans need seconds or labels repeat
   axis.replaceChildren(...[0, .25, .5, .75, 1].map(p => {
@@ -454,17 +611,27 @@ function renderTimeline(ds, byDec, misses) {
 }
 
 function renderList(ds, byDec) {
-  if (!ds.length) { $("#list").replaceChildren(el("li", {class: "quiet-note", style: "padding:10px 8px"}, "Nothing yet.")); return; }
-  $("#list").replaceChildren(...[...ds].reverse().map(r => {
-    const d = r.decision, fb = byDec[d.decision_id] || [], g = guardrail(r);
-    const held = g && g.kind === "held";
-    return el("li", {}, el("button", {class: `row ${d.decision_id === selected ? "sel" : ""}`, onclick: () => pick(d.decision_id)},
-      el("span", {class: "time"}, clock(at(r))),
-      el("span", {class: `badge ${d.should_speak ? "spoke" : held ? "held" : ""}`}, d.should_speak ? "Spoke" : held ? "Held" : "Quiet"),
-      el("span", {class: "why"},
-        el("strong", {}, d.should_speak ? human(d.trajectory) : human(d.decline_reason)), " · ", rich(d.reasoning)),
-      fb.length ? el("span", {class: "chips"},
-        fb.map(f => el("span", {class: "fbchip", style: `--c:var(--${f.kind})`}, FB[f.kind] || f.kind))) : null));
+  const counts = {all: ds.length, spoke: 0, held: 0, skipped: 0, quiet: 0};
+  for (const r of ds) counts[category(r)] += 1;
+  if (filter !== "all" && !counts[filter]) filter = "all";
+  $("#seg").replaceChildren(...["all", "spoke", "held", "skipped", "quiet"]
+    .filter(k => k === "all" || counts[k])
+    .map(k => el("button", {type: "button", class: k === filter ? "on" : null, "aria-pressed": String(k === filter),
+                            onclick: () => { filter = k; render(); }},
+      k, el("span", {class: "c"}, counts[k]))));
+
+  const shown = [...ds].reverse().filter(r => filter === "all" || category(r) === filter);
+  if (!shown.length) { $("#list").replaceChildren(el("li", {class: "none-note"}, "nothing here yet")); return; }
+  $("#list").replaceChildren(...shown.map(r => {
+    const d = r.decision, fb = byDec[d.decision_id] || [];
+    return el("li", {}, el("button", {class: `row ${category(r)} ${d.decision_id === selected ? "sel" : ""}`,
+                                      onclick: () => pick(d.decision_id)},
+      el("div", {class: "meta"}, el("span", {class: "time"}, clock(at(r))), badgeFor(r)),
+      el("div", {},
+        el("div", {class: "label"}, d.should_speak ? human(d.trajectory) : human(d.decline_reason)),
+        el("div", {class: "why"}, rich(d.reasoning)),
+        fb.length ? el("div", {class: "chips"},
+          fb.map(f => el("span", {class: "fbchip", style: `--c:var(--${f.kind})`}, FB[f.kind] || f.kind))) : null)));
   }));
 }
 
@@ -476,34 +643,30 @@ function renderDetail(r, byDec) {
     return;
   }
   const d = r.decision, c = r.candidate, j = r.judge || {}, fb = byDec[d.decision_id] || [];
-  const g = guardrail(r), held = g && g.kind === "held";
+  const g = guardrail(r), cat = category(r);
   const cited = new Set(d.signals_cited || []);
   const sec = (title, ...body) => el("div", {class: "sec"}, el("h3", {class: "lbl"}, title), ...body);
-  const fact = (k, v) => [el("dt", {}, k), el("dd", {}, v)];
+  const cell = (k, ...v) => el("div", {class: "cell"}, el("div", {class: "k"}, k), el("div", {class: "v"}, ...v));
+  const pct = Math.round(d.confidence * 100);
   const ms = v => v != null ? `${v} ms` : null;
   const latency = [j.judge_latency_ms != null ? `judge ${j.judge_latency_ms} ms` : ms(d.latency_ms),
                    j.content_latency_ms != null ? `content ${j.content_latency_ms} ms` : null].filter(Boolean).join(" · ");
 
   box.replaceChildren(...[   // filter: replaceChildren would print a null as the text "null"
-    chip("cursor", "Moment"),
-    el("div", {class: "d-head"},
-      el("span", {class: `badge big ${d.should_speak ? "spoke" : held ? "held" : ""}`},
-        d.should_speak ? "Spoke" : held ? "Held back" : "Stayed quiet"),
-      el("span", {class: "time"}, clock(at(r)))),
+    el("div", {class: "d-top"}, chip("cursor", "Moment"), el("span", {class: "time"}, clock(at(r)))),
+    el("div", {class: `status ${cat}`}, {spoke: "Spoke", held: "Held back", skipped: "Skipped", quiet: "Stayed quiet"}[cat]),
     g ? el("p", {class: `callout ${g.kind}`}, g.text) : null,
     j.error ? el("p", {class: "callout err"}, "The judge failed here, so it stayed quiet: ", el("code", {}, j.error)) : null,
     d.should_speak && d.content ? el("blockquote", {class: "said"}, rich(d.content)) : null,
     j.trajectory_evidence ? sec("What it saw", el("p", {class: "evidence"}, rich(j.trajectory_evidence))) : null,
     sec("Why", el("p", {}, rich(d.reasoning))),
-    el("dl", {class: "facts"},
-      fact("Trajectory", human(d.trajectory)),
-      fact("Confidence", el("span", {class: "conf"},
-        el("span", {class: "meter"}, el("i", {style: `width:${Math.round(d.confidence * 100)}%`})),
-        Math.round(d.confidence * 100) + "%")),
-      d.should_speak ? null : fact("Reason", human(d.decline_reason)),
-      fact("Budget", `${c.budget.remaining}/${c.budget.per_hour} left`),
-      latency ? fact("Latency", latency) : null,
-      fact("Prompt", [j.prompt_version || d.prompt_version || "—", j.content_version].filter(Boolean).join(" · "))),
+    el("div", {class: "cells-grid"},
+      cell("Trajectory", human(d.trajectory)),
+      cell("Confidence", `${pct}%`, el("div", {class: "meter"}, el("i", {style: `width:${pct}%`}))),
+      d.should_speak ? cell("Cited", `${cited.size} of ${c.signals.length} signals`) : cell("Reason", human(d.decline_reason)),
+      cell("Budget", `${c.budget.remaining}/${c.budget.per_hour} left`),
+      cell("Latency", latency || "—"),
+      cell("Prompt", [j.prompt_version || d.prompt_version || "—", j.content_version].filter(Boolean).join(" · "))),
     sec(`Signals (${c.signals.length})`, el("ul", {class: "signals"}, c.signals.map(s => el("li", {},
       el("div", {class: "sig-top"},
         el("span", {class: "sig-kind"}, human(s.kind)),
