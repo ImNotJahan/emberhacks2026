@@ -1,0 +1,36 @@
+{
+  "name": "restraint",
+  "displayName": "Restraint",
+  "description": "Observes developer activity and decides when (rarely) to speak.",
+  "version": "0.0.1",
+  "publisher": "emberhacks",
+  "engines": { "vscode": "^1.93.0" },
+  "main": "./extension.js",
+  "activationEvents": ["onStartupFinished"],
+  "contributes": {
+    "commands": [
+      { "command": "restraint.hello", "title": "Restraint: Hello World" },
+      { "command": "restraint.showLog", "title": "Restraint: Show Log" }
+    ],
+    "configuration": {
+      "title": "Restraint",
+      "properties": {
+        "restraint.redaction.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Strip secrets (key/token/password string literals, .env contents) before anything leaves the editor process."
+        },
+        "restraint.python": {
+          "type": "string",
+          "default": "python",
+          "description": "Python executable used to run the capture engine (extention.py)."
+        },
+        "restraint.port": {
+          "type": "number",
+          "default": 8765,
+          "description": "Port for the local candidate-moment endpoint."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{"k": "file_open", "ts": 1800000000000, "path": "src/api.py", "lang": "python"}
+{"k": "edit", "ts": 1800000010000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000012000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000014000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000016000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000018000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000020000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "save", "ts": 1800000024000, "path": "src/api.py", "lang": "python"}
+{"k": "terminal_out", "ts": 1800000026000, "text": "NameError: name 'fetch' is not defined\n1 failed, 4 passed", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "edit", "ts": 1800000050000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000052000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000054000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000056000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000058000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000060000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "save", "ts": 1800000064000, "path": "src/api.py", "lang": "python"}
+{"k": "terminal_out", "ts": 1800000066000, "text": "TypeError: fetch() missing 1 required positional argument: 'url'\n1 failed, 4 passed", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "edit", "ts": 1800000090000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000092000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000094000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000096000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000098000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "edit", "ts": 1800000100000, "path": "src/api.py", "lang": "python", "meta": {"added": 20, "removed": 2}}
+{"k": "save", "ts": 1800000104000, "path": "src/api.py", "lang": "python"}
+{"k": "terminal_out", "ts": 1800000106000, "text": "AssertionError: expected 200 got 404\n1 failed, 6 passed", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "edit", "ts": 1800000130000, "path": "src/api.py", "lang": "python", "meta": {"added": 12, "removed": 1}}
+{"k": "terminal_out", "ts": 1800000135000, "text": "7 passed in 0.3s", "exit_code": 0, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "terminal_out", "ts": 1800000150000, "text": "[main abc123] add api", "exit_code": 0, "meta": {"cmd": "git commit -m add api", "is_test": false}}
+{"k": "file_open", "ts": 1800000170000, "path": "src/models.py", "lang": "python"}
+{"k": "edit", "ts": 1800000175000, "path": "src/models.py", "lang": "python", "meta": {"added": 15, "removed": 0}}
+{"k": "edit", "ts": 1800000178000, "path": "src/models.py", "lang": "python", "meta": {"added": 15, "removed": 0}}
+{"k": "edit", "ts": 1800000181000, "path": "src/models.py", "lang": "python", "meta": {"added": 15, "removed": 0}}
+{"k": "edit", "ts": 1800000184000, "path": "src/models.py", "lang": "python", "meta": {"added": 15, "removed": 0}}
+{"k": "edit", "ts": 1800000187000, "path": "src/models.py", "lang": "python", "meta": {"added": 15, "removed": 0}}

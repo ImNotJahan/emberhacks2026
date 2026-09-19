@@ -1,0 +1,14 @@
+{"k": "file_open", "ts": 1800000000000, "path": "src/parser.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800000005000, "path": "tests/test_parser.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800000008000, "path": "src/parser.py", "lang": "python"}
+{"k": "edit", "ts": 1800000004000, "path": "src/parser.py", "lang": "python", "meta": {"added": 3, "removed": 3}}
+{"k": "terminal_out", "ts": 1800000012000, "text": "FAILED tests/test_parser.py\nAttributeError: 'NoneType' object has no attribute 'children'\n2 failed, 3 passed in 0.4s", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "edit", "ts": 1800000042000, "path": "src/parser.py", "lang": "python", "meta": {"added": 3, "removed": 3}}
+{"k": "terminal_out", "ts": 1800000050000, "text": "FAILED tests/test_parser.py\nAttributeError: 'NoneType' object has no attribute 'children'\n2 failed, 3 passed in 0.4s", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "edit", "ts": 1800000082000, "path": "src/parser.py", "lang": "python", "meta": {"added": 3, "removed": 3}}
+{"k": "terminal_out", "ts": 1800000090000, "text": "FAILED tests/test_parser.py\nAttributeError: 'NoneType' object has no attribute 'children'\n2 failed, 3 passed in 0.4s", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "edit", "ts": 1800000122000, "path": "src/parser.py", "lang": "python", "meta": {"added": 3, "removed": 3}}
+{"k": "terminal_out", "ts": 1800000130000, "text": "FAILED tests/test_parser.py\nAttributeError: 'NoneType' object has no attribute 'children'\n2 failed, 3 passed in 0.4s", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "diagnostic", "ts": 1800000135000, "path": "src/parser.py", "lang": "python", "text": "Cannot access attribute 'children' for class 'None'", "meta": {"count": 1}}
+{"k": "file_focus", "ts": 1800000140000, "path": "tests/test_parser.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800000200000, "path": "src/parser.py", "lang": "python"}
