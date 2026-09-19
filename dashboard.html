@@ -3,166 +3,269 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Restraint Log</title>
+<title>Big Brother</title>
+<!-- one link per family, so one failing doesn't take the others down -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hubot+Sans:wdth,wght@75..125,200..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&display=swap">
 <style>
 :root{
-  --bg:#f6f5f1; --panel:#ffffff; --ink:#1d1c19; --muted:#6d6b64; --line:#e3e1da; --soft:#efede7;
-  --quiet:#b4b1a7; --speak:#dd5a2b; --speak-soft:#fbe7de;
-  --accepted:#2e8f57; --dismissed:#7d7b74; --ignored:#bdbab1;
-  --bad_timing:#c98a12; --bad_content:#7b5cd1; --wanted_help:#cf3a3a;
-  --ok:#2e8f57;
-  --mono:ui-monospace,"Cascadia Mono",Consolas,monospace;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#151513; --panel:#1e1e1b; --ink:#ecebe6; --muted:#9c9a92; --line:#302f2b; --soft:#282723;
-    --quiet:#5f5d56; --speak:#f07a4a; --speak-soft:#3a2219;
-    --accepted:#4cc07d; --dismissed:#9a988f; --ignored:#5a5852;
-    --bad_timing:#e0a93a; --bad_content:#9d83ea; --wanted_help:#ef5b5b; --ok:#4cc07d;
-  }
+  color-scheme:dark;
+  --bg:#0a0a0a; --panel:#111111; --raise:#181818; --line:#1e1e1e; --line-2:#2b2b2b;
+  --ink:#e8e8e3; --muted:#8c8c86; --dim:#56564f;
+  --lime:#e1f24a; --lime-ink:#151700; --yellow:#f2df3a; --green:#43d672;
+  --quiet:#5c5c57; --speak:var(--lime);
+  --accepted:#43d672; --dismissed:#9a9a94; --ignored:#56564f;
+  --bad_timing:#f5a63b; --bad_content:#a88cff; --wanted_help:#ff5c5c;
+  --pixel:"Pixelify Sans","Courier New",monospace;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --sans:"Mona Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --display:"Hubot Sans","Arial Narrow",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
-.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 48px}
-h1{font-size:22px;margin:0;letter-spacing:-.01em}
-h2{font-size:13px;margin:0;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
-.sub{margin:2px 0 0;color:var(--muted)}
-button{font:inherit;color:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 var(--sans)}
+button{font:inherit;color:inherit;cursor:pointer}
+code{font-family:var(--mono);font-size:.88em;background:var(--raise);border:1px solid var(--line-2);border-radius:4px;padding:0 4px}
+.ico{width:15px;height:15px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
-.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px}
-.controls{display:flex;gap:12px;align-items:center}
-select{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
-.live{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px}
-.live i{width:8px;height:8px;border-radius:50%;background:var(--quiet)}
-.live.on i{background:var(--ok)} .live.off i{background:var(--wanted_help)}
+.app{display:grid;grid-template-columns:268px minmax(0,1fr);gap:8px;padding:8px;min-height:100vh}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:4px 9px;border:1px solid var(--line-2);border-radius:6px;background:var(--raise);
+      font:500 11.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.chip .ico{width:13px;height:13px}
+.lbl{margin:0 0 8px;font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
 
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-.stat .n{font-size:24px;font-weight:650;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.stat .l{font-size:12px;color:var(--muted)}
-.stat.spoke .n{color:var(--speak)}
+/* ---- sidebar ---- */
+.side{position:sticky;top:8px;align-self:start;height:calc(100vh - 16px);display:flex;flex-direction:column;padding:24px 16px 16px;overflow:auto}
+.logo{font:600 35px/1.02 var(--pixel);letter-spacing:.02em;padding:0 4px}
+.logo span{display:block}
+.tagline{font:500 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:9px;padding:0 4px}
+.nav{display:grid;gap:4px;margin:30px 0 34px}
+.nav a{display:flex;align-items:center;gap:14px;padding:11px 14px;border-radius:8px;border:1px solid transparent;
+       font:500 14px var(--mono);color:var(--muted);text-decoration:none}
+.nav a:hover{color:var(--ink)}
+.nav a.on{background:var(--raise);border-color:var(--line-2);color:var(--ink)}
+.side .lbl{padding:0 14px}
+.sessions{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.sessions button{width:100%;display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:8px 14px;border:1px solid transparent;
+                 border-radius:8px;background:none;font:13px var(--mono);color:var(--muted);text-align:left}
+.sessions button .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sessions button .n{flex:none;font-size:11px;color:var(--dim)}
+.sessions button:hover{color:var(--ink)}
+.sessions button.on{background:var(--raise);border-color:var(--line-2);color:var(--ink)}
+.sessions button.on .n{color:var(--lime)}
+.sessions .none{padding:8px 14px;font:13px var(--mono);color:var(--dim)}
+.side-foot{margin-top:auto;padding:16px 14px 0;font:11px/1.6 var(--mono);color:var(--dim);letter-spacing:.04em}
 
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
-.card-head{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap;margin-bottom:6px}
-.card-head .btn{margin-left:auto}
-.legend{display:flex;gap:6px 12px;flex-wrap:wrap;color:var(--muted);font-size:12px;flex-basis:100%;order:3}
-.legend span{display:inline-flex;align-items:center;gap:5px}
+/* ---- top bar ---- */
+.main{display:grid;gap:8px;align-content:start;min-width:0}
+.topbar{display:flex;align-items:center;gap:12px 30px;padding:15px 20px;flex-wrap:wrap}
+.dot-item{display:inline-flex;align-items:center;gap:10px;min-width:0;font:500 13px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.dot-item > span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dot-item i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--dim)}
+.dot-item.on i{background:var(--green);box-shadow:0 0 10px var(--green)}
+.dot-item.off i{background:var(--wanted_help)}
+.dot-item.y i{background:var(--yellow)}
+.btn-miss{margin-left:auto;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--wanted_help);background:none;color:var(--wanted_help);
+          border-radius:8px;padding:7px 12px;font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.btn-miss:hover:not(:disabled){background:rgba(255,92,92,.1)}
+.btn-miss:disabled{opacity:.35;cursor:default}
+
+/* ---- hero ---- */
+.hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:8px}
+.headline{display:flex;flex-direction:column;justify-content:space-between;gap:28px;padding:22px 30px 30px;min-height:320px}
+.headline h1{margin:0;font:500 clamp(28px,3.4vw,50px)/1.22 var(--pixel);color:var(--lime);letter-spacing:.01em}
+.headline h1 span{display:block}
+.headline h1 .dim{color:#6d7424}
+.headline p{margin:0;font:13px var(--mono);color:var(--muted);max-width:52ch}
+.glow{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+      padding:28px 20px;min-height:320px;border-color:#1b2466;
+      background:radial-gradient(90% 70% at 50% 108%,#3553ff 0%,#1b2bb0 28%,#0d1766 58%,#070b2b 100%)}
+.glow::after{content:"";position:absolute;left:50%;bottom:-62%;width:130%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;
+             border-top:1px solid rgba(160,180,255,.35);background:radial-gradient(closest-side,rgba(10,16,60,.0),rgba(5,8,32,.85));pointer-events:none}
+.glow > *{position:relative;z-index:1}
+.glow .over{font:600 13px var(--display);font-stretch:75%;letter-spacing:.06em;text-transform:uppercase;color:#c8d1ff}
+.glow .big{font-family:var(--display);font-weight:900;font-stretch:75%;font-size:clamp(96px,11.5vw,188px);line-height:.84;letter-spacing:-.02em;
+           color:#f2f4ff;margin:12px 0 10px;text-shadow:0 12px 50px rgba(40,70,255,.55)}
+.glow .under{font:500 15px var(--display);font-stretch:87.5%;color:#b3bfff}
+
+/* ---- tiles ---- */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.tile{padding:14px 16px 18px}
+.tile .n{font-family:var(--display);font-weight:800;font-stretch:80%;font-size:48px;line-height:1;letter-spacing:-.01em;margin-top:24px;font-variant-numeric:tabular-nums}
+.tile .n.lime{color:var(--lime)}
+.tile .sub{font:12px var(--mono);color:var(--muted);margin-top:8px}
+
+/* ---- timeline ---- */
+.pad{padding:16px 18px}
+.head{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap}
+.legend{display:flex;gap:6px 14px;flex-wrap:wrap;flex-basis:100%;margin-top:4px;font:11px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c)}
 .legend i.bar{width:3px;height:12px;border-radius:2px}
-
-.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 11px;cursor:pointer}
-.btn:hover:not(:disabled){background:var(--soft)}
-.btn:disabled{opacity:.5;cursor:default}
-.btn.miss{border-color:var(--wanted_help);color:var(--wanted_help);font-weight:600}
-
-.track{position:relative;height:132px;--base:80px;margin:10px 8px 0}
-.baseline{position:absolute;left:0;right:0;top:var(--base);height:1px;background:var(--line)}
-.tick{position:absolute;top:0;height:100%;width:14px;margin-left:-7px;border:0;background:none;padding:0;cursor:pointer;border-radius:6px}
+.legend i.bar.faint{height:7px;opacity:.5}
+.legend i.ring{background:none;border:2px solid var(--speak);width:9px;height:9px}
+.track{position:relative;height:140px;--base:84px;margin:14px 8px 0}
+.baseline{position:absolute;left:0;right:0;top:var(--base);height:1px;background:var(--line-2)}
+.tick{position:absolute;top:0;height:100%;width:14px;margin-left:-7px;border:0;background:none;padding:0;border-radius:6px}
 .tick .bar{position:absolute;left:6px;width:2px;height:24px;bottom:calc(100% - var(--base));background:var(--quiet);border-radius:2px}
-.tick.spoke .bar{left:5px;width:4px;height:58px;background:var(--speak)}
-.tick.spoke .bar::before{content:"";position:absolute;top:-5px;left:-3px;width:10px;height:10px;border-radius:50%;background:var(--speak)}
-.tick:hover .bar{filter:brightness(.8)}
-.tick.sel{background:var(--soft)}
+.tick.spoke .bar{left:5px;width:4px;height:60px;background:var(--speak)}
+.tick.spoke .bar::before{content:"";position:absolute;top:-5px;left:-3px;width:10px;height:10px;border-radius:50%;background:var(--speak);box-shadow:0 0 12px var(--speak)}
+.tick.gated .bar{height:12px;opacity:.5}
+.tick.held .bar{height:40px}
+.tick.held .bar::before{content:"";position:absolute;top:-9px;left:-4px;width:10px;height:10px;border-radius:50%;border:2px solid var(--speak);background:var(--panel);box-sizing:border-box}
+.tick:hover .bar{filter:brightness(1.35)}
+.tick.sel{background:var(--raise)}
 .tick .fb{position:absolute;left:3px;width:8px;height:8px;border-radius:50%;background:var(--c)}
 .miss-line{position:absolute;top:0;bottom:0;border-left:2px dashed var(--wanted_help)}
-.miss-line span{position:absolute;bottom:0;left:4px;font-size:11px;font-weight:600;color:var(--wanted_help);white-space:nowrap}
-.miss-line.flip span{left:auto;right:6px}
-.axis{position:relative;height:18px;margin:4px 8px 0;font:11px var(--mono);color:var(--muted)}
+.miss-line span{position:absolute;bottom:0;left:5px;font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--wanted_help);white-space:nowrap}
+.miss-line.flip span{left:auto;right:7px}
+.axis{position:relative;height:18px;margin:6px 8px 0;font:11px var(--mono);color:var(--dim)}
 .axis span{position:absolute;transform:translateX(-50%);white-space:nowrap}
 .axis span:first-child{transform:none} .axis span:last-child{transform:translateX(-100%)}
-.empty{color:var(--muted);text-align:center;padding:40px 0;margin:0}
+.empty{margin:0;padding:44px 0;text-align:center;font:15px var(--pixel);color:var(--dim)}
 
-.split{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;margin-top:14px;align-items:start}
-.list{list-style:none;margin:10px 0 0;padding:0;max-height:620px;overflow:auto}
-.row{display:grid;grid-template-columns:auto auto 1fr;gap:4px 10px;align-items:baseline;width:100%;text-align:left;border:0;background:none;padding:9px 8px;border-radius:8px;cursor:pointer;border-top:1px solid var(--line)}
+/* ---- moments + detail ---- */
+.split{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:8px;align-items:start}
+.list{list-style:none;margin:12px 0 0;padding:0;max-height:660px;overflow:auto}
+.row{display:grid;grid-template-columns:auto auto 1fr;gap:4px 12px;align-items:baseline;width:100%;padding:10px 8px;border:0;border-top:1px solid var(--line);
+     border-radius:0;background:none;text-align:left}
 .list li:first-child .row{border-top-color:transparent}
-.row:hover{background:var(--soft)} .row.sel{background:var(--soft)}
-.time{font:12px var(--mono);color:var(--muted)}
-.badge{font-size:11px;font-weight:600;padding:1px 7px;border-radius:99px;background:var(--soft);color:var(--muted)}
-.badge.spoke{background:var(--speak-soft);color:var(--speak)}
-.badge.big{font-size:13px;padding:3px 10px}
-.why{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.why strong{font-weight:600}
+.row:hover,.row.sel{background:var(--raise);border-radius:8px;border-top-color:transparent}
+.time{font:12px var(--mono);color:var(--dim);white-space:nowrap}
+.badge{font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:5px;border:1px solid var(--line-2);color:var(--muted);white-space:nowrap}
+.badge.spoke{background:var(--lime);border-color:var(--lime);color:var(--lime-ink)}
+.badge.held{border-color:var(--lime);color:var(--lime)}
+.badge.big{font-size:12px;padding:4px 10px}
+.why{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#c9c9c3}
+.why strong{color:var(--ink);font-weight:600}
 .chips{grid-column:3;display:flex;gap:6px;flex-wrap:wrap}
-.chip{font-size:11px;font-weight:600;color:var(--c);border:1px solid var(--c);border-radius:99px;padding:0 7px}
+.fbchip{font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--c);border:1px solid var(--c);border-radius:5px;padding:0 6px}
 
-#detail .ph{color:var(--muted);margin:0}
-.d-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.said{margin:0 0 14px;padding:10px 12px;border-left:3px solid var(--speak);background:var(--speak-soft);border-radius:0 8px 8px 0}
-.said code,.why code{font-family:var(--mono);font-size:.92em}
-.sec{margin-top:14px}
-.sec > h2{margin-bottom:6px}
+.detail .ph{margin:12px 0 4px;font:17px/1.4 var(--pixel);color:var(--dim)}
+.d-head{display:flex;align-items:center;gap:10px;margin:14px 0}
+.said{margin:0 0 16px;padding:12px 14px;border-left:3px solid var(--lime);background:rgba(225,242,74,.06);border-radius:0 8px 8px 0;font-size:15px}
+.callout{margin:0 0 14px;padding:9px 12px;border-left:3px solid var(--quiet);background:var(--raise);border-radius:0 8px 8px 0;font-size:13px}
+.callout.held{border-left-color:var(--lime)}
+.callout.err{border-left-color:var(--wanted_help)}
+.callout code{word-break:break-word}
+.sec{margin-top:16px}
 .sec p{margin:0}
-.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:14px 0 0}
-.facts dt{color:var(--muted)} .facts dd{margin:0}
+.evidence{color:var(--muted)}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:7px 16px;margin:16px 0 0;font-size:13px}
+.facts dt{font:500 11px/1.9 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.facts dd{margin:0}
 .conf{display:inline-flex;align-items:center;gap:8px}
-.meter{height:5px;border-radius:3px;background:var(--soft);overflow:hidden;width:90px}
-.meter i{display:block;height:100%;background:var(--ink);opacity:.55}
-.signals{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.meter{height:4px;border-radius:2px;background:var(--line-2);overflow:hidden;width:90px}
+.meter i{display:block;height:100%;background:var(--lime)}
+.signals{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 .sig-top{display:flex;align-items:center;gap:8px}
 .sig-kind{font-weight:600}
-.cited{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:0 6px}
-.sig-n{margin-left:auto;font:12px var(--mono);color:var(--muted)}
-.signals .meter{width:100%;margin:4px 0}
+.cited{font:600 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--lime);border:1px solid rgba(225,242,74,.4);border-radius:4px;padding:0 5px}
+.sig-n{margin-left:auto;font:12px var(--mono);color:var(--dim)}
+.signals .meter{width:100%;margin:5px 0}
 .sig-detail{color:var(--muted);font-size:13px}
 .fb-list{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:6px}
 .fb-list li{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.note{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line-2);border-radius:8px;padding:8px 10px}
+.note:focus{outline:1px solid var(--lime);border-color:var(--lime)}
 .fb-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.fb-actions .btn{border-color:var(--c);color:var(--c);font-size:13px}
-.note{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+.fb-actions button{border:1px solid var(--c);background:none;color:var(--c);border-radius:6px;padding:5px 10px;font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.fb-actions button:hover:not(:disabled){background:var(--raise)}
+.fb-actions button:disabled{opacity:.4;cursor:default}
 .err{color:var(--wanted_help);font-size:13px;margin-top:6px}
+.quiet-note{margin:0;color:var(--muted);font-size:13px}
 
-@media (max-width:860px){
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .split{grid-template-columns:1fr}
-  #detail{order:-1}
+button:focus-visible,a:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+
+@media (max-width:1100px){
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .side{position:static;height:auto;padding:18px 14px}
+  .nav{grid-auto-flow:column;justify-content:start;margin:18px 0}
+  .sessions{grid-auto-flow:column;grid-auto-columns:max-content;overflow-x:auto;padding-bottom:4px}
+  .side-foot{display:none}
+  .hero,.split{grid-template-columns:1fr}
+  .headline,.glow{min-height:250px}
+  .detail{order:-1}
 }
 @media (max-width:600px){
+  .headline{padding:18px 18px 22px}
   .axis span:nth-child(2n){display:none}
+  .topbar{gap:10px 20px}
 }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <div>
-      <h1>Restraint log</h1>
-      <p class="sub">Every moment the judge considered, and whether it spoke.</p>
-    </div>
-    <div class="controls">
-      <select id="session" aria-label="Session" hidden></select>
-      <span id="live" class="live"><i></i><span>Connecting…</span></span>
-    </div>
-  </header>
+<div class="app">
+  <aside class="side panel">
+    <div class="logo"><span>BIG</span><span>BROTHER</span></div>
+    <div class="tagline">All-seeing AI helper</div>
+    <nav class="nav">
+      <a class="on" href="/" data-icon="grid">Restraint log</a>
+      <a href="/surface" target="_blank" rel="noopener" data-icon="target">Surface ↗</a>
+    </nav>
+    <h2 class="lbl">Sessions</h2>
+    <ul class="sessions" id="sessions"></ul>
+    <div class="side-foot">P3 · SURFACE &amp; RESTRAINT LOG</div>
+  </aside>
 
-  <section class="stats" id="stats"></section>
+  <div class="main">
+    <header class="topbar panel">
+      <span id="live" class="dot-item"><i></i><span>Connecting</span></span>
+      <span id="bar-session" class="dot-item y"><i></i><span>No session</span></span>
+      <button id="wanted" class="btn-miss" data-icon="flag" disabled>I wanted help</button>
+    </header>
 
-  <section class="card">
-    <div class="card-head">
-      <h2>Timeline</h2>
-      <div class="legend">
-        <span><i class="bar" style="--c:var(--speak)"></i>Spoke</span>
-        <span><i class="bar" style="--c:var(--quiet)"></i>Stayed quiet</span>
-        <span><i style="--c:var(--accepted)"></i>Accepted</span>
-        <span><i style="--c:var(--dismissed)"></i>Dismissed</span>
-        <span><i style="--c:var(--ignored)"></i>Ignored</span>
-        <span><i style="--c:var(--bad_timing)"></i>Bad timing</span>
-        <span><i style="--c:var(--bad_content)"></i>Bad content</span>
-        <span><i style="--c:var(--wanted_help)"></i>Missed</span>
+    <section class="hero">
+      <div class="headline panel">
+        <span class="chip" data-icon="activity" style="align-self:flex-start">Restraint log</span>
+        <h1 id="headline"></h1>
+        <p>Every moment the judge considered, including every no, with its reasoning.</p>
       </div>
-      <button id="wanted" class="btn miss" disabled>I wanted help just now</button>
-    </div>
-    <div class="track" id="track"></div>
-    <div class="axis" id="axis"></div>
-  </section>
-
-  <main class="split">
-    <section class="card">
-      <h2>Moments</h2>
-      <ol class="list" id="list"></ol>
+      <div class="glow panel">
+        <div class="over">Stayed quiet</div>
+        <div class="big" id="quiet-pct">—</div>
+        <div class="under" id="quiet-under">no moments yet</div>
+      </div>
     </section>
-    <aside class="card" id="detail"></aside>
-  </main>
+
+    <section class="tiles" id="tiles"></section>
+
+    <section class="panel pad">
+      <div class="head">
+        <span class="chip" data-icon="clock">Timeline</span>
+        <div class="legend">
+          <span><i class="bar" style="--c:var(--speak)"></i>Spoke</span>
+          <span><i class="bar" style="--c:var(--quiet)"></i>Stayed quiet</span>
+          <span><i class="ring"></i>Held (wanted to speak)</span>
+          <span><i class="bar faint" style="--c:var(--quiet)"></i>Skipped (budget/cooldown/snooze)</span>
+          <span><i style="--c:var(--accepted)"></i>Accepted</span>
+          <span><i style="--c:var(--dismissed)"></i>Dismissed</span>
+          <span><i style="--c:var(--ignored)"></i>Ignored</span>
+          <span><i style="--c:var(--bad_timing)"></i>Bad timing</span>
+          <span><i style="--c:var(--bad_content)"></i>Bad content</span>
+          <span><i style="--c:var(--wanted_help)"></i>Missed</span>
+        </div>
+      </div>
+      <div class="track" id="track"></div>
+      <div class="axis" id="axis"></div>
+    </section>
+
+    <div class="split">
+      <section class="panel pad">
+        <span class="chip" data-icon="list">Moments</span>
+        <ol class="list" id="list"></ol>
+      </section>
+      <section class="panel pad detail" id="detail"></section>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -170,6 +273,19 @@ const $ = s => document.querySelector(s);
 const FB = {accepted:"Accepted", dismissed:"Dismissed", ignored:"Ignored",
             bad_timing:"Bad timing", bad_content:"Bad content", wanted_help:"Wanted help"};
 const SPOKEN_FEEDBACK = ["accepted", "dismissed", "bad_timing", "bad_content", "ignored"];
+const ICONS = {
+  grid: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/>',
+  activity: '<path d="M3 12h4l3-8 4 16 3-8h4"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  list: '<path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/>',
+  flag: '<path d="M5 21V4h11l-2 4 2 4H5"/>',
+  speak: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',
+  hand: '<circle cx="12" cy="12" r="9"/><path d="M8 12h8"/>',
+  shield: '<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/>',
+  message: '<path d="M4 5h16v11H9l-5 4z"/>',
+  cursor: '<path d="M5 3l14 8-6 2-2 6z"/>',
+};
 
 let data = {decisions: [], feedback: []};
 let session = null, selected = null, lastSig = "";
@@ -186,6 +302,15 @@ function el(tag, props = {}, ...kids) {
   for (const c of kids.flat()) if (c != null && c !== false) n.append(c.nodeType ? c : String(c));
   return n;
 }
+function icon(name) {
+  const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  s.setAttribute("viewBox", "0 0 24 24");
+  s.setAttribute("class", "ico");
+  s.setAttribute("aria-hidden", "true");
+  s.innerHTML = ICONS[name] || "";
+  return s;
+}
+const chip = (name, text) => el("span", {class: "chip"}, icon(name), text);
 const human = s => s ? s.replace(/_/g, " ").replace(/^./, c => c.toUpperCase()) : "—";
 const clock = ms => new Date(ms).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit", second: "2-digit"});
 const hhmm = ms => new Date(ms).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"});
@@ -194,6 +319,27 @@ const hhmm = ms => new Date(ms).toLocaleTimeString([], {hour: "2-digit", minute:
 function rich(text) {
   return (text || "").split(/(`[^`]+`)/).map(p =>
     p.startsWith("`") && p.endsWith("`") && p.length > 1 ? el("code", {}, p.slice(1, -1)) : p);
+}
+
+// When the moment happened. decision.ts is when the judge finished, which in
+// a replay is the instant the replay ran, so it can't place moments in time.
+const at = r => (r.candidate && r.candidate.ts) || r.decision.ts;
+
+// The judge's own guardrails, from the extra "judge" key its log adds.
+// gated: budget/cooldown stopped it before Gemini was asked.
+// held:  Gemini said speak, then a guardrail overruled it.
+function guardrail(r) {
+  const o = (r.judge || {}).override;
+  if (!o) return null;
+  const cool = o.match(/^cooldown \((\d+)s\)/);
+  if (cool) return {kind: "gated", text: `Gemini wasn't asked: it already spoke less than ${Math.round(cool[1] / 60)} min ago.`};
+  if (o.startsWith("budget exhausted")) return {kind: "gated", text: "Gemini wasn't asked: this hour's interruption budget was already spent."};
+  if (o.startsWith("snoozed")) return {kind: "gated", text: "Gemini wasn't asked: you had snoozed it from the surface."};
+  if (/judge not called/.test(o)) return {kind: "gated", text: `Gemini wasn't asked: ${o.replace(/;\s*judge not called/, "")}.`};
+  if (o === "judge said speak but bucket was empty") return {kind: "held", text: "Gemini wanted to speak, but the interruption budget was empty."};
+  if (o === "judge said speak but content generation produced nothing")
+    return {kind: "held", text: "Gemini wanted to speak, but couldn't write anything grounded enough to say."};
+  return {kind: r.decision.should_speak ? "note" : "held", text: o};
 }
 
 async function poll() {
@@ -211,58 +357,75 @@ async function poll() {
 
 function setLive(ok) {
   const l = $("#live");
-  l.className = "live " + (ok ? "on" : "off");
+  l.className = "dot-item " + (ok ? "on" : "off");
   l.lastElementChild.textContent = ok ? "Live" : "Server unreachable";
 }
 
 function render() {
-  const latest = {};
-  for (const r of data.decisions) latest[r.session_id] = Math.max(latest[r.session_id] || 0, r.decision.ts);
+  const latest = {}, tally = {};
+  for (const r of data.decisions) {
+    latest[r.session_id] = Math.max(latest[r.session_id] || 0, r.decision.ts);  // most recently judged session first
+    const t = tally[r.session_id] ||= {n: 0, spoke: 0};
+    t.n += 1;
+    t.spoke += r.decision.should_speak ? 1 : 0;
+  }
   for (const f of data.feedback) latest[f.session_id] = Math.max(latest[f.session_id] || 0, f.ts);
   const sessions = Object.keys(latest).sort((a, b) => latest[b] - latest[a]);
   if (!sessions.includes(session)) session = sessions[0] || null;
 
-  const sel = $("#session");
-  sel.replaceChildren(...sessions.map(s => el("option", {value: s, selected: s === session ? "" : null}, s)));
-  sel.hidden = sessions.length < 2;
+  $("#sessions").replaceChildren(...(sessions.length ? sessions.map(s => el("li", {},
+    el("button", {class: s === session ? "on" : null, title: s, "aria-current": s === session ? "true" : null,
+                  onclick: () => { session = s; selected = null; render(); }},
+      el("span", {class: "name"}, s),
+      el("span", {class: "n", title: "moments · spoke"}, tally[s] ? `${tally[s].n} · ${tally[s].spoke}` : "—"))))
+    : [el("li", {class: "none"}, "None yet")]));
+  $("#bar-session").lastElementChild.textContent = session || "No session";
 
-  const ds = data.decisions.filter(r => r.session_id === session).sort((a, b) => a.decision.ts - b.decision.ts);
+  const ds = data.decisions.filter(r => r.session_id === session).sort((a, b) => at(a) - at(b));
   const fbs = data.feedback.filter(f => f.session_id === session);
   const byDec = {};
   for (const f of fbs) if (f.decision_id) (byDec[f.decision_id] ||= []).push(f);
   const misses = fbs.filter(f => !f.decision_id);
   if (selected && !ds.some(r => r.decision.decision_id === selected)) selected = null;
 
-  renderStats(ds, fbs, misses);
+  renderHero(ds, fbs, misses);
   renderTimeline(ds, byDec, misses);
   renderList(ds, byDec);
   renderDetail(ds.find(r => r.decision.decision_id === selected), byDec);
   $("#wanted").disabled = !session;
 }
 
-function renderStats(ds, fbs, misses) {
+function renderHero(ds, fbs, misses) {
+  const n = ds.length;
   const spoke = ds.filter(r => r.decision.should_speak).length;
-  const quiet = ds.length - spoke;
-  const b = ds.length ? ds[ds.length - 1].candidate.budget : null;
-  const stat = (label, n, sub, cls) =>
-    el("div", {class: "stat " + (cls || "")}, el("div", {class: "n"}, n), el("div", {class: "l"}, label + (sub ? " · " + sub : "")));
-  $("#stats").replaceChildren(
-    stat("Moments", ds.length, "considered"),
-    stat("Spoke", spoke, null, "spoke"),
-    stat("Stayed quiet", quiet, ds.length ? Math.round(quiet / ds.length * 100) + "%" : null),
-    stat("Budget left", b ? `${b.remaining}/${b.per_hour}` : "—", "this hour"),
-    stat("Feedback", fbs.length, misses.length ? `${misses.length} missed` : null),
-  );
+  const quiet = n - spoke;
+  const capped = ds.filter(r => { const g = guardrail(r); return g && g.kind !== "note"; }).length;
+  const b = n ? ds[n - 1].candidate.budget : null;
+  const s = k => k === 1 ? "" : "s";
+
+  $("#headline").replaceChildren(...(n
+    ? [el("span", {}, `${n} moment${s(n)} considered`), el("span", {}, `${quiet} declined`), el("span", {}, `${spoke} spoken`)]
+    : [el("span", {}, "waiting for the"), el("span", {}, "judge to speak up"), el("span", {class: "dim"}, "(or not)")]));
+  $("#quiet-pct").textContent = n ? Math.round(quiet / n * 100) + "%" : "—";
+  $("#quiet-under").textContent = n ? `${quiet} of ${n} moments, it said nothing` : "no moments yet";
+
+  const tile = (ico, label, value, sub, cls) => el("div", {class: "tile panel"},
+    chip(ico, label), el("div", {class: "n " + (cls || "")}, value), el("div", {class: "sub"}, sub || " "));
+  $("#tiles").replaceChildren(
+    tile("speak", "Spoke", spoke, n ? `of ${n} moments` : null, "lime"),
+    tile("hand", "Held back", capped, capped ? "by budget, cooldown or snooze" : "no guardrail fired"),
+    tile("shield", "Budget left", b ? `${b.remaining}/${b.per_hour}` : "—", "interruptions this hour"),
+    tile("message", "Feedback", fbs.length, misses.length ? `${misses.length} missed (wanted help)` : "none missed"));
 }
 
 function renderTimeline(ds, byDec, misses) {
   const track = $("#track"), axis = $("#axis");
   if (!ds.length && !misses.length) {
-    track.replaceChildren(el("p", {class: "empty"}, "No moments yet. Waiting for the judge to call log()."));
+    track.replaceChildren(el("p", {class: "empty"}, "no moments yet. waiting for the judge."));
     axis.replaceChildren();
     return;
   }
-  const times = [...ds.map(r => r.decision.ts), ...misses.map(f => f.ts)];
+  const times = [...ds.map(at), ...misses.map(f => f.ts)];
   let t0 = Math.min(...times), t1 = Math.max(...times);
   if (t1 - t0 < 60000) { const mid = (t0 + t1) / 2; t0 = mid - 30000; t1 = mid + 30000; }
   const pad = (t1 - t0) * 0.03; t0 -= pad; t1 += pad;
@@ -273,63 +436,74 @@ function renderTimeline(ds, byDec, misses) {
     nodes.push(el("div", {class: "miss-line" + ((m.ts - t0) / (t1 - t0) > .85 ? " flip" : ""), style: `left:${x(m.ts)}`,
       title: `Wanted help · ${clock(m.ts)}${m.note ? " — " + m.note : ""}`}, el("span", {}, "missed")));
   for (const r of ds) {
-    const d = r.decision, id = d.decision_id;
-    const label = `${clock(d.ts)} · ${d.should_speak ? "Spoke" : "Stayed quiet: " + human(d.decline_reason)}`;
+    const d = r.decision, id = d.decision_id, g = guardrail(r);
+    const label = `${clock(at(r))} · ${d.should_speak ? "Spoke" : g && g.kind !== "note" ? g.text : "Stayed quiet: " + human(d.decline_reason)}`;
     nodes.push(el("button", {
-        class: `tick ${d.should_speak ? "spoke" : "quiet"} ${id === selected ? "sel" : ""}`,
-        style: `left:${x(d.ts)}`, title: label, "aria-label": label, onclick: () => pick(id)},
+        class: `tick ${d.should_speak ? "spoke" : "quiet"} ${g ? g.kind : ""} ${id === selected ? "sel" : ""}`,
+        style: `left:${x(at(r))}`, title: label, "aria-label": label, onclick: () => pick(id)},
       el("i", {class: "bar"}),
       (byDec[id] || []).map((f, i) =>
         el("b", {class: "fb", style: `--c:var(--${f.kind});top:calc(var(--base) + ${8 + i * 11}px)`}))));
   }
   track.replaceChildren(...nodes);
+  const label = t1 - t0 < 5 * 60000 ? clock : hhmm;   // short spans need seconds or labels repeat
   axis.replaceChildren(...[0, .25, .5, .75, 1].map(p => {
     const t = t0 + (t1 - t0) * p;
-    return el("span", {style: `left:${p * 100}%`}, hhmm(t));
+    return el("span", {style: `left:${p * 100}%`}, label(t));
   }));
 }
 
 function renderList(ds, byDec) {
-  if (!ds.length) { $("#list").replaceChildren(el("li", {class: "empty"}, "Nothing yet.")); return; }
+  if (!ds.length) { $("#list").replaceChildren(el("li", {class: "quiet-note", style: "padding:10px 8px"}, "Nothing yet.")); return; }
   $("#list").replaceChildren(...[...ds].reverse().map(r => {
-    const d = r.decision, fb = byDec[d.decision_id] || [];
+    const d = r.decision, fb = byDec[d.decision_id] || [], g = guardrail(r);
+    const held = g && g.kind === "held";
     return el("li", {}, el("button", {class: `row ${d.decision_id === selected ? "sel" : ""}`, onclick: () => pick(d.decision_id)},
-      el("span", {class: "time"}, clock(d.ts)),
-      el("span", {class: `badge ${d.should_speak ? "spoke" : ""}`}, d.should_speak ? "Spoke" : "Quiet"),
+      el("span", {class: "time"}, clock(at(r))),
+      el("span", {class: `badge ${d.should_speak ? "spoke" : held ? "held" : ""}`}, d.should_speak ? "Spoke" : held ? "Held" : "Quiet"),
       el("span", {class: "why"},
         el("strong", {}, d.should_speak ? human(d.trajectory) : human(d.decline_reason)), " · ", rich(d.reasoning)),
       fb.length ? el("span", {class: "chips"},
-        fb.map(f => el("span", {class: "chip", style: `--c:var(--${f.kind})`}, FB[f.kind] || f.kind))) : null));
+        fb.map(f => el("span", {class: "fbchip", style: `--c:var(--${f.kind})`}, FB[f.kind] || f.kind))) : null));
   }));
 }
 
 function renderDetail(r, byDec) {
   const box = $("#detail");
   if (!r) {
-    box.replaceChildren(el("h2", {}, "Moment"),
-      el("p", {class: "ph", style: "margin-top:10px"}, "Pick a moment on the timeline to see why the judge spoke or stayed quiet."));
+    box.replaceChildren(chip("cursor", "Moment"),
+      el("p", {class: "ph"}, "pick a moment on the timeline to see why it spoke, or why it didn't."));
     return;
   }
-  const d = r.decision, c = r.candidate, fb = byDec[d.decision_id] || [];
+  const d = r.decision, c = r.candidate, j = r.judge || {}, fb = byDec[d.decision_id] || [];
+  const g = guardrail(r), held = g && g.kind === "held";
   const cited = new Set(d.signals_cited || []);
-  const sec = (title, ...body) => el("div", {class: "sec"}, el("h2", {}, title), ...body);
+  const sec = (title, ...body) => el("div", {class: "sec"}, el("h3", {class: "lbl"}, title), ...body);
   const fact = (k, v) => [el("dt", {}, k), el("dd", {}, v)];
+  const ms = v => v != null ? `${v} ms` : null;
+  const latency = [j.judge_latency_ms != null ? `judge ${j.judge_latency_ms} ms` : ms(d.latency_ms),
+                   j.content_latency_ms != null ? `content ${j.content_latency_ms} ms` : null].filter(Boolean).join(" · ");
 
-  box.replaceChildren(
+  box.replaceChildren(...[   // filter: replaceChildren would print a null as the text "null"
+    chip("cursor", "Moment"),
     el("div", {class: "d-head"},
-      el("span", {class: `badge big ${d.should_speak ? "spoke" : ""}`}, d.should_speak ? "Spoke" : "Stayed quiet"),
-      el("span", {class: "time"}, clock(d.ts))),
+      el("span", {class: `badge big ${d.should_speak ? "spoke" : held ? "held" : ""}`},
+        d.should_speak ? "Spoke" : held ? "Held back" : "Stayed quiet"),
+      el("span", {class: "time"}, clock(at(r)))),
+    g ? el("p", {class: `callout ${g.kind}`}, g.text) : null,
+    j.error ? el("p", {class: "callout err"}, "The judge failed here, so it stayed quiet: ", el("code", {}, j.error)) : null,
     d.should_speak && d.content ? el("blockquote", {class: "said"}, rich(d.content)) : null,
+    j.trajectory_evidence ? sec("What it saw", el("p", {class: "evidence"}, rich(j.trajectory_evidence))) : null,
     sec("Why", el("p", {}, rich(d.reasoning))),
     el("dl", {class: "facts"},
       fact("Trajectory", human(d.trajectory)),
       fact("Confidence", el("span", {class: "conf"},
         el("span", {class: "meter"}, el("i", {style: `width:${Math.round(d.confidence * 100)}%`})),
         Math.round(d.confidence * 100) + "%")),
-      d.should_speak ? null : fact("Held back", human(d.decline_reason)),
+      d.should_speak ? null : fact("Reason", human(d.decline_reason)),
       fact("Budget", `${c.budget.remaining}/${c.budget.per_hour} left`),
-      d.latency_ms != null ? fact("Latency", `${d.latency_ms} ms`) : null,
-      fact("Prompt", d.prompt_version || "—")),
+      latency ? fact("Latency", latency) : null,
+      fact("Prompt", [j.prompt_version || d.prompt_version || "—", j.content_version].filter(Boolean).join(" · "))),
     sec(`Signals (${c.signals.length})`, el("ul", {class: "signals"}, c.signals.map(s => el("li", {},
       el("div", {class: "sig-top"},
         el("span", {class: "sig-kind"}, human(s.kind)),
@@ -337,22 +511,22 @@ function renderDetail(r, byDec) {
         el("span", {class: "sig-n"}, s.occurrences > 1 ? `×${s.occurrences}` : "")),
       el("div", {class: "meter"}, el("i", {style: `width:${Math.round(s.strength * 100)}%`})),
       el("p", {class: "sig-detail"}, s.detail))))),
-    sec("Feedback", feedbackBlock(d, fb)));
+    sec("Feedback", feedbackBlock(d, fb))].filter(Boolean));
 }
 
 function feedbackBlock(d, fb) {
   const list = fb.length ? el("ul", {class: "fb-list"}, fb.map(f => el("li", {},
-    el("span", {class: "chip", style: `--c:var(--${f.kind})`}, FB[f.kind] || f.kind),
+    el("span", {class: "fbchip", style: `--c:var(--${f.kind})`}, FB[f.kind] || f.kind),
     el("span", {class: "time"}, clock(f.ts)),
     f.note ? el("span", {}, f.note) : null))) : null;
   if (!d.should_speak)
     return el("div", {}, list,
-      el("p", {class: "ph"}, "The judge stayed quiet here. If you wanted help, press “I wanted help just now”."));
+      el("p", {class: "quiet-note"}, "The judge stayed quiet here. If you wanted help, press “I wanted help”."));
 
   const note = el("input", {class: "note", placeholder: "Note (optional)", "aria-label": "Feedback note"});
   const err = el("div", {class: "err"});
-  const buttons = SPOKEN_FEEDBACK.map(kind => el("button", {class: "btn", style: `--c:var(--${kind})`,
-    onclick: async e => {
+  const buttons = SPOKEN_FEEDBACK.map(kind => el("button", {type: "button", style: `--c:var(--${kind})`,
+    onclick: async () => {
       buttons.forEach(b => b.disabled = true);
       const ok = await sendFeedback(kind, d.decision_id, note.value.trim() || null);
       if (!ok) { err.textContent = "Couldn't reach the server."; buttons.forEach(b => b.disabled = false); }
@@ -375,12 +549,13 @@ async function sendFeedback(kind, decisionId, note) {
 
 function pick(id) { selected = id; render(); }
 
-$("#session").addEventListener("change", e => { session = e.target.value; selected = null; render(); });
+document.querySelectorAll("[data-icon]").forEach(e => e.prepend(icon(e.dataset.icon)));
 $("#wanted").addEventListener("click", async e => {
-  e.target.disabled = true;
+  const btn = e.currentTarget;
+  btn.disabled = true;
   const note = prompt("What did you want help with? (optional)");
   if (note !== null) await sendFeedback("wanted_help", null, note.trim() || null);
-  e.target.disabled = !session;
+  btn.disabled = !session;
 });
 
 render();

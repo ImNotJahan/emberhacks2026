@@ -26,15 +26,30 @@ state = {"considering": None, "snoozed_until": 0}
 def _now_ms() -> int:
     return int(time.time() * 1000)
 
-def _store(record: dict) -> bool:
-    """Sort a record into memory by shape. False if it's neither type."""
+_seen = {}   # identity -> stored record, so re-sends are harmless
+
+def _identity(record: dict):
+    """What makes a record unique, by shape. None if it's neither type."""
     if "decision" in record:
-        decisions.append(record)
-    elif "kind" in record and "decision_id" in record:   # Signal/Event also have "kind"
-        feedback.append(record)
-    else:
-        return False
-    return True
+        return ("decision", record["decision"].get("decision_id"))
+    if "kind" in record and "decision_id" in record:   # Signal/Event also have "kind"
+        return ("feedback", record["decision_id"], record["kind"], record.get("ts"))
+    return None
+
+def _store(record: dict, identity) -> str:
+    """Keep a record in memory. Returns "new", "upgraded" or "duplicate".
+    The live judge sends plain DecisionRecords; its log file (via p3_import)
+    has the same record plus a "judge" key with its evidence. Whichever
+    arrives second, the stored record ends up with the evidence."""
+    old = _seen.get(identity)
+    if old is None:
+        _seen[identity] = record
+        (decisions if identity[0] == "decision" else feedback).append(record)
+        return "new"
+    if "judge" in record and "judge" not in old:
+        old["judge"] = record["judge"]
+        return "upgraded"
+    return "duplicate"
 
 def _load() -> None:
     if not LOG_PATH.exists():
@@ -42,9 +57,12 @@ def _load() -> None:
     with open(LOG_PATH, encoding="utf-8") as fh:
         for line in fh:
             try:
-                _store(json.loads(line))
-            except (ValueError, TypeError):
-                pass   # a line torn by a crash mid-write; skip it
+                record = json.loads(line)
+                identity = _identity(record)
+            except (ValueError, TypeError, AttributeError):
+                continue   # a line torn by a crash mid-write; skip it
+            if identity:
+                _store(record, identity)
     # end a torn tail with a newline so the next append starts a clean line
     with open(LOG_PATH, "rb+") as fh:
         if fh.seek(0, os.SEEK_END) > 0:
@@ -56,9 +74,14 @@ _load()
 
 @app.post("/log")
 def log(record: dict):
+    identity = _identity(record)
+    if identity is None:
+        return {"ok": False, "error": "not a DecisionRecord or FeedbackRecord"}
     with _lock:
-        if not _store(record):
-            return {"ok": False, "error": "not a DecisionRecord or FeedbackRecord"}
+        outcome = _store(record, identity)
+        if outcome == "duplicate":
+            return {"ok": True, "duplicate": True}
+        # an upgrade is saved too, so a restart reloads the evidence
         LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
         with open(LOG_PATH, "a", encoding="utf-8") as fh:
             fh.write(json.dumps(record, separators=(",", ":")) + "\n")
@@ -66,7 +89,8 @@ def log(record: dict):
         c = state["considering"]
         if c and c["candidate_id"] == record.get("candidate", {}).get("candidate_id"):
             state["considering"] = None
-    return {"ok": True, "decisions": len(decisions), "feedback": len(feedback)}
+    return {"ok": True, "upgraded": outcome == "upgraded",
+            "decisions": len(decisions), "feedback": len(feedback)}
 
 @app.get("/records")
 def records():

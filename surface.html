@@ -3,80 +3,100 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Assistant Surface</title>
+<title>Big Brother</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&display=swap">
 <style>
+/* same look as the dashboard: dark panels, lime voice, blue glow while thinking */
 :root{
-  --bg:#f6f5f1; --panel:#ffffff; --ink:#1d1c19; --muted:#6d6b64; --line:#e3e1da; --soft:#efede7;
-  --idle:#a8a59b; --think:#3b82c4; --speak:#dd5a2b; --speak-soft:#fbe7de; --warn:#cf3a3a;
-  --accepted:#2e8f57; --bad_timing:#c98a12; --bad_content:#7b5cd1;
-  --mono:ui-monospace,"Cascadia Mono",Consolas,monospace;
+  color-scheme:dark;
+  --bg:#0a0a0a; --panel:#111111; --raise:#181818; --line:#1e1e1e; --line-2:#2b2b2b;
+  --ink:#e8e8e3; --muted:#8c8c86; --dim:#56564f;
+  --lime:#e1f24a; --lime-text:#e1f24a; --lime-ink:#151700; --think:#5b78ff; --warn:#ff5c5c;
+  --accepted:#43d672; --bad_timing:#f5a63b; --bad_content:#a88cff;
+  --glow:radial-gradient(120% 140% at 50% 120%,#3553ff 0%,#1b2bb0 35%,#0d1766 65%,#070b2b 100%);
+  --pixel:"Pixelify Sans","Courier New",monospace;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --sans:"Mona Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#151513; --panel:#1e1e1b; --ink:#ecebe6; --muted:#9c9a92; --line:#302f2b; --soft:#282723;
-    --idle:#6b6961; --think:#5ba3e6; --speak:#f07a4a; --speak-soft:#3a2219; --warn:#ef5b5b;
-    --accepted:#4cc07d; --bad_timing:#e0a93a; --bad_content:#9d83ea;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#151513; --panel:#1e1e1b; --ink:#ecebe6; --muted:#9c9a92; --line:#302f2b; --soft:#282723;
-  --idle:#6b6961; --think:#5ba3e6; --speak:#f07a4a; --speak-soft:#3a2219; --warn:#ef5b5b;
-  --accepted:#4cc07d; --bad_timing:#e0a93a; --bad_content:#9d83ea;
+:root[data-theme="light"]{   /* VS Code light themes pass ?theme=light */
+  color-scheme:light;
+  --bg:#f5f5f2; --panel:#ffffff; --raise:#f0f0ec; --line:#e2e2dc; --line-2:#d3d3cc;
+  --ink:#16160f; --muted:#62625b; --dim:#8f8f87;
+  --lime-text:#5b6600; --think:#2f4dff; --warn:#d63b3b;
+  --accepted:#23884a; --bad_timing:#b86e0c; --bad_content:#6a4fd6;
+  --glow:radial-gradient(120% 140% at 50% 120%,#c3ceff 0%,#e3e8ff 50%,#ffffff 100%);
 }
 *{box-sizing:border-box}
 [hidden],#card:empty,#toast:empty{display:none!important}
-body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.5 var(--sans)}
 .embed body{background:transparent}
 button{font:inherit;color:inherit;cursor:pointer}
-.wrap{max-width:440px;margin:0 auto;padding:12px 12px 20px;display:grid;gap:10px}
+button:focus-visible,a:focus-visible,textarea:focus-visible{outline:2px solid var(--lime-text);outline-offset:2px}
+.wrap{max-width:440px;margin:0 auto;padding:10px 10px 18px;display:grid;gap:8px}
 
 /* presence */
-.presence{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.dot{position:relative;flex:none;width:10px;height:10px;border-radius:50%;background:var(--idle)}
-.dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid transparent}
-.mode-considering .dot{background:var(--think);animation:breathe 1.6s ease-in-out infinite}
-.mode-ready .dot, .mode-open .dot{background:var(--speak)}
-.mode-ready .dot::after{border-color:var(--speak);animation:ring 1.8s ease-out 2}
-.mode-snoozed .dot{background:none;border:2px solid var(--idle)}
+.presence{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;transition:background .4s}
+.mode-considering.presence{background:var(--glow);border-color:rgba(91,120,255,.45)}
+.dot{position:relative;flex:none;width:10px;height:10px;border-radius:50%;background:var(--dim)}
+.dot::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid transparent}
+.mode-watching .dot{background:var(--dim)}
+.mode-considering .dot{background:var(--think);box-shadow:0 0 12px var(--think);animation:breathe 1.6s ease-in-out infinite}
+.mode-ready .dot,.mode-open .dot{background:var(--lime);box-shadow:0 0 12px var(--lime)}
+.mode-ready .dot::after{border-color:var(--lime);animation:ring 1.8s ease-out 2}
+.mode-snoozed .dot{background:none;border:2px solid var(--dim)}
 .mode-offline .dot{background:var(--warn)}
-@keyframes breathe{50%{opacity:.35;transform:scale(.8)}}
+@keyframes breathe{50%{opacity:.4;transform:scale(.8)}}
 @keyframes ring{from{opacity:.9;transform:scale(.6)}to{opacity:0;transform:scale(1.8)}}
-@media (prefers-reduced-motion:reduce){.dot,.dot::after{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.dot,.dot::after{animation:none!important}.presence{transition:none}}
 .txt{flex:1;min-width:0}
-.title{font-weight:600}
-.sub{color:var(--muted);font-size:12px}
-.btn{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:5px 10px;white-space:nowrap}
-.btn:hover:not(:disabled){background:var(--soft)}
-.btn:disabled{opacity:.5;cursor:default}
-.btn.primary{background:var(--speak);border-color:var(--speak);color:#fff;font-weight:600}
-.btn.primary:hover{filter:brightness(1.08);background:var(--speak)}
+.title{font:500 17px/1.25 var(--pixel);letter-spacing:.01em}
+.mode-ready .title,.mode-open .title{color:var(--lime-text)}
+.mode-considering .title{color:#eef1ff}
+:root[data-theme="light"] .mode-considering .title{color:var(--ink)}
+.sub{margin-top:2px;font:11.5px/1.45 var(--mono);color:var(--muted)}
+.mode-considering .sub{color:#b3bfff}
+:root[data-theme="light"] .mode-considering .sub{color:var(--muted)}
+.btn{border:1px solid var(--line-2);background:var(--raise);border-radius:7px;padding:6px 10px;white-space:nowrap;
+     font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.btn:hover:not(:disabled){border-color:var(--muted)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.primary{background:var(--lime);border-color:var(--lime);color:var(--lime-ink)}
+.btn.primary:hover{filter:brightness(1.06)}
 
 /* the thought */
-.card{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--speak);border-radius:12px;padding:12px}
-.card-top{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}
-.card-top .x{margin-left:auto;border:0;background:none;padding:2px 6px;border-radius:6px;font-size:16px;line-height:1;color:var(--muted)}
-.card-top .x:hover{background:var(--soft);color:var(--ink)}
-.content{margin:8px 0 10px;font-size:14px}
-code{font-family:var(--mono);font-size:.9em;background:var(--soft);padding:0 3px;border-radius:4px}
-.why{background:var(--soft);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--muted)}
-.why b{color:var(--ink);font-weight:600}
-.sigs{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
-.sig{font-size:11px;border:1px solid var(--line);border-radius:99px;padding:0 6px;background:var(--panel)}
-.actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.actions .btn{border-color:var(--c);color:var(--c)}
-.more{font-size:12px;color:var(--muted);margin-top:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px 14px}
+.card-top{display:flex;align-items:center;gap:8px;font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.card-top > span{display:inline-flex;align-items:center;gap:7px;padding:3px 8px;border:1px solid var(--line-2);border-radius:6px;background:var(--raise)}
+.card-top > span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--lime)}
+.card-top .x{margin-left:auto;border:0;background:none;padding:2px 7px;border-radius:6px;font:16px/1 var(--mono);color:var(--muted)}
+.card-top .x:hover{background:var(--raise);color:var(--ink)}
+.content{margin:12px 0;padding-left:12px;border-left:3px solid var(--lime);font-size:14.5px;line-height:1.5}
+code{font-family:var(--mono);font-size:.88em;background:var(--raise);border:1px solid var(--line-2);border-radius:4px;padding:0 4px}
+.why{background:var(--raise);border-radius:8px;padding:9px 11px;font-size:12.5px;color:var(--muted)}
+.why b{display:block;margin-bottom:3px;font:500 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.sigs{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.sig{font:600 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--lime-text);border:1px solid var(--line-2);border-radius:4px;padding:1px 6px}
+.actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.actions .btn{background:none;border-color:var(--c);color:var(--c)}
+.actions .btn:hover:not(:disabled){background:var(--raise)}
+.more{margin-top:10px;font:11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
 
-.toast{font-size:12px;color:var(--muted);padding:0 4px;min-height:1em}
+.toast{padding:0 4px;font:11.5px var(--mono);color:var(--muted)}
 
 /* missed help */
 .help{border-top:1px solid var(--line);padding-top:10px}
-.link{border:0;background:none;padding:0;color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+.link{border:0;background:none;padding:0;font:11.5px var(--mono);letter-spacing:.04em;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
 .link:hover{color:var(--ink)}
 .help form{display:grid;gap:6px;margin-top:8px}
-textarea{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 9px;resize:vertical;min-height:54px}
+textarea{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line-2);border-radius:8px;padding:8px 10px;resize:vertical;min-height:56px}
 .row{display:flex;gap:6px;justify-content:flex-end}
-.foot{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+.foot{display:flex;justify-content:space-between;gap:8px;font:10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
 .foot a{color:inherit}
+.foot a:hover{color:var(--ink)}
 </style>
 </head>
 <body>
