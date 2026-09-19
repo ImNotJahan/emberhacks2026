@@ -16,7 +16,7 @@ import time
 from pathlib import Path
 from urllib.error import HTTPError
 
-from p3_send import _call
+from p3_send import BASE_URL, _call
 
 LOG_DIR = Path(__file__).resolve().parent / "logs"
 OWN_FILES = {"mailbox.jsonl"}   # the server's own save file; never forward it
@@ -29,26 +29,30 @@ def judge_logs() -> list:
 def forward(path: Path, offset: int = 0) -> tuple:
     """Send every complete line after `offset`. Returns (new offset, counts).
     Stops early if the server is unreachable, so nothing is skipped over."""
-    counts = {"new": 0, "evidence added": 0, "already there": 0, "skipped": 0}
+    counts = {"new": 0, "evidence added": 0, "already there": 0, "skipped": 0, "server down": 0}
+    # Read and close before sending anything: on Windows an open file can't be
+    # deleted, and judge.replay deletes its log to start fresh.
     with open(path, "rb") as fh:
         fh.seek(offset)
-        for raw in fh:
-            if not raw.endswith(b"\n"):
-                break                      # the judge is mid-write; pick it up next pass
-            line = raw.strip()
-            if line:
-                try:
-                    resp = _call("/log", line.decode("utf-8"))
-                    outcome = ("skipped" if not resp.get("ok") else "already there" if resp.get("duplicate")
-                               else "evidence added" if resp.get("upgraded") else "new")
-                except HTTPError:
-                    outcome = "skipped"    # server rejected this line; move on
-                except OSError:
-                    break                  # server down: retry this line next pass
-                except ValueError:
-                    outcome = "skipped"
-                counts[outcome] += 1
-            offset += len(raw)
+        chunk = fh.read()
+    for raw in chunk.splitlines(keepends=True):
+        if not raw.endswith(b"\n"):
+            break                          # the judge is mid-write; pick it up next pass
+        line = raw.strip()
+        if line:
+            try:
+                resp = _call("/log", line.decode("utf-8"))
+                outcome = ("skipped" if not resp.get("ok") else "already there" if resp.get("duplicate")
+                           else "evidence added" if resp.get("upgraded") else "new")
+            except HTTPError:
+                outcome = "skipped"        # server rejected this line; move on
+            except OSError:
+                counts["server down"] = 1
+                break                      # server down: retry this line next pass
+            except ValueError:
+                outcome = "skipped"
+            counts[outcome] += 1
+        offset += len(raw)
     return offset, counts
 
 
@@ -59,15 +63,32 @@ def main() -> None:
     ap.add_argument("--every", type=float, default=1.0, help="seconds between passes with --follow")
     a = ap.parse_args()
 
-    offsets = {}
+    offsets = {}   # path -> (file id, bytes already sent)
+    warned = False
     while True:
+        down = False
         for path in a.files or judge_logs():
-            start = offsets.get(path, 0)
-            if path.stat().st_size < start:
+            try:
+                st = path.stat()
+            except OSError:
+                if not a.follow:
+                    print(f"{path}: not found", flush=True)
+                continue                       # deleted between passes
+            file_id, start = offsets.get(path, (st.st_ino, 0))
+            if st.st_ino != file_id or st.st_size < start:
                 start = 0                      # file was replaced (a fresh replay)
-            offsets[path], counts = forward(path, start)
+            try:
+                new_offset, counts = forward(path, start)
+            except OSError:
+                continue                       # vanished mid-read; next pass
+            offsets[path] = (st.st_ino, new_offset)
+            down = down or counts.pop("server down")
             if any(counts.values()):
                 print(f"{path.name}: " + ", ".join(f"{n} {k}" for k, n in counts.items() if n), flush=True)
+        if down and not warned:
+            print(f"can't reach the P3 server at {BASE_URL}; "
+                  + ("will keep retrying" if a.follow else "is it running?"), flush=True)
+        warned = down
         if not a.follow:
             break
         time.sleep(a.every)

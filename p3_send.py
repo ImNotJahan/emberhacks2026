@@ -3,7 +3,7 @@ p3_send.py — one-line logging to the Surface mailbox (p3_server.py).
 
     from p3_send import log, considering, snoozed
 
-    if snoozed():                 # dev hit snooze: decline with USER_SUPPRESSED
+    if snoozed():                 # dev hit snooze or pause: decline with USER_SUPPRESSED
         ...
     considering(candidate)        # optional: shows "considering…" in the surface
     decision = ...                # the Gemini call
@@ -11,7 +11,8 @@ p3_send.py — one-line logging to the Surface mailbox (p3_server.py).
 
 Standard library only, so the judge doesn't need FastAPI installed.
 None of these raise. If the mailbox is down, log() appends the record to
-unsent.jsonl instead and returns False.
+unsent.jsonl instead and returns False; the next log() that gets through
+sends those first.
 
 Point it at another machine with the MAILBOX_URL env var, e.g.
     MAILBOX_URL=http://192.168.1.20:8766/log
@@ -20,11 +21,16 @@ Point it at another machine with the MAILBOX_URL env var, e.g.
 import json
 import os
 import urllib.request
+from pathlib import Path
+from urllib.error import HTTPError
 
-from contract import now_ms, to_json, write_jsonl
+from contract import to_json, write_jsonl
 
-MAILBOX_URL = os.environ.get("MAILBOX_URL", "http://localhost:8766/log")
-BASE_URL = MAILBOX_URL.rsplit("/log", 1)[0]
+# 127.0.0.1, not "localhost": on Windows "localhost" tries IPv6 first and every
+# request waits ~1-2 s before falling back, since the server only listens on IPv4.
+MAILBOX_URL = os.environ.get("MAILBOX_URL", "http://127.0.0.1:8766/log")
+# accept ".../log", ".../log/", "http://host:8766" or "http://host:8766/"
+BASE_URL = MAILBOX_URL.rstrip("/").removesuffix("/log").rstrip("/")
 FALLBACK_PATH = "unsent.jsonl"
 
 
@@ -43,10 +49,44 @@ def log(record) -> bool:
     """POST a DecisionRecord or FeedbackRecord to the mailbox. True if it was stored."""
     try:
         # the mailbox answers 200 with ok=false for records it doesn't recognise
-        return bool(_call("/log", to_json(record)).get("ok"))
+        ok = bool(_call("/log", to_json(record)).get("ok"))
+    except HTTPError:
+        return False          # the server is up but refused it; saving it won't help
     except Exception:
-        write_jsonl(FALLBACK_PATH, [record])
+        try:
+            write_jsonl(FALLBACK_PATH, [record])
+        except OSError:
+            pass
         return False
+    _flush_unsent()
+    return ok
+
+
+def _flush_unsent() -> None:
+    """Send what piled up in unsent.jsonl while the mailbox was down. The
+    server ignores records it already has, so a partial flush is safe to redo."""
+    path = Path(FALLBACK_PATH)
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return
+    for i, line in enumerate(lines):
+        if not line.strip():
+            continue
+        try:
+            _call("/log", line)
+        except HTTPError:
+            continue          # refused: drop it
+        except Exception:
+            try:
+                path.write_text("\n".join(lines[i:]) + "\n", encoding="utf-8")
+            except OSError:
+                pass
+            return            # down again: keep the rest for next time
+    try:
+        path.unlink()
+    except OSError:
+        pass
 
 
 def considering(candidate) -> None:
@@ -59,8 +99,9 @@ def considering(candidate) -> None:
 
 
 def snoozed() -> bool:
-    """True while the developer has snoozed the assistant from the surface."""
+    """True while the developer has snoozed or paused the assistant from the surface."""
     try:
-        return _call("/state")["snoozed_until"] > now_ms()
+        s = _call("/state")
+        return s.get("paused") is True or s["snoozed_until"] > s["now"]   # the server's clock, not this machine's
     except Exception:
         return False
