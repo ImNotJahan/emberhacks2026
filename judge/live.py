@@ -19,6 +19,7 @@ import json
 import time
 import urllib.error
 import urllib.request
+from typing import Optional
 
 from contract import new_id, now_ms, to_json
 from judge.codec import candidate_from_dict
@@ -37,7 +38,7 @@ def _post(url: str, body: str) -> None:
     urllib.request.urlopen(req, timeout=5).read()
 
 
-def run(port: int, session_id: str, prompt: str, per_hour: int, poll_s: float,
+def run(port: int, session_id: str, prompt: str, per_hour: Optional[int], poll_s: float,
         mailbox: bool = True) -> None:
     base = f"http://127.0.0.1:{port}"
     judge = Judge(session_id, prompt, per_hour, mailbox=mailbox)
@@ -75,7 +76,8 @@ if __name__ == "__main__":
     ap.add_argument("--port", type=int, default=8765)
     ap.add_argument("--session", default=None)
     ap.add_argument("--prompt", default=LATEST)
-    ap.add_argument("--per-hour", type=int, default=3)
+    ap.add_argument("--per-hour", type=int, default=None,
+                    help="interruption budget; default none: each moment on its merits")
     ap.add_argument("--poll", type=float, default=1.0)
     ap.add_argument("--no-mailbox", action="store_true", help="don't talk to p3_server.py")
     a = ap.parse_args()

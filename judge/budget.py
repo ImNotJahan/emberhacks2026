@@ -1,5 +1,10 @@
 """Interruption budget: a token bucket, N per hour, refilling continuously.
 
+per_hour=None (or 0) means NO budget: the bucket only keeps count, never
+refuses, and reports BudgetState(per_hour=0, remaining=0). The live judge runs
+this way since v8 (each moment judged on its merits); calibration of v1-v7
+still uses 3/hour so their rows stay comparable.
+
 Time is always passed in (candidate.ts), never read from the wall clock, so a
 replayed trace spends and refills exactly as it did live.
 """
@@ -15,7 +20,9 @@ HOUR_MS = 3_600_000
 
 
 class TokenBucket:
-    def __init__(self, per_hour: int = 3, start_full: bool = True) -> None:
+    def __init__(self, per_hour: Optional[int] = 3, start_full: bool = True) -> None:
+        self.unlimited = not per_hour
+        per_hour = per_hour or 0
         self.per_hour = per_hour
         self.tokens = float(per_hour) if start_full else 0.0
         self._last_ms: Optional[int] = None
@@ -30,6 +37,8 @@ class TokenBucket:
             self._last_ms = ts
 
     def remaining(self, ts: int) -> int:
+        if self.unlimited:
+            return 0          # "no budget", not "exhausted": check .unlimited
         self._refill(ts)
         return math.floor(self.tokens + 1e-9)
 
@@ -43,6 +52,10 @@ class TokenBucket:
         )
 
     def try_spend(self, ts: int) -> bool:
+        if self.unlimited:
+            self.spent += 1
+            self.last_intervention_ms = ts
+            return True
         if self.remaining(ts) < 1:
             return False
         self.tokens -= 1.0

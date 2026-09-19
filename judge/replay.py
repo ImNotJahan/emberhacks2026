@@ -34,7 +34,7 @@ def load_candidates(trace: Path) -> list[CandidateMoment]:
     return [candidate_from_dict(d) for d in read_jsonl(str(trace))]
 
 
-def replay(trace: str | Path, prompt_version: str = LATEST, per_hour: int = 3,
+def replay(trace: str | Path, prompt_version: str = LATEST, per_hour: Optional[int] = None,
            with_content: bool = True, session_id: Optional[str] = None,
            fresh: bool = True, mailbox: bool = False) -> tuple[Path, list[InterventionDecision]]:
     trace = Path(trace)
@@ -53,7 +53,8 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("trace")
     ap.add_argument("--prompt", default=LATEST)
-    ap.add_argument("--per-hour", type=int, default=3)
+    ap.add_argument("--per-hour", type=int, default=None,
+                    help="interruption budget; default none (v8+). Use 3 for v1-v7")
     ap.add_argument("--no-content", action="store_true")
     ap.add_argument("--session")
     ap.add_argument("--mailbox", action="store_true",

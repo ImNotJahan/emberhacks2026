@@ -10,7 +10,7 @@ from contract import CandidateMoment
 from judge import gemini
 from judge.render import render_candidate
 
-CONTENT_VERSION = "content-v3"
+CONTENT_VERSION = "content-v4"
 
 CONTENT_SYSTEM = """\
 You write the one interruption a coding assistant is allowed to make. A
@@ -35,6 +35,23 @@ file, the exact error, the failing test, and the concrete check to run.
 Never guess a function or variable name; an invented name is worse than
 saying nothing.
 
+DIAGNOSE LIKE A SENIOR ENGINEER (content-v4):
+- The last line of a traceback is where execution WAS, not necessarily the
+  bug. Read the whole run: exit code, what was printed, how it ended.
+- KeyboardInterrupt / exit 130 / ^C means the developer stopped the program
+  themselves. Never tell them the problem is that it "is being stopped" or
+  to "let it complete". Ask why it didn't finish: the same line printed
+  over and over means an infinite loop; little output means it is waiting
+  (input(), network, lock) or slow.
+- Same failure after several small edits: the edits aren't touching the
+  cause. Point upstream, to where the bad value or the loop condition is
+  produced, not to the line that reports it.
+- A "## Known patterns" section, when present, is a reliable diagnosis from
+  deterministic matching. Build the message on it, and make the next action
+  the specific fix it names (e.g. which loop condition to check, which
+  variable must change each iteration), anchored on the file and line.
+- Prefer the root cause and one concrete fix over generic advice.
+
 Never: greet, apologize, say "it looks like", suggest a break, tell them to
 "read the error" or "add logging" generically, or restate what they already
 know. No markdown, no code blocks; inline identifiers in backticks are fine.
@@ -57,7 +74,7 @@ def generate(candidate: CandidateMoment, judge_reasoning: str,
     """One content call, plus one retry if it names something not in the
     context. A second invention returns data=None: the judge then stays
     silent rather than say something made up."""
-    context = render_candidate(candidate)
+    context = render_candidate(candidate, hints=True)
     user = (
         context
         + f"\n\n## Judge's read\ntrajectory={trajectory}\n{judge_reasoning}"

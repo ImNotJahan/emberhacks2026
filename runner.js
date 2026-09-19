@@ -32,6 +32,9 @@ class Runner {
     this.spoke = 0;
     this.silent = 0;
     this.announced = false;
+    this.lastDecision = null;
+    this.startedAt = null;
+    this.listeners = new Set();
 
     this.status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1000);
     this.status.command = 'restraint.menu';
@@ -41,6 +44,39 @@ class Runner {
   }
 
   cfg() { return vscode.workspace.getConfiguration('restraint'); }
+
+  // --- for the sidebar Control view ---------------------------------------
+
+  onChange(fn) { this.listeners.add(fn); }
+
+  snapshot() {
+    const cfg = this.cfg();
+    return {
+      state: this.state, detail: this.detail, python: this.python, session: this.session,
+      spoke: this.spoke, silent: this.silent, lastDecision: this.lastDecision,
+      startedAt: this.startedAt, judgeProblem: this.judgeProblem || null,
+      procs: { engine: !!this.engine, judge: !!this.judge, mailbox: !!this.mailbox },
+      port: cfg.get('port', 8765), mailboxPort: MAILBOX_PORT,
+      prompt: cfg.get('prompt', ''), redaction: cfg.get('redaction.enabled', true),
+    };
+  }
+
+  // judge.live prints "[<ms>ms] SPEAK: <content>" or "[<ms>ms] silent (<reason>)",
+  // then "    why: <reasoning>". Counted here, so the numbers are this window's judge.
+  parseJudgeLine(line) {
+    const m = /^\[(\d+)ms\] (?:SPEAK: (.*)|silent \((\w+)\))$/.exec(line);
+    if (m) {
+      const spoke = m[2] !== undefined;
+      this.lastDecision = { ts: Date.now(), ms: Number(m[1]), spoke, content: m[2] || null, reason: m[3] || null, why: '' };
+      this.noteDecision(spoke);
+      return;
+    }
+    const w = /^\s+why: (.*)$/.exec(line);
+    if (w && this.lastDecision && !this.lastDecision.why) {
+      this.lastDecision.why = w[1];
+      this.render();
+    }
+  }
 
   setState(state, detail = '') {
     this.state = state;
@@ -65,6 +101,7 @@ class Runner {
     if (this.session) lines.push(`decision log: \`logs/${this.session}.jsonl\``);
     lines.push('', 'Click for options');
     this.status.tooltip = new vscode.MarkdownString(lines.join('\n\n'));
+    for (const fn of this.listeners) { try { fn(); } catch (e) { this.log('status listener: ' + e.message); } }
   }
 
   noteDecision(spoke) {
@@ -113,6 +150,8 @@ class Runner {
   start() {
     if (this.engine || this.judge) return;
     this.spoke = this.silent = 0;
+    this.lastDecision = null;
+    this.startedAt = Date.now();
     this.setState('starting', 'Checking setup');
 
     this.python = this.findPython();
@@ -222,13 +261,14 @@ class Runner {
     const n = new Date(), pad = x => String(x).padStart(2, '0');   // local time, matches the clock on the wall
     const stamp = `${n.getFullYear()}${pad(n.getMonth() + 1)}${pad(n.getDate())}_${pad(n.getHours())}${pad(n.getMinutes())}${pad(n.getSeconds())}`;
     this.session = `live_${stamp}`;
-    const args = ['-m', 'judge.live', '--port', port, '--session', this.session,
-      '--per-hour', String(cfg.get('perHour', 3))];
+    // No --per-hour: since judge-v8 there is no interruption budget.
+    const args = ['-m', 'judge.live', '--port', port, '--session', this.session];
     const prompt = cfg.get('prompt', '');
     if (prompt) args.push('--prompt', prompt);
 
     this.judge = this.spawnPy('judge', args, line => {
       if (line.startsWith('judge live:')) this.ready();
+      else this.parseJudgeLine(line);
     });
     const judge = this.judge;
     judge.on('exit', code => {
@@ -264,6 +304,7 @@ class Runner {
     const procs = [this.judge, this.engine, this.mailbox];
     this.judge = this.engine = this.mailbox = null;         // exit handlers ignore procs no longer current
     for (const p of procs) if (p) p.kill();
+    this.startedAt = null;
     if (!silent) this.setState('stopped');
   }
 

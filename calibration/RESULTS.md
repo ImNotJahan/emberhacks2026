@@ -22,6 +22,8 @@ Traces: refactor, tdd, exploring, parser, thrash, blocked, p1_stuck (synthetic p
 | 2026-09-19 11:23:35 | judge-v5 | fb67b9eb | cec4e923 | 3 | 0% | 0% | 100% | 6/48 | 1395 | 1730 | + counted schema fields gate trajectory |
 | 2026-09-19 11:30:30 | judge-v5 | fb67b9eb | 105a97a1 | 3 | 0% | 0% | 100% | 9/54 | 1382 | 1726 | v5 rescored with p1_stuck (real edit shapes) added |
 | 2026-09-19 11:31:50 | judge-v6 | 2e113a19 | 105a97a1 | 3 | 0% | 0% | 100% | 9/54 | 1401 | 1718 | + size-only edit guidance for real editor data; blocked at 30s |
+| 2026-09-19 12:23:18 | judge-v7 | 9b98871f | 105a97a1 | 3 | 0% | 0% | 100% | 9/54 | 1325 | 1636 | + deterministic known-pattern hints (infinite loop vs Ctrl+C, exit codes, exception catalog) |
+| 2026-09-19 12:25:00 | judge-v8 | 08786d69 | 105a97a1 | 3 | 0% | 0% | 100% | 9/54 | 1296 | 1644 | budget removed: each moment on its merits (cooldown kept) |
 
-## Misses and false positives, latest run (judge-v6)
+## Misses and false positives, latest run (judge-v8)
 

@@ -4,7 +4,8 @@
     python -m judge.calibrate --table                  # just rebuild the table
 
 Each version is replayed over every calibration trace with a fresh judge
-(budget 3/hour, content generation off — content can't change timing).
+(budget 3/hour for v1-v7, none for v8+; content generation off — content
+can't change timing).
 Metrics, per contract.EvalResult:
   false_positive_rate  spoke where the label says leave them alone.
                        Headline number, restricted to PRODUCTIVE traces.
@@ -28,6 +29,7 @@ from pathlib import Path
 
 from contract import EvalResult, read_jsonl, to_json
 from judge import gemini
+from judge.prompts import BUDGETED
 from judge.codec import label_from_dict
 from judge.prompts import PROMPTS
 from judge.replay import replay
@@ -51,7 +53,8 @@ def score(version: str, notes: str = "", repeats: int = 3) -> dict:
     rows = []
     for rep, name in [(r, n) for r in range(repeats) for n in CALIBRATION]:
         labels = [label_from_dict(d) for d in read_jsonl(str(TRACE_DIR / f"{name}.labels.jsonl"))]
-        path, ds = replay(TRACE_DIR / f"{name}.candidates.jsonl", version, per_hour=3,
+        path, ds = replay(TRACE_DIR / f"{name}.candidates.jsonl", version,
+                          per_hour=3 if version in BUDGETED else None,
                           with_content=False, session_id=f"cal_{name}__{version}__r{rep}")
         lines = list(read_jsonl(str(path)))
         hit_eps: set[str] = set()
