@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Big Brother</title>
+<link rel="icon" type="image/png" href="/p3_eye.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mona+Sans:wght@400..700&display=swap">
@@ -100,7 +101,9 @@ textarea{font:inherit;color:var(--ink);background:var(--panel);border:1px solid 
 
 /* on/off switch: always in reach at the top */
 .head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 4px 0}
-.brand{font:600 13px var(--pixel);letter-spacing:.05em}
+.brand{display:inline-flex;align-items:center;gap:8px;font:600 13px var(--pixel);letter-spacing:.05em}
+.brand .mark{width:24px;height:24px;flex:none}
+:root[data-theme="light"] .brand .mark{background:#161616;border-radius:5px;padding:2px}
 .back{display:inline-flex;align-items:center;gap:7px;padding:5px 9px 5px 7px;border:1px solid var(--line-2);border-radius:7px;background:var(--raise);
       font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-decoration:none}
 .back:hover{color:var(--ink);border-color:var(--muted)}
@@ -123,7 +126,7 @@ textarea{font:inherit;color:var(--ink);background:var(--panel);border:1px solid 
 <div class="wrap">
   <header class="head">
     <a class="back" id="back" href="/" hidden><span class="arrow" aria-hidden="true">←</span>Restraint log</a>
-    <span class="brand" id="brand">BIG BROTHER</span>
+    <span class="brand" id="brand"><img class="mark" src="/p3_eye.png" alt="" width="24" height="24">BIG BROTHER</span>
     <button id="power" class="switch" type="button" role="switch" aria-checked="true" disabled>
       <span class="state">On</span><span class="rail" aria-hidden="true"><span class="knob"></span></span>
     </button>

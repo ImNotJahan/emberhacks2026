@@ -174,3 +174,8 @@ def dashboard():
 @app.get("/surface")
 def surface():
     return FileResponse(HERE / "surface.html")
+
+@app.get("/p3_eye.png")
+def eye():
+    """The Big Brother mark: logo and browser-tab icon for both pages."""
+    return FileResponse(HERE / "p3_eye.png", headers={"Cache-Control": "max-age=86400"})
