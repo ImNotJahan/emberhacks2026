@@ -227,3 +227,4 @@ __marimo__/
 # Restraint runtime output
 trace.*.jsonl
 candidates.jsonl
+unsent.jsonl
