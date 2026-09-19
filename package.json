@@ -4,17 +4,52 @@
   "description": "Observes developer activity and decides when (rarely) to speak.",
   "version": "0.0.1",
   "publisher": "emberhacks",
-  "engines": { "vscode": "^1.93.0" },
+  "engines": {
+    "vscode": "^1.93.0"
+  },
   "main": "./extension.js",
-  "activationEvents": ["onStartupFinished"],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "contributes": {
     "commands": [
-      { "command": "restraint.hello", "title": "Restraint: Hello World" },
-      { "command": "restraint.showLog", "title": "Restraint: Show Log" }
+      {
+        "command": "restraint.menu",
+        "title": "Restraint: Menu"
+      },
+      {
+        "command": "restraint.start",
+        "title": "Restraint: Start"
+      },
+      {
+        "command": "restraint.stop",
+        "title": "Restraint: Stop"
+      },
+      {
+        "command": "restraint.restart",
+        "title": "Restraint: Restart"
+      },
+      {
+        "command": "restraint.showLog",
+        "title": "Restraint: Show Log"
+      },
+      {
+        "command": "restraint.openDecisionLog",
+        "title": "Restraint: Open Decision Log"
+      },
+      {
+        "command": "restraint.testNotification",
+        "title": "Restraint: Test Notification"
+      }
     ],
     "configuration": {
       "title": "Restraint",
       "properties": {
+        "restraint.autoStart": {
+          "type": "boolean",
+          "default": true,
+          "description": "Start the capture engine and judge when VS Code starts."
+        },
         "restraint.redaction.enabled": {
           "type": "boolean",
           "default": true,
@@ -22,13 +57,33 @@
         },
         "restraint.python": {
           "type": "string",
-          "default": "python",
-          "description": "Python executable used to run the capture engine (extention.py)."
+          "default": "",
+          "description": "Python executable for the capture engine and judge. Empty = auto-detect (.venv/venv in the extension folder, then python3, python, py)."
         },
         "restraint.port": {
           "type": "number",
           "default": 8765,
           "description": "Port for the local candidate-moment endpoint."
+        },
+        "restraint.testSurface.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "TEMPORARY: show judge decisions from logs/*.jsonl as notifications and in the status bar. Testing only."
+        },
+        "restraint.prompt": {
+          "type": "string",
+          "default": "judge-v6",
+          "description": "Judge prompt version passed to judge.live (see judge/prompts.py). Empty = the judge's default."
+        },
+        "restraint.perHour": {
+          "type": "number",
+          "default": 3,
+          "description": "Interruption budget: at most this many interventions per hour."
+        },
+        "restraint.verbose": {
+          "type": "boolean",
+          "default": false,
+          "description": "Log every raw editor event to the Restraint output channel (noisy)."
         }
       }
     }

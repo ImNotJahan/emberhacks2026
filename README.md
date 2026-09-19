@@ -35,6 +35,8 @@ commands and output      stdin   → CandidateMoment                        → 
    If anything fails, the judge stays silent: a broken judge must never interrupt anyone.
 4. **Surface**: *not built yet* (Person 3). This part will read `logs/<session>.jsonl`, show interventions in the editor, render the timeline, and write `FeedbackRecord`s.
 
+   Until then, a **temporary test surface** ([testSurface.js](testSurface.js)) watches `logs/*.jsonl` for new lines and shows them in the editor. See [Running it live](#running-it-live-one-click).
+
 ## The contract
 
 [contract.py](contract.py) is the boundary between the four workstreams. It uses only the standard library and depends on nothing else in the repo.
@@ -64,24 +66,48 @@ Extension settings (`restraint.*`):
 
 | Setting | Default | Meaning |
 |---|---|---|
+| `autoStart` | `true` | Start the capture engine and judge when VS Code starts |
+| `python` | *(empty)* | Python interpreter to use. When empty, the extension auto-detects one, trying in order: `.venv` or `venv` in the repo, then `python3`, `python`, `py` |
+| `prompt` | `judge-v6` | Prompt version passed to the live judge |
+| `perHour` | `3` | Interruption budget (maximum interventions per hour) |
 | `redaction.enabled` | `true` | Strip secrets before anything leaves the editor process |
-| `python` | `python` | Interpreter used to run `extention.py` |
 | `port` | `8765` | Port the capture engine listens on for candidates |
+| `verbose` | `false` | Log every raw editor event to the output channel |
+| `testSurface.enabled` | `true` | TEMPORARY: show decisions as notifications |
 
-## Running it live
+## Running it live (one click)
 
-1. Open this repo in VS Code and press **F5** ("Run Extension"). In the development host window, open the project you want to observe. The extension starts the capture engine, which writes these files to the extension folder:
-   - `trace.raw.jsonl`: redacted raw observations, replayable
-   - `trace.events.jsonl`: normalized `Event`s
-   - `trace.candidates.jsonl`: nominated `CandidateMoment`s
+Open this repo in VS Code and press **F5** ("Run Restraint"). In the window that opens, open the project you want to observe.
 
-   All three files are gitignored. **They are appended to, so move them aside between sessions.**
-2. In a terminal, start the judge:
-   ```bash
-   python -m judge.live --session my_session [--prompt judge-v6] [--per-hour 3]
-   ```
-   It polls `/candidates`, prints each decision, logs it to `logs/my_session.jsonl`, and posts its budget state back to the engine at `/budget`.
-3. **Restraint: Show Log** opens the extension's output channel, where you can see the raw events and engine output.
+The extension then starts everything itself:
+1. It finds a Python interpreter.
+2. It checks that `google-genai` is installed and that `GEMINI_API_KEY` is set.
+3. It starts the capture engine (`extention.py`).
+4. Once the engine is up, it starts the live judge (`judge.live`).
+
+A notification confirms that Restraint is running. The item at the left of the status bar always shows the current state:
+
+| Status bar | Meaning |
+|---|---|
+| `⟳ Restraint: starting…` | Checking setup and launching the processes |
+| `👁 Restraint · 1 spoke · 4 silent` | Running. The counts are decisions seen in this window |
+| `⚠ Restraint: capture only` (yellow) | The engine runs but the judge couldn't start. A notification offers **Install requirements** or **Open .env** |
+| `✖ Restraint: failed` (red) | A process died, or the port is already in use (Restraint may be running in another window). The notification offers **Restart** |
+| `⊘ Restraint: off` | Stopped |
+
+Click the status bar item for a menu with Start/Stop, Restart, Show log, Open decision log, Test notification and Settings. The same actions are available as **Restraint: …** commands in the Command Palette.
+
+- **Decisions:** when the judge speaks, you get a notification. Its **Why now?** button shows the reasoning, trajectory and signals. Silent decisions go only to the output channel (**Restraint: Show Log**). Use **Test notification** to check that notifications appear. If none appear, turn off Do Not Disturb in the notifications bell.
+- **Decision log:** each live session writes to `logs/live_<date>_<time>.jsonl`.
+- **Trace files:** the engine writes these to the repo root, all gitignored:
+  - `trace.raw.jsonl`: redacted raw observations, replayable
+  - `trace.events.jsonl`: normalized `Event`s
+  - `trace.candidates.jsonl`: nominated `CandidateMoment`s
+
+  **They are appended to, so move them aside between recording sessions.**
+- **Replays:** the notifications also fire for replays. While the extension is running, `python -m judge.replay traces/thrash.candidates.jsonl` makes its decisions appear in the editor, tagged `(replay: …)`. This is the fastest way to see the surface without real coding.
+
+To run the pieces by hand instead, set `restraint.autoStart` to false and run `python extention.py --port 8765` and `python -m judge.live --session NAME`.
 
 Engine endpoints: `GET /health`, `/candidates?since=<ts>`, `/candidates/latest`, `/events`, `/redaction`, and `POST /budget`.
 
@@ -151,7 +177,7 @@ Stuck traces:
 `budget30` is used only for the budget check. The 0% false positives and 100% hit rate in RESULTS.md apply to the synthetic set and should not be quoted as real-world accuracy.
 
 To add a real session:
-1. Record it live, as described in [Running it live](#running-it-live).
+1. Record it live, as described in [Running it live](#running-it-live-one-click).
 2. Copy it to `traces/<name>.raw.jsonl`.
 3. Produce `<name>.candidates.jsonl` with `extention.py --replay ... --out`.
 4. Hand-label it into `<name>.labels.jsonl`. Label timestamps are epoch ms: note the wall-clock time the screen recording starts, then add the video offset to it.
@@ -202,13 +228,15 @@ The prompts are defined in [judge/prompts.py](judge/prompts.py). Each version ad
 - **Single-language scope.** Error fingerprinting and test-count parsing are built around Python and pytest output.
 - **Terminals without shell integration produce no events.** An example is `cmd.exe`.
 - **Frequent interventions risk learned helplessness.** This is why the budget exists.
-- **No `npm` scripts.** Every command is a Python module invocation.
+- **No `npm` scripts.** Outside the F5 flow, every command is a Python module invocation.
 
 ## Repo layout
 
 ```
 contract.py            shared data contract (stdlib only)
-extension.js           VS Code collector
+extension.js           VS Code collector + command wiring
+runner.js              one-click lifecycle: Python detection, setup checks, engine + judge processes, status bar
+testSurface.js         TEMPORARY decision notifications (until the real surface lands)
 extention.py           capture engine: redaction, episodes, signals, HTTP endpoint
 package.json           extension manifest
 test_capture.py        capture engine tests + synthetic raw traces

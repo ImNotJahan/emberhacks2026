@@ -4,17 +4,18 @@
 // fingerprinting, segmentation and signals all live in Python.
 const vscode = require('vscode');
 const path = require('path');
-const { spawn } = require('child_process');
+const { Runner } = require('./runner');
+const testSurface = require('./testSurface'); // TEMP: remove with testSurface.js
 
 const MAX_TEXT = 1500;
 const CURSOR_JUMP_LINES = 30;
 const TEST_CMD = /\b(pytest|unittest|jest|vitest|mocha|go test|cargo test|npm (run )?test|yarn test|pnpm test|dotnet test)\b/;
 
 let out;
-let engine = null;
+let runner = null;
 
 function log(line) {
-  out.appendLine(line);
+  out.appendLine(`${new Date().toLocaleTimeString()}  ${line}`);
   console.log('[restraint] ' + line);
 }
 
@@ -30,24 +31,8 @@ function send(ev) {
   ev.ts = ev.ts || Date.now();
   if (typeof ev.text === 'string' && ev.text.length > MAX_TEXT) ev.text = ev.text.slice(-MAX_TEXT);
   const line = JSON.stringify(ev);
-  log('raw ' + line.slice(0, 200));
-  if (engine && engine.stdin.writable) engine.stdin.write(line + '\n');
-}
-
-function startEngine(context) {
-  const cfg = vscode.workspace.getConfiguration('restraint');
-  const script = path.join(context.extensionPath, 'extention.py');
-  const dir = context.extensionPath;
-  const args = [script, '--port', String(cfg.get('port', 8765)),
-    '--record', path.join(dir, 'trace.raw.jsonl'),
-    '--events-out', path.join(dir, 'trace.events.jsonl'),
-    '--out', path.join(dir, 'trace.candidates.jsonl')];
-  if (!cfg.get('redaction.enabled', true)) args.push('--no-redact');
-  engine = spawn(cfg.get('python', 'python'), args, { cwd: context.extensionPath });
-  engine.stdout.on('data', d => log('engine: ' + String(d).trimEnd()));
-  engine.stderr.on('data', d => log('engine!: ' + String(d).trimEnd()));
-  engine.on('error', e => { log('engine failed to start: ' + e.message); engine = null; });
-  engine.on('exit', c => { log('engine exited ' + c); engine = null; });
+  if (vscode.workspace.getConfiguration('restraint').get('verbose', false)) log('raw ' + line.slice(0, 200));
+  if (runner) runner.write(line);
 }
 
 function activate(context) {
@@ -55,14 +40,24 @@ function activate(context) {
   context.subscriptions.push(out);
   log('activated');
 
+  runner = new Runner(context, log);
+  let surface = null;
+  if (vscode.workspace.getConfiguration('restraint').get('testSurface.enabled', true))
+    surface = testSurface.start(context, log, spoke => runner.noteDecision(spoke)); // TEMP: remove with testSurface.js
+
   context.subscriptions.push(
-    vscode.commands.registerCommand('restraint.hello', () => vscode.window.showInformationMessage('Restraint: Hello World')),
     vscode.commands.registerCommand('restraint.showLog', () => out.show(true)),
+    vscode.commands.registerCommand('restraint.menu', () => runner.menu()),
+    vscode.commands.registerCommand('restraint.start', () => runner.start()),
+    vscode.commands.registerCommand('restraint.stop', () => runner.stop()),
+    vscode.commands.registerCommand('restraint.restart', () => runner.restart()),
+    vscode.commands.registerCommand('restraint.openDecisionLog', () => runner.openDecisionLog()),
+    vscode.commands.registerCommand('restraint.testNotification', () =>
+      surface ? surface.test() : vscode.window.showInformationMessage('Restraint: the test surface is disabled (restraint.testSurface.enabled).')),
   );
 
-  startEngine(context);
-  context.subscriptions.push({ dispose: () => engine && engine.kill() });
   registerSources(context);
+  if (vscode.workspace.getConfiguration('restraint').get('autoStart', true)) runner.start();
 }
 
 function registerSources(context) {
@@ -140,6 +135,6 @@ function registerSources(context) {
   }));
 }
 
-function deactivate() { if (engine) engine.kill(); }
+function deactivate() { if (runner) runner.stop(true); }
 
 module.exports = { activate, deactivate };
