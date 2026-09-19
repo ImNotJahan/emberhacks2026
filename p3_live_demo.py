@@ -32,12 +32,12 @@ MOMENTS = [
 
 def main() -> None:
     ep = Episode(new_id("ep"), now_ms())
-    budget = BudgetState()
+    budget = BudgetState(per_hour=0, remaining=0)   # no cap, like the live judge since judge-v8
     print(f"session {SESSION}")
     for sigs, traj, conf, why, decline, content in MOMENTS:
         snap = ActivitySnapshot.create(ep, [])
         cand = CandidateMoment.create(
-            snap, [Signal(k, s, d, now_ms()) for k, s, d in sigs], budget)
+            snap, [Signal(k, s, d, now_ms()) for k, s, d in sigs], BudgetState(**vars(budget)))
 
         if snoozed():
             dec = InterventionDecision.create(
@@ -56,7 +56,8 @@ def main() -> None:
         log(DecisionRecord.create(SESSION, cand, dec))
         print("  spoke" if dec.should_speak else f"  stayed quiet ({dec.decline_reason.value})")
         if dec.should_speak:
-            budget.remaining -= 1
+            budget.interventions_this_session += 1
+            budget.last_intervention_ms = cand.ts
         time.sleep(2)
 
 

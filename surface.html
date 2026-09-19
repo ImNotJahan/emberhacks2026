@@ -97,10 +97,32 @@ textarea{font:inherit;color:var(--ink);background:var(--panel);border:1px solid 
 .foot{display:flex;justify-content:space-between;gap:8px;font:10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
 .foot a{color:inherit}
 .foot a:hover{color:var(--ink)}
+
+/* on/off switch: always in reach at the top */
+.head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 4px 0}
+.brand{font:600 13px var(--pixel);letter-spacing:.05em}
+.switch{display:inline-flex;align-items:center;gap:9px;border:0;background:none;padding:4px 2px;
+        font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.switch .rail{position:relative;width:38px;height:22px;border-radius:99px;background:var(--line-2);border:1px solid var(--line-2);transition:background .2s,border-color .2s}
+.switch .knob{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--dim);transition:transform .2s,background .2s}
+.switch[aria-checked="true"]{color:var(--lime-text)}
+.switch[aria-checked="true"] .rail{background:var(--lime);border-color:var(--lime);box-shadow:0 0 10px rgba(225,242,74,.35)}
+.switch[aria-checked="true"] .knob{transform:translateX(16px);background:var(--lime-ink)}
+.switch:disabled{opacity:.45;cursor:default}
+.mode-paused .dot{background:none;border:2px dashed var(--dim)}
+.mode-paused .title{color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.switch .rail,.switch .knob{transition:none}}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <header class="head">
+    <span class="brand">BIG BROTHER</span>
+    <button id="power" class="switch" type="button" role="switch" aria-checked="true" disabled>
+      <span class="state">On</span><span class="rail" aria-hidden="true"><span class="knob"></span></span>
+    </button>
+  </header>
+
   <section id="presence" class="presence mode-watching" aria-live="polite">
     <span class="dot" aria-hidden="true"></span>
     <div class="txt"><div class="title">Connecting…</div><div class="sub"></div></div>
@@ -191,6 +213,7 @@ function view() {
   const {ds, pending} = sessionData();
   const spoke = ds.filter(r => r.decision.should_speak).length;
   const base = {quiet: ds.length - spoke, spoke};
+  if (st.paused) return {...base, mode: "paused"};
   if (st.snoozed_until > now()) return {...base, mode: "snoozed"};
   const open = pending.find(r => r.decision.decision_id === openId);
   if (open) return {...base, mode: "open", rec: open, more: pending.length - 1};
@@ -207,7 +230,12 @@ function render() {
 
   $("#tally").textContent = !v.quiet && !v.spoke ? "No moments yet"
                                                  : `Stayed quiet ${v.quiet}× · spoke ${v.spoke}×`;
-  const key = [v.mode, v.rec && v.rec.decision.decision_id, v.more, v.quiet, st.snoozed_until].join("|");
+  const power = $("#power");
+  power.disabled = online !== true;
+  power.setAttribute("aria-checked", String(!st.paused));
+  power.setAttribute("aria-label", st.paused ? "Assistant paused. Turn on" : "Assistant on. Pause");
+  power.querySelector(".state").textContent = st.paused ? "Paused" : "On";
+  const key = [v.mode, v.rec && v.rec.decision.decision_id, v.more, v.quiet, st.snoozed_until, st.paused].join("|");
   if (key === lastKey) return;
   lastKey = key;
 
@@ -225,6 +253,8 @@ function presenceText(v) {
   switch (v.mode) {
     case "connecting": return ["Connecting…", "", null];
     case "offline": return ["Can't reach the assistant", "Is the mailbox server running on :8766?", null];
+    case "paused": return ["Paused", "I won't interrupt you until you turn me back on",
+      el("button", {class: "btn primary", type: "button", onclick: () => setPaused(false)}, "Turn on")];
     case "snoozed": return ["Snoozed", `Holding everything until ${clock(st.snoozed_until)}`,
       el("button", {class: "btn", type: "button", onclick: () => setSnooze(0)}, "Resume")];
     case "considering": return ["Considering something…", "Weighing whether it's worth interrupting you", snooze];
@@ -271,7 +301,7 @@ async function respond(r, kind) {
   if (openId === id) openId = null;
   render();
   const ok = await sendFeedback(r.session_id, r.contract_version, kind, id);
-  if (ok) await poll();
+  if (ok) await refresh();
   sending.delete(id);
   toast(ok ? `Logged as ${LABEL[kind]}. Thanks.` : "Couldn't reach the server, so that wasn't logged.");
   render();
@@ -293,6 +323,22 @@ async function setSnooze(until) {
   render();
 }
 
+// Pause: off until turned back on (a snooze ends by itself). The judge sees it
+// through p3_send.snoozed() and stays quiet.
+async function setPaused(paused) {
+  $("#power").disabled = true;
+  try {
+    const r = await fetch("/pause", {method: "POST", headers: {"Content-Type": "application/json"},
+                                     body: JSON.stringify({paused})});
+    const s = await r.json();
+    if (!s.ok) throw new Error(s.error);
+    Object.assign(st, s);
+    if (paused) openId = null;
+    toast(paused ? "Paused. I'll stay quiet until you turn me back on." : "Back on. Watching quietly.");
+  } catch { toast("Couldn't reach the server."); }
+  render();
+}
+
 // Thoughts that sat unopened past EXPIRE_MS are logged as IGNORED, but only
 // ones this surface actually displayed — never ones it never showed.
 async function expireIgnored() {
@@ -303,19 +349,45 @@ async function expireIgnored() {
   }
 }
 
-async function poll() {
-  try {
-    const [a, b] = await Promise.all([fetch("/records", {cache: "no-store"}), fetch("/state", {cache: "no-store"})]);
-    recs = await a.json();
-    st = await b.json();
-    skew = st.now - Date.now();
-    online = true;
-  } catch {
-    online = false;
+// Only what changed since the last answer; "full" means start over (server restarted).
+let boot = "", rev = 0, inflight = null;
+const fbKey = f => `${f.decision_id}|${f.kind}|${f.ts}`;
+
+function merge(d) {
+  if (d.full) { recs = {decisions: d.decisions, feedback: d.feedback}; return; }
+  const index = new Map(recs.decisions.map((r, i) => [r.decision.decision_id, i]));
+  for (const r of d.decisions) {
+    const i = index.get(r.decision.decision_id);
+    if (i === undefined) recs.decisions.push(r); else recs.decisions[i] = r;
   }
-  render();
+  const have = new Set(recs.feedback.map(fbKey));
+  recs.feedback.push(...d.feedback.filter(f => !have.has(fbKey(f))));
 }
 
+function poll() {   // one at a time: a slow answer must not pile up requests
+  return inflight ??= (async () => {
+    try {
+      const [a, b] = await Promise.all([fetch(`/records?since=${rev}&boot=${boot}`, {cache: "no-store"}),
+                                        fetch("/state", {cache: "no-store"})]);
+      const d = await a.json();
+      st = await b.json();
+      merge(d);
+      boot = d.boot; rev = d.rev;
+      skew = st.now - Date.now();
+      online = true;
+    } catch {
+      online = false;
+    } finally {
+      inflight = null;
+    }
+    render();
+  })();
+}
+
+// after sending something: wait out a poll that started before it, then fetch again
+async function refresh() { await inflight; await poll(); }
+
+$("#power").addEventListener("click", () => setPaused(!st.paused));
 $("#help-toggle").addEventListener("click", () => {
   $("#help-form").hidden = !$("#help-form").hidden;
   if (!$("#help-form").hidden) $("#help-note").focus();
@@ -327,9 +399,17 @@ $("#help-form").addEventListener("submit", async e => {
   if (!s) { toast("No session yet, so there's nothing to attach this to."); return; }
   const any = recs.decisions.find(r => r.session_id === s);
   const ok = await sendFeedback(s, any && any.contract_version, "wanted_help", null, $("#help-note").value.trim());
-  if (ok) { $("#help-form").hidden = true; $("#help-note").value = ""; await poll(); }
+  if (ok) { $("#help-form").hidden = true; $("#help-note").value = ""; await refresh(); }
   toast(ok ? "Logged as a miss. That's how I learn when to speak." : "Couldn't reach the server, so that wasn't logged.");
 });
+
+// Inside VS Code this page sits in a sandboxed iframe that can't open tabs,
+// so ask the host (surface_webview.js) to open the restraint log instead.
+if (params.has("embed") && window.parent !== window)
+  document.querySelector(".foot a").addEventListener("click", e => {
+    e.preventDefault();
+    window.parent.postMessage({type: "big-brother:open", url: new URL("/", location.href).href}, "*");
+  });
 
 poll();
 setInterval(poll, 1500);

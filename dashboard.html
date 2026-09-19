@@ -73,6 +73,17 @@ code{font-family:var(--mono);font-size:.88em;background:var(--raise);border:1px 
           border-radius:8px;padding:7px 12px;font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase}
 .btn-miss:hover:not(:disabled){background:rgba(255,92,92,.1)}
 .btn-miss:disabled{opacity:.35;cursor:default}
+/* on/off switch, same as the surface's */
+.switch{margin-left:auto;display:inline-flex;align-items:center;gap:10px;border:0;background:none;padding:4px 2px;
+        font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.switch + .btn-miss{margin-left:0}
+.switch .rail{position:relative;width:40px;height:22px;border-radius:99px;background:var(--line-2);border:1px solid var(--line-2);transition:background .2s,border-color .2s}
+.switch .knob{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--dim);transition:transform .2s,background .2s}
+.switch[aria-checked="true"]{color:var(--lime)}
+.switch[aria-checked="true"] .rail{background:var(--lime);border-color:var(--lime);box-shadow:0 0 10px rgba(225,242,74,.35)}
+.switch[aria-checked="true"] .knob{transform:translateX(18px);background:var(--lime-ink)}
+.switch:disabled{opacity:.4;cursor:default}
+@media (prefers-reduced-motion:reduce){.switch .rail,.switch .knob{transition:none}}
 
 /* ---- hero ---- */
 .hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:8px}
@@ -138,7 +149,7 @@ code{font-family:var(--mono);font-size:.88em;background:var(--raise);border:1px 
 .tip{position:absolute;bottom:calc(100% - 22px);z-index:5;width:280px;padding:10px 12px;background:#0c0c0c;border:1px solid var(--line-2);border-radius:8px;
      box-shadow:0 14px 34px rgba(0,0,0,.6);pointer-events:none;font-size:12.5px}
 .tip .t{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.tip p{margin:0;color:#cfcfc9;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tip p{margin:0;color:#cfcfc9;display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .axis{position:relative;height:18px;margin-top:8px;font:11px var(--mono);color:var(--dim)}
 .axis span{position:absolute;transform:translateX(-50%);white-space:nowrap}
 .axis span:first-child{transform:none} .axis span:last-child{transform:translateX(-100%)}
@@ -176,7 +187,7 @@ code{font-family:var(--mono);font-size:.88em;background:var(--raise);border:1px 
 .badge{font:600 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:5px;border:1px solid var(--line-2);color:var(--muted);white-space:nowrap}
 .badge.spoke{background:var(--lime);border-color:var(--lime);color:var(--lime-ink)}
 .badge.held{border-color:var(--lime);color:var(--lime)}
-.why{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#b9b9b3}
+.why{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#b9b9b3}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
 .fbchip{font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--c);border:1px solid var(--c);border-radius:5px;padding:0 6px}
 .none-note{padding:28px 8px;text-align:center;font:14px var(--pixel);color:var(--dim)}
@@ -279,6 +290,9 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--lime);outline-offse
     <header class="topbar panel">
       <span id="live" class="dot-item"><i></i><span>Connecting</span></span>
       <span id="bar-session" class="dot-item y"><i></i><span>No session</span></span>
+      <button id="power" class="switch" type="button" role="switch" aria-checked="true" disabled>
+        <span class="state">Assistant on</span><span class="rail" aria-hidden="true"><span class="knob"></span></span>
+      </button>
       <button id="wanted" class="btn-miss" data-icon="flag" disabled>I wanted help</button>
     </header>
 
@@ -377,7 +391,7 @@ const ICONS = {
 };
 
 let data = {decisions: [], feedback: []};
-let session = null, selected = null, lastSig = "", filter = "all";
+let session = null, selected = null, filter = "all";
 
 function el(tag, props = {}, ...kids) {
   const n = document.createElement(tag);
@@ -444,23 +458,85 @@ function badgeFor(r) {
     {spoke: "Spoke", held: "Held", skipped: "Skipped", quiet: "Quiet"}[c]);
 }
 
+// The judge dropped its hourly budget in judge-v8: per_hour 0 means "no cap",
+// not "used up". Older sessions and calibration runs still have a cap.
+const hasCap = b => !!(b && b.per_hour > 0);
+function budgetText(b) {
+  if (!b) return "—";
+  if (hasCap(b)) return `${b.remaining}/${b.per_hour} left`;
+  const n = b.interventions_this_session || 0;
+  return `no cap · spoke ${n}× before this`;
+}
+
 function duration(ms) {
   const m = Math.round(ms / 60000);
   return ms < 60000 ? `${Math.round(ms / 1000)} s` : m < 60 ? `${m} min` : `${Math.floor(m / 60)} h ${m % 60} min`;
 }
 
-async function poll() {
-  try {
-    const r = await fetch("/records", {cache: "no-store"});
-    data = await r.json();
-    setLive(true);
-  } catch {
-    setLive(false);
-    return;
+// Polling asks only for what changed since the last answer (a record can also
+// change in place, when the judge's evidence arrives after it). The server
+// says "full" when the page must start over, e.g. after it restarts.
+let boot = "", rev = 0, inflight = null;
+const fbKey = f => `${f.decision_id}|${f.kind}|${f.ts}`;
+
+function merge(d) {
+  if (d.full) { data = {decisions: d.decisions, feedback: d.feedback}; return true; }
+  const index = new Map(data.decisions.map((r, i) => [r.decision.decision_id, i]));
+  for (const r of d.decisions) {
+    const i = index.get(r.decision.decision_id);
+    if (i === undefined) data.decisions.push(r); else data.decisions[i] = r;
   }
-  const sig = data.decisions.length + ":" + data.feedback.length;
-  if (sig !== lastSig) { lastSig = sig; render(); }
+  const have = new Set(data.feedback.map(fbKey));
+  data.feedback.push(...d.feedback.filter(f => !have.has(fbKey(f))));
+  return d.decisions.length + d.feedback.length > 0;
 }
+
+function poll() {   // one at a time: a slow answer must not pile up requests
+  return inflight ??= (async () => {
+    try {
+      const [r, s] = await Promise.all([fetch(`/records?since=${rev}&boot=${boot}`, {cache: "no-store"}),
+                                        fetch("/state", {cache: "no-store"})]);
+      const d = await r.json();
+      renderPower(await s.json());
+      const changed = merge(d);
+      boot = d.boot; rev = d.rev;
+      setLive(true);
+      if (changed) render();
+    } catch {
+      setLive(false);
+      renderPower(null);
+    } finally {
+      inflight = null;
+    }
+  })();
+}
+
+// The on/off switch. Paused = the judge stays quiet until it's turned back on.
+let paused = false;
+function renderPower(state) {
+  const p = $("#power");
+  p.disabled = !state;
+  if (!state) return;
+  paused = state.paused === true;
+  p.setAttribute("aria-checked", String(!paused));
+  p.setAttribute("aria-label", paused ? "Assistant paused. Turn on" : "Assistant on. Pause");
+  p.querySelector(".state").textContent = paused ? "Paused" : "Assistant on";
+}
+
+async function setPaused(next) {
+  $("#power").disabled = true;
+  try {
+    const r = await fetch("/pause", {method: "POST", headers: {"Content-Type": "application/json"},
+                                     body: JSON.stringify({paused: next})});
+    const s = await r.json();
+    renderPower(s.ok ? s : null);
+  } catch {
+    renderPower(null);
+  }
+}
+
+// after sending something: wait out a poll that started before it, then fetch again
+async function refresh() { await inflight; await poll(); }
 
 function setLive(ok) {
   const l = $("#live");
@@ -535,9 +611,16 @@ function renderHero(ds, fbs, misses) {
   const breakdown = held ? el("div", {class: "kv"},
     Object.entries(tags).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([t, k]) => el("span", {}, t, el("b", {}, k)))) : null;
 
-  // Budget left: one cell per interruption this hour
-  const cells = b ? el("div", {class: "cells", "aria-hidden": "true"},
-    Array.from({length: b.per_hour}, (_, i) => el("i", {class: i < b.remaining ? "on" : null}))) : null;
+  // Budget: one cell per interruption this hour. Since judge-v8 there is usually
+  // no hourly cap (per_hour 0), so show how often it has spoken instead.
+  const capped = hasCap(b);
+  const lastSpoke = ds.filter(r => r.decision.should_speak).map(at).pop();
+  const budgetViz = capped
+    ? el("div", {class: "cells", "aria-hidden": "true"},
+        Array.from({length: b.per_hour}, (_, i) => el("i", {class: i < b.remaining ? "on" : null})))
+    : b ? el("div", {class: "kv"},
+        el("span", {}, "interruptions", el("b", {}, spoke)),
+        el("span", {}, "last spoke", el("b", {}, lastSpoke ? hhmm(lastSpoke) : "not yet"))) : null;
 
   // Feedback: share of each kind
   const kinds = {};
@@ -552,7 +635,8 @@ function renderHero(ds, fbs, misses) {
   $("#tiles").replaceChildren(
     tile("speak", "Spoke", spoke, n ? `of ${n} moments` : null, pixels, "lime"),
     tile("hand", "Held back", held, held ? "by the judge's guardrails" : "no guardrail fired", breakdown),
-    tile("shield", "Budget left", b ? `${b.remaining}/${b.per_hour}` : "—", "interruptions this hour", cells),
+    capped ? tile("shield", "Budget left", `${b.remaining}/${b.per_hour}`, "interruptions this hour", budgetViz)
+           : tile("shield", "Budget", b ? "No cap" : "—", b ? "each moment judged on its merits" : "no moments yet", budgetViz),
     tile("message", "Feedback", fbs.length,
          misses.length ? `${misses.length} missed (wanted help)` : fbs.length ? "none missed" : "no feedback yet", mix));
 }
@@ -664,7 +748,7 @@ function renderDetail(r, byDec) {
       cell("Trajectory", human(d.trajectory)),
       cell("Confidence", `${pct}%`, el("div", {class: "meter"}, el("i", {style: `width:${pct}%`}))),
       d.should_speak ? cell("Cited", `${cited.size} of ${c.signals.length} signals`) : cell("Reason", human(d.decline_reason)),
-      cell("Budget", `${c.budget.remaining}/${c.budget.per_hour} left`),
+      cell("Budget", budgetText(c.budget)),
       cell("Latency", latency || "—"),
       cell("Prompt", [j.prompt_version || d.prompt_version || "—", j.content_version].filter(Boolean).join(" · "))),
     sec(`Signals (${c.signals.length})`, el("ul", {class: "signals"}, c.signals.map(s => el("li", {},
@@ -706,13 +790,14 @@ async function sendFeedback(kind, decisionId, note) {
                                    body: JSON.stringify(rec)});
     if (!r.ok) return false;
   } catch { return false; }
-  await poll();
+  await refresh();
   return true;
 }
 
 function pick(id) { selected = id; render(); }
 
 document.querySelectorAll("[data-icon]").forEach(e => e.prepend(icon(e.dataset.icon)));
+$("#power").addEventListener("click", () => setPaused(!paused));
 $("#wanted").addEventListener("click", async e => {
   const btn = e.currentTarget;
   btn.disabled = true;

@@ -10,7 +10,7 @@ import random
 from contract import (Episode, ActivitySnapshot, Signal, SignalKind, BudgetState,
     CandidateMoment, InterventionDecision, Trajectory, DeclineReason,
     DecisionRecord, FeedbackRecord, FeedbackKind, new_id, now_ms)
-from p3_send import log
+from p3_send import BASE_URL, _call, log
 
 S, T, D = SignalKind, Trajectory, DeclineReason
 SESSION = "sess_demo"
@@ -89,6 +89,17 @@ MISS = (26.9, "wanted a hint on the TypeError")
 
 
 def main() -> None:
+    # Loading it twice would double every moment (new ids each run).
+    try:
+        loaded = any(r["session_id"] == SESSION for r in _call("/records")["decisions"])
+    except Exception:
+        print(f"can't reach the P3 server at {BASE_URL}; start it first")
+        return
+    if loaded:
+        print(f"{SESSION} is already loaded. For a fresh copy, stop the server, "
+              "delete logs/mailbox.jsonl and start it again.")
+        return
+
     start = now_ms() - 30 * 60_000
     at = lambda minute: start + int(minute * 60_000)
     ep = Episode(new_id("ep"), start)
