@@ -1,0 +1,3 @@
+{"ts":1789020265000,"should_have_spoken":false,"rationale":"Reading unfamiliar code; idle is reading time.","tolerance_ms":1000}
+{"ts":1789020450000,"should_have_spoken":false,"rationale":"Tracing call graph deliberately (grep, new file each hop).","tolerance_ms":1000}
+{"ts":1789020610000,"should_have_spoken":false,"rationale":"Writing notes, then thinking.","tolerance_ms":1000}

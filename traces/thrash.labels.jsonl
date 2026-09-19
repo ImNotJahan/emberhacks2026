@@ -1,0 +1,3 @@
+{"ts":1789040078000,"should_have_spoken":false,"rationale":"Only two attempts; normal debugging.","tolerance_ms":1000}
+{"ts":1789040156000,"should_have_spoken":true,"rationale":"Oscillating on decoding; never checks what the dict holds.","tolerance_ms":1000}
+{"ts":1789040315000,"should_have_spoken":true,"rationale":"Clearly stuck and paused: best moment to speak.","tolerance_ms":1000}

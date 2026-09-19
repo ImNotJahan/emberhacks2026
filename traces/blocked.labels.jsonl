@@ -1,0 +1,2 @@
+{"ts":1789050058000,"should_have_spoken":false,"rationale":"Second attempt, still mid-flow.","tolerance_ms":1000}
+{"ts":1789050307000,"should_have_spoken":true,"rationale":"Stopped on a circular import they keep reshuffling; config<->db cycle is the fix.","tolerance_ms":1000}

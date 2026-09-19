@@ -1,0 +1,2 @@
+{"ts":1800000090000,"should_have_spoken":false,"rationale":"3 identical failures: still ordinary debugging.","tolerance_ms":1000}
+{"ts":1800000155000,"should_have_spoken":true,"rationale":"4 identical failures, identical +3/-3 tweaks, then stalled.","tolerance_ms":1000}

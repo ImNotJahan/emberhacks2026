@@ -1,0 +1,4 @@
+{"ts":1789000076000,"should_have_spoken":false,"rationale":"Mid-rename; diagnostics already falling 14\u21928.","tolerance_ms":1000}
+{"ts":1789000131000,"should_have_spoken":false,"rationale":"Refactor sweep; 7 failures are the unrenamed call sites.","tolerance_ms":1000}
+{"ts":1789000184000,"should_have_spoken":false,"rationale":"Removed alias on purpose to surface remaining call sites.","tolerance_ms":1000}
+{"ts":1789000224000,"should_have_spoken":false,"rationale":"Done and committed; nothing to add.","tolerance_ms":1000}

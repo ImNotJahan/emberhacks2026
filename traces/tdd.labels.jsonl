@@ -1,0 +1,3 @@
+{"ts":1789010088000,"should_have_spoken":false,"rationale":"Red-green loop, failing count shrinking every run.","tolerance_ms":1000}
+{"ts":1789010144000,"should_have_spoken":false,"rationale":"Red-green loop, failing count shrinking every run.","tolerance_ms":1000}
+{"ts":1789010200000,"should_have_spoken":false,"rationale":"Red-green loop, failing count shrinking every run.","tolerance_ms":1000}
