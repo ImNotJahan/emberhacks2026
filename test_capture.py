@@ -88,6 +88,20 @@ class Capture(unittest.TestCase):
         _, cands = run(productive_trace())
         self.assertEqual(cands, [], [s.detail for c in cands for s in c.signals])
 
+    def test_file_thrash_detector(self):
+        from contract import Event
+        from extention import detect_file_thrash
+        def focus(t, p): return Event(EventKind.FILE_FOCUS, ts=T0 + t * 1000, path=p)
+        visits = [focus(i * 15, "a.py" if i % 2 == 0 else "b.py") for i in range(12)]
+        sig = detect_file_thrash(visits, T0 + 180_000)
+        self.assertIsNotNone(sig)
+        self.assertEqual(sig.kind, SignalKind.FILE_THRASH)
+        self.assertGreaterEqual(sig.occurrences, 4)
+        edits = [Event(EventKind.EDIT, ts=T0 + (60 + i) * 1000, path="a.py") for i in range(15)]
+        working = detect_file_thrash(visits + edits, T0 + 180_000)
+        self.assertLess(working.strength, sig.strength)          # revisiting while editing = working
+        self.assertIsNone(detect_file_thrash(visits[:3], T0 + 30_000))
+
     def test_candidates_are_debounced(self):
         _, cands = run(stuck_trace())
         gaps = [b.ts - a.ts for a, b in zip(cands, cands[1:])]
