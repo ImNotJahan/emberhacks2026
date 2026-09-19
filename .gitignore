@@ -224,7 +224,13 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
-# Restraint runtime output
+# Big Brother runtime output
 trace.*.jsonl
 candidates.jsonl
 unsent.jsonl
+
+# Evaluation: old engine output and screen recordings stay local
+traces/_old/
+*.mov
+*.mp4
+recording_kit/broken_shop/.pytest_cache/

@@ -1,0 +1,5 @@
+{"ts": 1800600156000, "should_have_spoken": false, "rationale": "First failure of a new test.", "tolerance_ms": 60000}
+{"ts": 1800600346000, "should_have_spoken": true, "rationale": "4th identical TypeError; the edits add and remove the same `?.` guard.", "tolerance_ms": 50000}
+{"ts": 1800600466000, "should_have_spoken": true, "rationale": "6th identical failure; edits are cancelling each other out.", "tolerance_ms": 50000}
+{"ts": 1800600660426, "should_have_spoken": true, "rationale": "Stalled after 6 failures, cycling through the same three files.", "tolerance_ms": 90000}
+{"ts": 1800600706000, "should_have_spoken": false, "rationale": "Found it (constructor assigned the wrong field). Quiet.", "tolerance_ms": 60000}

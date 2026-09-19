@@ -1,8 +1,8 @@
-# Restraint
+# Big Brother
 
 A VS Code extension that watches how you work and decides **when**, and almost never, to interrupt you with help.
 
-Most AI coding tools work on *what* to say. Restraint works on *when* to say it. It tells a developer who is converging on a fix or exploring on purpose (leave them alone) apart from one who is thrashing or blocked (a short nudge helps). There is no quota: each moment is judged on its own merits, and it stays silent by default. Every decision is logged, including every time it stayed silent and why. We call that log the restraint log.
+Most AI coding tools work on *what* to say. Big Brother works on *when* to say it. It tells a developer who is converging on a fix or exploring on purpose (leave them alone) apart from one who is thrashing or blocked (a short nudge helps). There is no quota: each moment is judged on its own merits, and it stays silent by default. Every decision is logged, including every time it stayed silent and why. We call that log the restraint log.
 
 Built for EmberHacks 2026.
 
@@ -38,11 +38,11 @@ commands and output      stdin   → CandidateMoment                        → 
    - The judge posts `considering` before each model call.
    - The judge checks the snooze state first; while snoozed it declines with `user_suppressed`.
    - The mailbox serves:
-     - the intervention surface (`/surface`), shown as the **Big Brother** view in the Restraint sidebar through [surface_webview.js](surface_webview.js)
-     - the restraint-log dashboard (`/`, or **Restraint: Open Dashboard**)
+     - the intervention surface (`/surface`), shown as the **Big Brother** view in the Big Brother sidebar through [surface_webview.js](surface_webview.js)
+     - the restraint-log dashboard (`/`, or **Big Brother: Open Dashboard**)
    - Feedback from either page comes back as `FeedbackRecord`s. The mailbox persists everything to `logs/mailbox.jsonl`.
 
-   If the mailbox is down, the judge still decides and logs, and `p3_send` parks records in `unsent.jsonl`. The **temporary test surface** ([testSurface.js](testSurface.js)) also still shows decisions as notifications. Turn it off with `restraint.testSurface.enabled`.
+   If the mailbox is down, the judge still decides and logs, and `p3_send` parks records in `unsent.jsonl`. The **temporary test surface** ([testSurface.js](testSurface.js)) also still shows decisions as notifications. Turn it off with `bigBrother.testSurface.enabled`.
 
 ## The contract
 
@@ -69,7 +69,7 @@ echo 'GEMINI_API_KEY=...' > .env         # read by judge/env.py; real env vars w
 
 VS Code 1.93 or later is required. The terminal events depend on the shell integration API.
 
-Extension settings (`restraint.*`):
+Extension settings (`bigBrother.*`):
 
 | Setting | Default | Meaning |
 |---|---|---|
@@ -83,9 +83,9 @@ Extension settings (`restraint.*`):
 
 ## Running it live (one click)
 
-Open this repo in VS Code and press **F5** ("Run Restraint"). In the window that opens, open the project you want to observe.
+Open this repo in VS Code and press **F5** ("Run Big Brother"). In the window that opens, open the project you want to observe.
 
-The **Restraint** icon in the activity bar opens a sidebar with two views:
+The **Big Brother** icon in the activity bar opens a sidebar with two views:
 - **Control** shows:
   - whether the engine, judge and surface server are running in this window
   - the engine's event and candidate counts
@@ -102,19 +102,19 @@ The extension then starts everything itself:
 3. It starts the surface mailbox (`p3_server.py` on :8766), if fastapi and uvicorn are installed, and the capture engine (`extention.py`).
 4. Once the engine is up, it starts the live judge (`judge.live`).
 
-A notification confirms that Restraint is running. The item at the left of the status bar always shows the current state:
+A notification confirms that Big Brother is running. The item at the left of the status bar always shows the current state:
 
 | Status bar | Meaning |
 |---|---|
-| `⟳ Restraint: starting…` | Checking setup and launching the processes |
-| `👁 Restraint · 1 spoke · 4 silent` | Running. The counts are decisions seen in this window |
-| `⚠ Restraint: capture only` (yellow) | The engine runs but the judge couldn't start. A notification offers **Install requirements** or **Open .env** |
-| `✖ Restraint: failed` (red) | A process died, or the port is already in use (Restraint may be running in another window). The notification offers **Restart** |
-| `⊘ Restraint: off` | Stopped |
+| `⟳ Big Brother: starting…` | Checking setup and launching the processes |
+| `👁 Big Brother · 1 spoke · 4 silent` | Running. The counts are decisions seen in this window |
+| `⚠ Big Brother: capture only` (yellow) | The engine runs but the judge couldn't start. A notification offers **Install requirements** or **Open .env** |
+| `✖ Big Brother: failed` (red) | A process died, or the port is already in use (Big Brother may be running in another window). The notification offers **Restart** |
+| `⊘ Big Brother: off` | Stopped |
 
-Click the status bar item for a menu with Start/Stop, Restart, Show log, Open decision log, Test notification and Settings. The same actions are available as **Restraint: …** commands in the Command Palette.
+Click the status bar item for a menu with Start/Stop, Restart, Show log, Open decision log, Test notification and Settings. The same actions are available as **Big Brother: …** commands in the Command Palette.
 
-- **Decisions:** when the judge speaks, you get a notification. Its **Why now?** button shows the reasoning, trajectory and signals. Silent decisions go only to the output channel (**Restraint: Show Log**). Use **Test notification** to check that notifications appear. If none appear, turn off Do Not Disturb in the notifications bell.
+- **Decisions:** when the judge speaks, you get a notification. Its **Why now?** button shows the reasoning, trajectory and signals. Silent decisions go only to the output channel (**Big Brother: Show Log**). Use **Test notification** to check that notifications appear. If none appear, turn off Do Not Disturb in the notifications bell.
 - **Decision log:** each live session writes to `logs/live_<date>_<time>.jsonl`.
 - **Trace files:** the engine writes these to the repo root, all gitignored:
   - `trace.raw.jsonl`: redacted raw observations, replayable
@@ -124,7 +124,7 @@ Click the status bar item for a menu with Start/Stop, Restart, Show log, Open de
   **They are appended to, so move them aside between recording sessions.**
 - **Replays:** the notifications also fire for replays. While the extension is running, `python -m judge.replay traces/thrash.candidates.jsonl` makes its decisions appear in the editor, tagged `(replay: …)`. This is the fastest way to see the surface without real coding.
 
-To run the pieces by hand instead, set `restraint.autoStart` to false and run:
+To run the pieces by hand instead, set `bigBrother.autoStart` to false and run:
 - `python -m uvicorn p3_server:app --port 8766`
 - `python extention.py --port 8765`
 - `python -m judge.live --session NAME`
@@ -173,7 +173,7 @@ These are computed in [judge/calibrate.py](judge/calibrate.py). Each prompt vers
 - **False-positive rate (productive)**: how often it spoke on traces where the developer should be left alone. This is the headline number.
 - **Hit rate**: how many of the labeled should-speak moments it spoke on. A `too_soon` hold right after a hit in the same episode counts as covered.
 - **p50 / p95 latency**: from candidate to timing decision, counting model calls only.
-- **Interventions per hour**: computed into `EvalResult` but not yet shown in the table.
+- **Interventions per hour**: computed into `EvalResult`, and shown by `judge.eval` (below).
 
 The latest results are in [calibration/RESULTS.md](calibration/RESULTS.md). Compare rows only when they share the same `traces` hash.
 
@@ -198,12 +198,29 @@ Stuck traces:
 
 `budget30` is used only for the budget check. The 0% false positives and 100% hit rate in RESULTS.md apply to the synthetic set and should not be quoted as real-world accuracy.
 
-To add a real session:
-1. Record it live, as described in [Running it live](#running-it-live-one-click).
-2. Copy it to `traces/<name>.raw.jsonl`.
-3. Produce `<name>.candidates.jsonl` with `extention.py --replay ... --out`.
-4. Hand-label it into `<name>.labels.jsonl`. Label timestamps are epoch ms: note the wall-clock time the screen recording starts, then add the video offset to it.
-5. Add the name to `CALIBRATION`, and to `PRODUCTIVE` if applicable, in [judge/synth.py](judge/synth.py).
+### End-to-end evaluation ([traces/eval/](traces/eval/))
+
+Calibration scores the judge alone on hand-built candidates. `judge.eval` scores **capture and judge together**. It runs raw editor traces through `extention.py` and then the judge, and matches the decisions to hand-labelled *moments*: points where a nudge would have helped, or would have been infuriating. A should-speak moment with no candidate near it counts as a capture miss.
+
+```bash
+python -m judge.eval --capture-only   # free, offline: which should-speak moments get a candidate at all
+python -m judge.eval                  # + the judge (content off); decision logs cached in logs/eval_*.jsonl
+python -m judge.eval dogfood --fresh  # one session, re-run the judge
+python -m judge.scenarios             # regenerate the scripted sessions
+```
+
+Output goes to [calibration/EVAL.md](calibration/EVAL.md): per-session capture recall, hit rate, infuriating rate, FP on productive sessions, interventions per hour, p95 latency, and lag, followed by every miss attributed to capture or judge.
+
+- The sessions are one **real** capture (`dogfood`, 41 min) and six **scripted** raw traces, 16–26 min each, from [judge/scenarios.py](judge/scenarios.py): 62 labels in total.
+- [traces/eval/SCENARIOS.md](traces/eval/SCENARIOS.md) is the catalogue of should-speak (S1–S28) and stay-silent (Q1–Q18) moments to label against.
+- The scripted sessions are realistic in shape but written by us. Real recordings replace them.
+
+To add a real session, use [recording_kit/](recording_kit/):
+- [BRIEF.md](recording_kit/BRIEF.md): operator checklist and the volunteer tasks
+- `broken_shop/`: four planted bugs plus a feature task
+- `save_session.sh`: moves the engine output into `traces/eval/<name>.raw.jsonl` and prints the `echo SYNC` timestamp used to line the video up with the trace
+
+Then label the session following SCENARIOS.md and add it to `traces/eval/manifest.json`.
 
 ## Tests and checks
 
@@ -248,14 +265,15 @@ A 240s cooldown after speaking is still in place (`too_soon`), so a stuck episod
 
 ## Known limitations
 
-- **Telling exploration from being stuck is hard on real traces.** The judge has only been calibrated on synthetic traces.
+- **Telling exploration from being stuck is hard on real traces.** The judge is calibrated at 100% hit rate on synthetic candidates. End to end on realistic raw traces ([calibration/EVAL.md](calibration/EVAL.md)) it interrupts none of 41 leave-alone moments, but it catches only about 29% of should-speak ones:
+  - about half of the misses are capture: rapid re-runs are merged, the same signal is suppressed for 3 minutes, and there is no stall detector for terminal errors
+  - the other half are the judge calling clear thrash `still_converging`
 - **The surface only shows the most recent session.** A live session and a replay sent with `--mailbox` share one mailbox. Pass `?session=<id>` to pick a session.
 - **The judge doesn't read feedback yet.** `FeedbackRecord`s (`bad_timing`, `wanted_help`, …) are stored for evaluation but don't change the judge's behaviour.
 - **No personalization.** The thresholds (cooldown, signal gates) are the same for everyone.
 - **Single-language scope.** Error fingerprinting and test-count parsing are built around Python and pytest output.
 - **Terminals without shell integration produce no events.** An example is `cmd.exe`.
 - **Frequent interventions risk learned helplessness.** With the budget removed, only the judge's cost-benefit bar and the cooldown prevent this.
-- **No `npm` scripts.** Outside the F5 flow, every command is a Python module invocation.
 
 ## Repo layout
 
@@ -264,7 +282,7 @@ contract.py            shared data contract (stdlib only)
 extension.js           VS Code collector + command wiring
 runner.js              one-click lifecycle: Python detection, setup checks, engine + judge processes, status bar
 testSurface.js         TEMPORARY decision notifications (still on alongside the real surface)
-surface_webview.js     hosts the surface page in the Restraint sidebar
+surface_webview.js     hosts the surface page in the Big Brother sidebar
 controlView.js         sidebar Control view: start/stop in this window + status
 p3_server.py           surface mailbox: /log, /records, /considering, /snooze, /state, pages
 p3_send.py             stdlib client the judge uses to reach the mailbox
@@ -288,10 +306,14 @@ judge/
   live.py              live loop against the capture engine
   replay.py            trace → decision log
   calibrate.py         scoring across prompt versions
+  eval.py              end-to-end scoring: raw trace → capture → judge vs labelled moments
+  scenarios.py         scripted raw sessions + moment labels for eval
   latency.py           latency report
   checks.py, smoke.py  acceptance checks
   synth.py, fixtures.py  synthetic traces and fixtures
 traces/                recorded + synthetic traces and labels
-calibration/           scoring history (results.jsonl, RESULTS.md, LATENCY.md)
+  eval/                eval sessions: raw traces, moment labels, manifest, SCENARIOS.md
+recording_kit/         broken_shop (planted bugs), recording brief, save_session.sh
+calibration/           scoring history (results.jsonl, RESULTS.md, LATENCY.md, EVAL.md)
 logs/                  decision logs (gitignored, regenerated)
 ```

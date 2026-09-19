@@ -1,0 +1,6 @@
+{"ts": 1800400185610, "should_have_spoken": false, "rationale": "Opened 8 files in about 2 minutes with no edits: reading, not lost.", "tolerance_ms": 60000}
+{"ts": 1800400409719, "should_have_spoken": false, "rationale": "Cursor jumping along a call chain with grep: tracing on purpose.", "tolerance_ms": 60000}
+{"ts": 1800400458800, "should_have_spoken": false, "rationale": "First error, and the message says exactly what is missing.", "tolerance_ms": 60000}
+{"ts": 1800400530115, "should_have_spoken": false, "rationale": "Stopped a server with Ctrl+C on purpose: exit 130 is not a failure here.", "tolerance_ms": 45000}
+{"ts": 1800400690000, "should_have_spoken": false, "rationale": "Long quiet stretch after the app came up: reading, nothing wrong on screen.", "tolerance_ms": 90000}
+{"ts": 1800400791473, "should_have_spoken": false, "rationale": "Alternating between billing.py and models.py while comparing them; no error present.", "tolerance_ms": 60000}

@@ -16,6 +16,7 @@ Writes logs/<session>.jsonl and prints the readable view.
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 from typing import Optional
 
@@ -26,8 +27,18 @@ from judge.log import LOG_DIR, DecisionLog, pretty
 from judge.prompts import LATEST
 
 
-def load_candidates(trace: Path) -> list[CandidateMoment]:
+def is_raw(trace: Path) -> bool:
+    """Raw editor observations have a "k" key; CandidateMoments don't. Decided
+    by content so any file name works (session2.json, trace.raw.jsonl, ...)."""
     if trace.name.endswith(".raw.jsonl"):
+        return True
+    with open(trace, "r", encoding="utf-8") as fh:
+        first = next((l for l in fh if l.strip()), "{}")
+    return "k" in json.loads(first)
+
+
+def load_candidates(trace: Path) -> list[CandidateMoment]:
+    if is_raw(trace):
         import extention
         with open(trace, "r", encoding="utf-8") as fh:
             return extention.replay(extention.Engine(extention.Redactor()), fh)

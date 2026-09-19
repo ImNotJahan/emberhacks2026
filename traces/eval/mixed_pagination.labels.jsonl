@@ -1,0 +1,10 @@
+{"ts": 1800300154000, "should_have_spoken": false, "rationale": "First failure mid-implementation.", "tolerance_ms": 60000}
+{"ts": 1800300474000, "should_have_spoken": false, "rationale": "Second failure; still reasonable to try the obvious fix.", "tolerance_ms": 60000}
+{"ts": 1800300574000, "should_have_spoken": true, "rationale": "5 runs, same assertion, each edit is a 1-char flip back and forth: textbook guessing. 'The slice end is exclusive' is the whole answer.", "tolerance_ms": 50000}
+{"ts": 1800300624000, "should_have_spoken": true, "rationale": "6th identical failure and the edits are reverting each other.", "tolerance_ms": 40000}
+{"ts": 1800300714000, "should_have_spoken": false, "rationale": "Solved it themselves. Don't take credit afterwards.", "tolerance_ms": 60000}
+{"ts": 1800300956636, "should_have_spoken": false, "rationale": "Long uninterrupted edit burst: deep in flow.", "tolerance_ms": 60000}
+{"ts": 1800301125000, "should_have_spoken": false, "rationale": "One hang, stopped with Ctrl+C: they already know it looped.", "tolerance_ms": 60000}
+{"ts": 1800301257000, "should_have_spoken": true, "rationale": "Third infinite loop in a row after tiny edits: the cursor is never reassigned inside the loop. Naming that saves minutes.", "tolerance_ms": 60000}
+{"ts": 1800301360226, "should_have_spoken": true, "rationale": "Stalled about 2 minutes staring at the loop after 3 hangs.", "tolerance_ms": 70000}
+{"ts": 1800301448300, "should_have_spoken": false, "rationale": "Committed. Done.", "tolerance_ms": 60000}

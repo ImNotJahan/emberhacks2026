@@ -3,7 +3,7 @@
 // sidebar view. The page does all the work; this file only hosts it.
 //
 // 1. package.json -> "contributes":
-//      "views": { "explorer": [ { "type": "webview", "id": "restraint.surface", "name": "Big Brother" } ] }
+//      "views": { "explorer": [ { "type": "webview", "id": "bigBrother.surface", "name": "Big Brother" } ] }
 // 2. in extension.js activate(context):
 //      const { SurfaceView } = require('./surface_webview');
 //      context.subscriptions.push(
@@ -40,6 +40,6 @@ class SurfaceView {
 </head><body><iframe src="${src.toString(true)}" title="Big Brother"></iframe></body></html>`;
   }
 }
-SurfaceView.id = 'restraint.surface';
+SurfaceView.id = 'bigBrother.surface';
 
 module.exports = { SurfaceView };

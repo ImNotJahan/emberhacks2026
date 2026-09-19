@@ -1,7 +1,7 @@
 // runner.js — one-click lifecycle: finds Python, checks setup, starts the
 // capture engine (extention.py), Person 3's surface mailbox (p3_server.py) and
 // the live judge (judge.live), and keeps a status bar item that always says
-// what state Restraint is in.
+// what state Big Brother is in.
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
@@ -37,13 +37,13 @@ class Runner {
     this.listeners = new Set();
 
     this.status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1000);
-    this.status.command = 'restraint.menu';
+    this.status.command = 'bigBrother.menu';
     this.status.show();
     context.subscriptions.push(this.status, { dispose: () => this.stop(true) });
     this.render();
   }
 
-  cfg() { return vscode.workspace.getConfiguration('restraint'); }
+  cfg() { return vscode.workspace.getConfiguration('bigBrother'); }
 
   // --- for the sidebar Control view ---------------------------------------
 
@@ -87,15 +87,15 @@ class Runner {
   render() {
     const s = STATE[this.state];
     const label = {
-      starting: 'Restraint: starting…',
-      running: `Restraint · ${this.spoke} spoke · ${this.silent} silent`,
-      degraded: 'Restraint: capture only',
-      stopped: 'Restraint: off',
-      error: 'Restraint: failed',
+      starting: 'Big Brother: starting…',
+      running: `Big Brother · ${this.spoke} spoke · ${this.silent} silent`,
+      degraded: 'Big Brother: capture only',
+      stopped: 'Big Brother: off',
+      error: 'Big Brother: failed',
     }[this.state];
     this.status.text = `${s.icon} ${label}`;
     this.status.backgroundColor = s.bg ? new vscode.ThemeColor(s.bg) : undefined;
-    const lines = [`**Restraint** — ${this.state}`];
+    const lines = [`**Big Brother** — ${this.state}`];
     if (this.detail) lines.push(this.detail);
     if (this.python) lines.push(`python: \`${this.python}\``);
     if (this.session) lines.push(`decision log: \`logs/${this.session}.jsonl\``);
@@ -157,8 +157,8 @@ class Runner {
     this.python = this.findPython();
     if (!this.python) {
       this.setState('error', 'No Python 3.9+ found');
-      vscode.window.showErrorMessage('Restraint: no Python 3.9+ found. Set "restraint.python" to your interpreter.', 'Open Settings')
-        .then(p => p && vscode.commands.executeCommand('workbench.action.openSettings', 'restraint.python'));
+      vscode.window.showErrorMessage('Big Brother: no Python 3.9+ found. Set "bigBrother.python" to your interpreter.', 'Open Settings')
+        .then(p => p && vscode.commands.executeCommand('workbench.action.openSettings', 'bigBrother.python'));
       return;
     }
     this.log(`using python: ${this.python}`);
@@ -172,10 +172,10 @@ class Runner {
         : 'Judge not started: GEMINI_API_KEY is missing from .env.';
       this.judgeProblem = msg;
       const action = judgeProblem === 'deps' ? 'Install requirements' : 'Open .env';
-      vscode.window.showWarningMessage(`Restraint: ${msg} Capture still runs.`, action, 'Show log').then(p => {
+      vscode.window.showWarningMessage(`Big Brother: ${msg} Capture still runs.`, action, 'Show log').then(p => {
         if (p === 'Install requirements') this.installRequirements();
         if (p === 'Open .env') this.openEnv();
-        if (p === 'Show log') vscode.commands.executeCommand('restraint.showLog');
+        if (p === 'Show log') vscode.commands.executeCommand('bigBrother.showLog');
       });
     } else {
       this.judgeProblem = null;
@@ -227,7 +227,7 @@ class Runner {
       if (this.engine !== engine) return;     // stopped on purpose, or replaced by a restart
       this.engine = null;
       const why = this.portInUse
-        ? `Port ${port} is already in use — is Restraint running in another window?`
+        ? `Port ${port} is already in use — is Big Brother running in another window?`
         : `Capture engine exited (code ${code}).`;
       this.portInUse = false;
       this.fail(why);
@@ -283,20 +283,20 @@ class Runner {
     if (this.announced) return;
     this.announced = true;
     vscode.window.showInformationMessage(
-      'Restraint is running: it watches how you work and will rarely interrupt. Decisions appear here as notifications.',
+      'Big Brother is running: it watches how you work and will rarely interrupt. Decisions appear here as notifications.',
       'Test notification', 'Show log',
     ).then(p => {
-      if (p === 'Test notification') vscode.commands.executeCommand('restraint.testNotification');
-      if (p === 'Show log') vscode.commands.executeCommand('restraint.showLog');
+      if (p === 'Test notification') vscode.commands.executeCommand('bigBrother.testNotification');
+      if (p === 'Show log') vscode.commands.executeCommand('bigBrother.showLog');
     });
   }
 
   fail(why) {
     this.stop();
     this.setState('error', why);
-    vscode.window.showErrorMessage(`Restraint stopped: ${why}`, 'Restart', 'Show log').then(p => {
+    vscode.window.showErrorMessage(`Big Brother stopped: ${why}`, 'Restart', 'Show log').then(p => {
       if (p === 'Restart') this.restart();
-      if (p === 'Show log') vscode.commands.executeCommand('restraint.showLog');
+      if (p === 'Show log') vscode.commands.executeCommand('bigBrother.showLog');
     });
   }
 
@@ -320,10 +320,10 @@ class Runner {
   // --- helpers used by the menu -------------------------------------------
 
   installRequirements() {
-    const t = vscode.window.createTerminal({ name: 'Restraint setup', cwd: this.dir });
+    const t = vscode.window.createTerminal({ name: 'Big Brother setup', cwd: this.dir });
     t.show();
     t.sendText(`"${this.python}" -m pip install -r requirements.txt`);
-    vscode.window.showInformationMessage('Restraint: after the install finishes, choose Restart from the status bar.', 'Restart')
+    vscode.window.showInformationMessage('Big Brother: after the install finishes, choose Restart from the status bar.', 'Restart')
       .then(p => p && this.restart());
   }
 
@@ -334,9 +334,9 @@ class Runner {
   }
 
   openDecisionLog() {
-    if (!this.session) return vscode.window.showInformationMessage('Restraint: no live decision log yet.');
+    if (!this.session) return vscode.window.showInformationMessage('Big Brother: no live decision log yet.');
     const p = path.join(this.dir, 'logs', `${this.session}.jsonl`);
-    if (!fs.existsSync(p)) return vscode.window.showInformationMessage('Restraint: no decisions logged yet.');
+    if (!fs.existsSync(p)) return vscode.window.showInformationMessage('Big Brother: no decisions logged yet.');
     vscode.window.showTextDocument(vscode.Uri.file(p));
   }
 
@@ -351,17 +351,17 @@ class Runner {
       { label: '$(bell) Test notification', id: 'test' },
       { label: '$(gear) Settings', id: 'settings' },
     ];
-    const pick = await vscode.window.showQuickPick(items, { placeHolder: `Restraint — ${this.state}${this.detail ? ': ' + this.detail : ''}` });
+    const pick = await vscode.window.showQuickPick(items, { placeHolder: `Big Brother — ${this.state}${this.detail ? ': ' + this.detail : ''}` });
     if (!pick) return;
     ({
       stop: () => this.stop(),
       start: () => this.start(),
       restart: () => this.restart(),
-      log: () => vscode.commands.executeCommand('restraint.showLog'),
+      log: () => vscode.commands.executeCommand('bigBrother.showLog'),
       decisions: () => this.openDecisionLog(),
       dashboard: () => this.openDashboard(),
-      test: () => vscode.commands.executeCommand('restraint.testNotification'),
-      settings: () => vscode.commands.executeCommand('workbench.action.openSettings', 'restraint'),
+      test: () => vscode.commands.executeCommand('bigBrother.testNotification'),
+      settings: () => vscode.commands.executeCommand('workbench.action.openSettings', 'bigBrother'),
     })[pick.id]();
   }
 }

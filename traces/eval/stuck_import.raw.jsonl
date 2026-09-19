@@ -1,0 +1,260 @@
+{"k": "file_open", "ts": 1800100000000, "path": "shop/models.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800100000000, "path": "shop/models.py", "lang": "python"}
+{"k": "edit", "ts": 1800100001921, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100004160, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100005953, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1800100008415, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100010701, "path": "shop/models.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100012899, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100014796, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100017221, "path": "shop/models.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100019045, "path": "shop/models.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100021037, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100022848, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100023502, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100025426, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100026275, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100027951, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100028909, "path": "shop/models.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100029684, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100031317, "path": "shop/models.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100032021, "path": "shop/models.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100033366, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100035841, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100038223, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100040626, "path": "shop/models.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100042609, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100043754, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100045834, "path": "shop/models.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100047438, "path": "shop/models.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100048659, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100050243, "path": "shop/models.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100051045, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100052209, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100054035, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100055992, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100058354, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100060302, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100062252, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100063024, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100065312, "path": "shop/models.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100066820, "path": "shop/models.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100068409, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100070720, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100071439, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100073532, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100074208, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100075355, "path": "shop/models.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "save", "ts": 1800100077559, "path": "shop/models.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800100086010, "path": "tests/test_models.py", "lang": "python"}
+{"k": "edit", "ts": 1800100087740, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100089502, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100090731, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100091853, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100092761, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100094477, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100095315, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100097266, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100098777, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100100652, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100103067, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100104710, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100107137, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100108330, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100109755, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100110562, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100112564, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100113992, "path": "tests/test_models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "save", "ts": 1800100115337, "path": "tests/test_models.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1800100130000, "text": "pytest tests/test_models.py", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1800100132000, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/shop\r\ncollected 0 items / 1 error\r\n\r\n==================================== ERRORS ====================================\r\n_______________ ERROR collecting tests/test_models.py _______________\r\ntests/test_models.py:1: in <module>\r\n    from shop.models import Product\r\nshop/models.py:3: in <module>\r\n    from shop.pricing import Price\r\nshop/pricing.py:2: in <module>\r\n    from shop.models import Product\r\nE   ImportError: cannot import name 'Price' from partially initialized module 'shop.pricing' (most likely due to a circular import) (/Users/dev/shop/shop/pricing.py)\r\n=========================== short test summary info ============================\r\nERROR tests/test_models.py\r\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\r\n=============================== 1 error in 0.21s ===============================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 2, "meta": {"cmd": "pytest tests/test_models.py", "is_test": true}}
+{"k": "file_focus", "ts": 1800100135000, "path": "shop/pricing.py", "lang": "python"}
+{"k": "cursor_jump", "ts": 1800100135775, "path": "shop/pricing.py", "lang": "python", "meta": {"from": 2, "to": 40}}
+{"k": "edit", "ts": 1800100140877, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100143612, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100146475, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1800100150229, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100152661, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100154963, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100157389, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100159631, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100162948, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100164345, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "save", "ts": 1800100166240, "path": "shop/pricing.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1800100190000, "text": "pytest tests/test_models.py", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1800100192000, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/shop\r\ncollected 0 items / 1 error\r\n\r\n==================================== ERRORS ====================================\r\n_______________ ERROR collecting tests/test_models.py _______________\r\ntests/test_models.py:1: in <module>\r\n    from shop.models import Product\r\nshop/models.py:3: in <module>\r\n    from shop.pricing import Price\r\nshop/pricing.py:2: in <module>\r\n    from shop.models import Product\r\nE   ImportError: cannot import name 'Price' from partially initialized module 'shop.pricing' (most likely due to a circular import) (/Users/dev/shop/shop/pricing.py)\r\n=========================== short test summary info ============================\r\nERROR tests/test_models.py\r\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\r\n=============================== 1 error in 0.21s ===============================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 2, "meta": {"cmd": "pytest tests/test_models.py", "is_test": true}}
+{"k": "file_focus", "ts": 1800100195000, "path": "shop/models.py", "lang": "python"}
+{"k": "edit", "ts": 1800100196738, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100199079, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100200046, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100202349, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100205111, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1800100207460, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "save", "ts": 1800100208703, "path": "shop/models.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1800100245000, "text": "pytest tests/test_models.py", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1800100247000, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/shop\r\ncollected 0 items / 1 error\r\n\r\n==================================== ERRORS ====================================\r\n_______________ ERROR collecting tests/test_models.py _______________\r\ntests/test_models.py:1: in <module>\r\n    from shop.models import Product\r\nshop/models.py:3: in <module>\r\n    from shop.pricing import Price\r\nshop/pricing.py:2: in <module>\r\n    from shop.models import Product\r\nE   ImportError: cannot import name 'Price' from partially initialized module 'shop.pricing' (most likely due to a circular import) (/Users/dev/shop/shop/pricing.py)\r\n=========================== short test summary info ============================\r\nERROR tests/test_models.py\r\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\r\n=============================== 1 error in 0.21s ===============================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 2, "meta": {"cmd": "pytest tests/test_models.py", "is_test": true}}
+{"k": "file_focus", "ts": 1800100250000, "path": "shop/__init__.py", "lang": "python"}
+{"k": "edit", "ts": 1800100251981, "path": "shop/__init__.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100254614, "path": "shop/__init__.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100256257, "path": "shop/__init__.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100257675, "path": "shop/__init__.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "save", "ts": 1800100259312, "path": "shop/__init__.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1800100300000, "text": "pytest tests/test_models.py", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1800100302000, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/shop\r\ncollected 0 items / 1 error\r\n\r\n==================================== ERRORS ====================================\r\n_______________ ERROR collecting tests/test_models.py _______________\r\ntests/test_models.py:1: in <module>\r\n    from shop.models import Product\r\nshop/models.py:3: in <module>\r\n    from shop.pricing import Price\r\nshop/pricing.py:2: in <module>\r\n    from shop.models import Product\r\nE   ImportError: cannot import name 'Price' from partially initialized module 'shop.pricing' (most likely due to a circular import) (/Users/dev/shop/shop/pricing.py)\r\n=========================== short test summary info ============================\r\nERROR tests/test_models.py\r\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\r\n=============================== 1 error in 0.21s ===============================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 2, "meta": {"cmd": "pytest tests/test_models.py", "is_test": true}}
+{"k": "file_focus", "ts": 1800100305000, "path": "shop/models.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800100318355, "path": "shop/pricing.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800100331399, "path": "shop/__init__.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800100344998, "path": "shop/models.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800100356275, "path": "shop/pricing.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800100370743, "path": "shop/models.py", "lang": "python"}
+{"k": "edit", "ts": 1800100382116, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 1}}
+{"k": "terminal_cmd", "ts": 1800100400000, "text": "python -c 'import shop.models'", "meta": {"is_test": false}}
+{"k": "terminal_out", "ts": 1800100401500, "text": "Traceback (most recent call last):\r\n  File \"/Users/dev/shop/shop/pricing.py\", line 2, in <module>\r\n    from shop.models import Product\r\nImportError: cannot import name 'Price' from partially initialized module 'shop.pricing' (most likely due to a circular import) (/Users/dev/shop/shop/pricing.py)\r\n\r\n%                                                                                                                        \r \r", "exit_code": 1, "meta": {"cmd": "python -c 'import shop.models'", "is_test": false}}
+{"k": "file_focus", "ts": 1800100580000, "path": "shop/models.py", "lang": "python"}
+{"k": "edit", "ts": 1800100581324, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100583672, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100585707, "path": "shop/models.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100588022, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100590536, "path": "shop/models.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100592151, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100593592, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100595362, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100596938, "path": "shop/models.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100598287, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100599983, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100601557, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "save", "ts": 1800100603564, "path": "shop/models.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800100604617, "path": "shop/pricing.py", "lang": "python"}
+{"k": "edit", "ts": 1800100606197, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100608223, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100610985, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100613414, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100614928, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100616052, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100618027, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1800100619442, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "save", "ts": 1800100621449, "path": "shop/pricing.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1800100660000, "text": "pytest tests/test_models.py", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1800100662000, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/shop\r\ncollected 0 items / 1 error\r\n\r\n==================================== ERRORS ====================================\r\n_______________ ERROR collecting tests/test_models.py _______________\r\ntests/test_models.py:1: in <module>\r\n    from shop.models import Product\r\nshop/models.py:3: in <module>\r\n    from shop.pricing import Price\r\nshop/pricing.py:2: in <module>\r\n    from shop.models import Product\r\nE   ImportError: cannot import name 'Price' from partially initialized module 'shop.pricing' (most likely due to a circular import) (/Users/dev/shop/shop/pricing.py)\r\n=========================== short test summary info ============================\r\nERROR tests/test_models.py\r\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\r\n=============================== 1 error in 0.21s ===============================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 2, "meta": {"cmd": "pytest tests/test_models.py", "is_test": true}}
+{"k": "terminal_cmd", "ts": 1800100663000, "text": "pytest tests/test_models.py", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1800100664200, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/shop\r\ncollected 0 items / 1 error\r\n\r\n==================================== ERRORS ====================================\r\n_______________ ERROR collecting tests/test_models.py _______________\r\ntests/test_models.py:1: in <module>\r\n    from shop.models import Product\r\nshop/models.py:3: in <module>\r\n    from shop.pricing import Price\r\nshop/pricing.py:2: in <module>\r\n    from shop.models import Product\r\nE   ImportError: cannot import name 'Price' from partially initialized module 'shop.pricing' (most likely due to a circular import) (/Users/dev/shop/shop/pricing.py)\r\n=========================== short test summary info ============================\r\nERROR tests/test_models.py\r\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\r\n=============================== 1 error in 0.21s ===============================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 2, "meta": {"cmd": "pytest tests/test_models.py", "is_test": true}}
+{"k": "terminal_cmd", "ts": 1800100665000, "text": "pytest tests/test_models.py", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1800100666200, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/shop\r\ncollected 0 items / 1 error\r\n\r\n==================================== ERRORS ====================================\r\n_______________ ERROR collecting tests/test_models.py _______________\r\ntests/test_models.py:1: in <module>\r\n    from shop.models import Product\r\nshop/models.py:3: in <module>\r\n    from shop.pricing import Price\r\nshop/pricing.py:2: in <module>\r\n    from shop.models import Product\r\nE   ImportError: cannot import name 'Price' from partially initialized module 'shop.pricing' (most likely due to a circular import) (/Users/dev/shop/shop/pricing.py)\r\n=========================== short test summary info ============================\r\nERROR tests/test_models.py\r\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\r\n=============================== 1 error in 0.21s ===============================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 2, "meta": {"cmd": "pytest tests/test_models.py", "is_test": true}}
+{"k": "terminal_cmd", "ts": 1800100667000, "text": "pytest tests/test_models.py", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1800100668200, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/shop\r\ncollected 0 items / 1 error\r\n\r\n==================================== ERRORS ====================================\r\n_______________ ERROR collecting tests/test_models.py _______________\r\ntests/test_models.py:1: in <module>\r\n    from shop.models import Product\r\nshop/models.py:3: in <module>\r\n    from shop.pricing import Price\r\nshop/pricing.py:2: in <module>\r\n    from shop.models import Product\r\nE   ImportError: cannot import name 'Price' from partially initialized module 'shop.pricing' (most likely due to a circular import) (/Users/dev/shop/shop/pricing.py)\r\n=========================== short test summary info ============================\r\nERROR tests/test_models.py\r\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\r\n=============================== 1 error in 0.21s ===============================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 2, "meta": {"cmd": "pytest tests/test_models.py", "is_test": true}}
+{"k": "terminal_cmd", "ts": 1800100669000, "text": "pytest tests/test_models.py", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1800100670200, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/shop\r\ncollected 0 items / 1 error\r\n\r\n==================================== ERRORS ====================================\r\n_______________ ERROR collecting tests/test_models.py _______________\r\ntests/test_models.py:1: in <module>\r\n    from shop.models import Product\r\nshop/models.py:3: in <module>\r\n    from shop.pricing import Price\r\nshop/pricing.py:2: in <module>\r\n    from shop.models import Product\r\nE   ImportError: cannot import name 'Price' from partially initialized module 'shop.pricing' (most likely due to a circular import) (/Users/dev/shop/shop/pricing.py)\r\n=========================== short test summary info ============================\r\nERROR tests/test_models.py\r\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\r\n=============================== 1 error in 0.21s ===============================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 2, "meta": {"cmd": "pytest tests/test_models.py", "is_test": true}}
+{"k": "file_open", "ts": 1800100720000, "path": "shop/types.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800100720000, "path": "shop/types.py", "lang": "python"}
+{"k": "edit", "ts": 1800100721799, "path": "shop/types.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100723826, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100726098, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100727679, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100730505, "path": "shop/types.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100733296, "path": "shop/types.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100736700, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100738519, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100742139, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100745751, "path": "shop/types.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100747126, "path": "shop/types.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100749933, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100753783, "path": "shop/types.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100755984, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100758320, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100761943, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100764215, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100767573, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100770348, "path": "shop/types.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100772427, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100774066, "path": "shop/types.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100775498, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100777160, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100780032, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100783841, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100786095, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100787172, "path": "shop/types.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100790582, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100792747, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100796219, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100797239, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100800264, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100802030, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100803336, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100806508, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100807843, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100810523, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100811865, "path": "shop/types.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100813317, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100814844, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100817078, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100820365, "path": "shop/types.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100823804, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100826500, "path": "shop/types.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100829198, "path": "shop/types.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100832219, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100833482, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100835154, "path": "shop/types.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100836522, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100839677, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100841541, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100843571, "path": "shop/types.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100847488, "path": "shop/types.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1800100849905, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100851624, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100855122, "path": "shop/types.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1800100856732, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100860331, "path": "shop/types.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100863094, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100864788, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "save", "ts": 1800100868572, "path": "shop/types.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800100869052, "path": "shop/models.py", "lang": "python"}
+{"k": "edit", "ts": 1800100869863, "path": "shop/models.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100871975, "path": "shop/models.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100873943, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1800100875765, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800100877025, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100878923, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100881564, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100882408, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "save", "ts": 1800100883901, "path": "shop/models.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800100885377, "path": "shop/pricing.py", "lang": "python"}
+{"k": "edit", "ts": 1800100886234, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100888123, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100888956, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100891583, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100893902, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800100894979, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100897931, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800100900569, "path": "shop/pricing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "save", "ts": 1800100901914, "path": "shop/pricing.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1800100970000, "text": "pytest tests/test_models.py", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1800100971500, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/shop\r\ncollected 12 items\r\n\r\ntests/test_models.py .........FFF                                                [100%]\r\n\r\n=================================== FAILURES ===================================\r\n_____________________ test_price_rounding ____________________\r\n\r\nE       NameError: name 'Decimal' is not defined\r\n\r\ntests/test_models.py:12: NameError\r\n=========================== short test summary info ============================\r\nFAILED tests/test_models.py::test_price_rounding - NameError: name 'Decimal' is not defined\r\n========================= 3 failed, 9 passed in 0.21s =========================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 1, "meta": {"cmd": "pytest tests/test_models.py", "is_test": true}}
+{"k": "file_focus", "ts": 1800100974500, "path": "shop/types.py", "lang": "python"}
+{"k": "edit", "ts": 1800100976305, "path": "shop/types.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800100977729, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "save", "ts": 1800100978664, "path": "shop/types.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1800101005000, "text": "pytest tests/test_models.py", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1800101006500, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/shop\r\ncollected 12 items\r\n\r\ntests/test_models.py ..........FF                                                [100%]\r\n\r\n=================================== FAILURES ===================================\r\n_____________________ test_price_rounding ____________________\r\n\r\nE       AssertionError: assert Decimal('10.4') == Decimal('10.40')\r\n\r\ntests/test_models.py:31: AssertionError\r\n=========================== short test summary info ============================\r\nFAILED tests/test_models.py::test_price_rounding - AssertionError: assert Decimal('10.4') == Decimal('10.40')\r\n========================= 2 failed, 10 passed in 0.21s =========================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 1, "meta": {"cmd": "pytest tests/test_models.py", "is_test": true}}
+{"k": "edit", "ts": 1800101009500, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800101012127, "path": "shop/types.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800101017332, "path": "shop/types.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800101021341, "path": "shop/types.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800101027268, "path": "shop/types.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "save", "ts": 1800101028938, "path": "shop/types.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1800101060000, "text": "pytest tests/test_models.py", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1800101061500, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/shop\r\ncollected 12 items\r\n\r\ntests/test_app.py ............                                                [100%]\r\n\r\n============================== 12 passed in 0.23s ===============================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 0, "meta": {"cmd": "pytest tests/test_models.py", "is_test": true}}
+{"k": "terminal_cmd", "ts": 1800101110000, "text": "git add -A && git commit -m 'break models/pricing cycle'", "meta": {"is_test": false}}
+{"k": "terminal_out", "ts": 1800101110300, "text": "[main 4e1f2a9] break models/pricing cycle\r\n 4 files changed, 31 insertions(+), 12 deletions(-)\r\n%                                                                                                                        \r \r", "exit_code": 0, "meta": {"cmd": "git add -A && git commit -m 'break models/pricing cycle'", "is_test": false}}
+{"k": "file_focus", "ts": 1800101173300, "path": "shop/models.py", "lang": "python"}
+{"k": "edit", "ts": 1800101174928, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800101178573, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800101180019, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800101183588, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800101188085, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800101191135, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800101194841, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800101196647, "path": "shop/models.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800101201041, "path": "shop/models.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1800101202263, "path": "shop/models.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "save", "ts": 1800101204470, "path": "shop/models.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800101205013, "path": "README.md", "lang": "markdown"}

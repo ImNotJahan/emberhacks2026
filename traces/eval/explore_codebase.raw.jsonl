@@ -1,0 +1,112 @@
+{"k": "terminal_cmd", "ts": 1800400000000, "text": "git log --oneline | head -20", "meta": {"is_test": false}}
+{"k": "terminal_out", "ts": 1800400000200, "text": "0000000 commit 0\r\n0000001 commit 1\r\n0000002 commit 2\r\n0000003 commit 3\r\n0000004 commit 4\r\n0000005 commit 5\r\n0000006 commit 6\r\n0000007 commit 7\r\n0000008 commit 8\r\n0000009 commit 9\r\n000000a commit 10\r\n000000b commit 11\r\n000000c commit 12\r\n000000d commit 13\r\n000000e commit 14\r\n000000f commit 15\r\n0000010 commit 16\r\n0000011 commit 17\r\n0000012 commit 18\r\n0000013 commit 19\r\n%                                                                                                                        \r \r", "exit_code": 0, "meta": {"cmd": "git log --oneline | head -20", "is_test": false}}
+{"k": "file_open", "ts": 1800400010200, "path": "README.md", "lang": "markdown"}
+{"k": "file_focus", "ts": 1800400010200, "path": "README.md", "lang": "markdown"}
+{"k": "file_open", "ts": 1800400051599, "path": "app/__main__.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400051599, "path": "app/__main__.py", "lang": "python"}
+{"k": "cursor_jump", "ts": 1800400053348, "path": "app/__main__.py", "lang": "python", "meta": {"from": 1, "to": 44}}
+{"k": "file_open", "ts": 1800400064005, "path": "app/config.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400064005, "path": "app/config.py", "lang": "python"}
+{"k": "cursor_jump", "ts": 1800400065636, "path": "app/config.py", "lang": "python", "meta": {"from": 1, "to": 78}}
+{"k": "file_open", "ts": 1800400084511, "path": "app/server.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400084511, "path": "app/server.py", "lang": "python"}
+{"k": "cursor_jump", "ts": 1800400085434, "path": "app/server.py", "lang": "python", "meta": {"from": 1, "to": 156}}
+{"k": "file_open", "ts": 1800400103713, "path": "app/routes/orders.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400103713, "path": "app/routes/orders.py", "lang": "python"}
+{"k": "cursor_jump", "ts": 1800400104723, "path": "app/routes/orders.py", "lang": "python", "meta": {"from": 1, "to": 73}}
+{"k": "file_open", "ts": 1800400123884, "path": "app/routes/users.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400123884, "path": "app/routes/users.py", "lang": "python"}
+{"k": "cursor_jump", "ts": 1800400124563, "path": "app/routes/users.py", "lang": "python", "meta": {"from": 1, "to": 139}}
+{"k": "file_open", "ts": 1800400135764, "path": "app/services/billing.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400135764, "path": "app/services/billing.py", "lang": "python"}
+{"k": "cursor_jump", "ts": 1800400137614, "path": "app/services/billing.py", "lang": "python", "meta": {"from": 1, "to": 64}}
+{"k": "file_open", "ts": 1800400149456, "path": "app/db.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400149456, "path": "app/db.py", "lang": "python"}
+{"k": "cursor_jump", "ts": 1800400151106, "path": "app/db.py", "lang": "python", "meta": {"from": 1, "to": 99}}
+{"k": "file_open", "ts": 1800400169889, "path": "app/models.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400169889, "path": "app/models.py", "lang": "python"}
+{"k": "cursor_jump", "ts": 1800400171018, "path": "app/models.py", "lang": "python", "meta": {"from": 1, "to": 52}}
+{"k": "file_focus", "ts": 1800400245610, "path": "app/services/billing.py", "lang": "python"}
+{"k": "cursor_jump", "ts": 1800400246867, "path": "app/services/billing.py", "lang": "python", "meta": {"from": 12, "to": 88}}
+{"k": "cursor_jump", "ts": 1800400273030, "path": "app/services/billing.py", "lang": "python", "meta": {"from": 88, "to": 140}}
+{"k": "cursor_jump", "ts": 1800400297281, "path": "app/services/billing.py", "lang": "python", "meta": {"from": 140, "to": 31}}
+{"k": "cursor_jump", "ts": 1800400320448, "path": "app/services/billing.py", "lang": "python", "meta": {"from": 31, "to": 202}}
+{"k": "terminal_cmd", "ts": 1800400343745, "text": "grep -rn 'def charge' app/", "meta": {"is_test": false}}
+{"k": "terminal_out", "ts": 1800400343945, "text": "app/services/billing.py:88:def charge(account, cents):\r\napp/routes/orders.py:41:    billing.charge(acct, total)\r\n%                                                                                                                        \r \r", "exit_code": 0, "meta": {"cmd": "grep -rn 'def charge' app/", "is_test": false}}
+{"k": "file_focus", "ts": 1800400358945, "path": "app/routes/orders.py", "lang": "python"}
+{"k": "cursor_jump", "ts": 1800400360519, "path": "app/routes/orders.py", "lang": "python", "meta": {"from": 1, "to": 41}}
+{"k": "terminal_cmd", "ts": 1800400450000, "text": "python -m app serve", "meta": {"is_test": false}}
+{"k": "terminal_out", "ts": 1800400450800, "text": "Traceback (most recent call last):\r\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\r\n  File \"/Users/dev/shop/app/config.py\", line 9, in <module>\r\n    DB = os.environ['DATABASE_URL']\r\nKeyError: 'DATABASE_URL'\r\n\r\n%                                                                                                                        \r \r", "exit_code": 1, "meta": {"cmd": "python -m app serve", "is_test": false}}
+{"k": "file_open", "ts": 1800400458800, "path": ".env.example", "lang": "plaintext"}
+{"k": "file_focus", "ts": 1800400458800, "path": ".env.example", "lang": "plaintext"}
+{"k": "terminal_cmd", "ts": 1800400480115, "text": "cp .env.example .env && python -m app serve", "meta": {"is_test": false}}
+{"k": "terminal_out", "ts": 1800400520115, "text": "INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)\r\n^CINFO:     Shutting down\r\n\r\n%                                                                                                                        \r \r", "exit_code": 130, "meta": {"cmd": "cp .env.example .env && python -m app serve", "is_test": false}}
+{"k": "file_focus", "ts": 1800400690000, "path": "app/services/billing.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400707872, "path": "app/models.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400727028, "path": "app/services/billing.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400741496, "path": "tests/test_billing.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400754100, "path": "app/services/billing.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400769919, "path": "app/models.py", "lang": "python"}
+{"k": "file_focus", "ts": 1800400870000, "path": "tests/test_billing.py", "lang": "python"}
+{"k": "edit", "ts": 1800400871982, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400875682, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400877343, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400880491, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400882656, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800400886079, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400888392, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400891102, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800400893172, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400895287, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400896779, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400898827, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400902272, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400904337, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800400908007, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800400909732, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800400912705, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800400915180, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800400918329, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400921597, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400923070, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800400925796, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800400928551, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1800400930632, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400932211, "path": "tests/test_billing.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "save", "ts": 1800400934556, "path": "tests/test_billing.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1800400950000, "text": "pytest tests/test_billing.py -k charge", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1800400951500, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/shop\r\ncollected 6 items\r\n\r\ntests/test_billing.py ......                                                      [100%]\r\n\r\n============================== 6 passed in 0.17s ===============================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 0, "meta": {"cmd": "pytest tests/test_billing.py -k charge", "is_test": true}}
+{"k": "file_open", "ts": 1800400990000, "path": "NOTES.md", "lang": "markdown"}
+{"k": "file_focus", "ts": 1800400990000, "path": "NOTES.md", "lang": "markdown"}
+{"k": "edit", "ts": 1800400991098, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800400994084, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800400996917, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800400998444, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800401000410, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800401001660, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800401004267, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800401005648, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800401007940, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800401009647, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800401012717, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800401013841, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800401014921, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800401016109, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800401018642, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800401020578, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1800401022667, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1800401025376, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800401027670, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800401028645, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800401032223, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1800401033864, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800401036542, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1800401039047, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800401040372, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800401042326, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800401045887, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1800401048133, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800401051479, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1800401053431, "path": "NOTES.md", "lang": "markdown", "meta": {"added": 1, "removed": 0}}
+{"k": "save", "ts": 1800401056810, "path": "NOTES.md", "lang": "markdown"}
+{"k": "file_focus", "ts": 1800401090000, "path": "app/server.py", "lang": "python"}

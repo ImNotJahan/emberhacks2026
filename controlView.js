@@ -1,4 +1,4 @@
-// controlView.js — the "Control" view in the Restraint sidebar. Start/stop the
+// controlView.js — the "Control" view in the Big Brother sidebar. Start/stop the
 // capture engine + judge (+ surface mailbox) in THIS window, and see what state
 // everything is in. All lifecycle work is Runner's; this only displays it.
 const vscode = require('vscode');
@@ -41,9 +41,9 @@ class ControlView {
       restart: () => r.restart(),
       dashboard: () => r.openDashboard(),
       decisions: () => r.openDecisionLog(),
-      log: () => vscode.commands.executeCommand('restraint.showLog'),
-      test: () => vscode.commands.executeCommand('restraint.testNotification'),
-      settings: () => vscode.commands.executeCommand('workbench.action.openSettings', 'restraint'),
+      log: () => vscode.commands.executeCommand('bigBrother.showLog'),
+      test: () => vscode.commands.executeCommand('bigBrother.testNotification'),
+      settings: () => vscode.commands.executeCommand('workbench.action.openSettings', 'bigBrother'),
       env: () => r.openEnv(),
       install: () => r.installRequirements(),
     })[cmd]?.();
@@ -144,7 +144,7 @@ window.addEventListener('message', ({ data: m }) => {
   if (m.type !== 'status') return;
   const s = m.data, live = s.live || {};
   $('dot').className = 'dot ' + s.state;
-  $('state').textContent = 'Restraint: ' + LABEL[s.state];
+  $('state').textContent = 'Big Brother: ' + LABEL[s.state];
   $('detail').textContent = s.detail || (s.state === 'stopped'
     ? 'Nothing is running in this window. Start runs the capture engine, the judge and the surface server here.' : '');
 
@@ -189,6 +189,6 @@ window.addEventListener('message', ({ data: m }) => {
 </body></html>`;
 }
 
-ControlView.id = 'restraint.control';
+ControlView.id = 'bigBrother.control';
 
 module.exports = { ControlView };
