@@ -1,0 +1,7 @@
+{"ts": 1800500072000, "should_have_spoken": false, "rationale": "First install failure: they will read the message.", "tolerance_ms": 60000}
+{"ts": 1800500169000, "should_have_spoken": false, "rationale": "Second failure after a sensible first fix (upgrading pip): still reasonable.", "tolerance_ms": 60000}
+{"ts": 1800500357000, "should_have_spoken": true, "rationale": "4th identical pg_config failure, now nuking the venv: blind retries. 'Use psycopg2-binary or brew install libpq' is the whole answer.", "tolerance_ms": 60000}
+{"ts": 1800500540000, "should_have_spoken": true, "rationale": "Quiet for 3 minutes after 4 failures: searching, blocked.", "tolerance_ms": 90000}
+{"ts": 1800500630000, "should_have_spoken": true, "rationale": "Escalating to sudo pip after 5 identical build failures: about to make it worse.", "tolerance_ms": 45000}
+{"ts": 1800500743000, "should_have_spoken": false, "rationale": "Found the real fix and is waiting on a long install: don't interrupt a download.", "tolerance_ms": 60000}
+{"ts": 1800500817000, "should_have_spoken": false, "rationale": "Everything installs and passes. Stay quiet.", "tolerance_ms": 60000}

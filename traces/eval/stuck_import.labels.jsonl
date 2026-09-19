@@ -1,0 +1,8 @@
+{"ts": 1800100135000, "should_have_spoken": false, "rationale": "First failure of a brand-new error right after writing code; they will read the traceback.", "tolerance_ms": 60000}
+{"ts": 1800100250000, "should_have_spoken": false, "rationale": "Third identical failure, but each run follows a different edit in a different file: still ordinary debugging.", "tolerance_ms": 60000}
+{"ts": 1800100305000, "should_have_spoken": true, "rationale": "4th identical ImportError after edits in 3 different files. The cause is the cycle, not where they are editing: a one-line nudge naming models<->pricing would save minutes.", "tolerance_ms": 75000}
+{"ts": 1800100404500, "should_have_spoken": true, "rationale": "Bouncing between the same three files with one edit in 90s, then the same error again: lost, not exploring.", "tolerance_ms": 60000}
+{"ts": 1800100580000, "should_have_spoken": true, "rationale": "Nearly 3 minutes of silence after five identical failures: blocked (probably searching the error).", "tolerance_ms": 90000}
+{"ts": 1800100671000, "should_have_spoken": true, "rationale": "Re-ran unchanged code 4 times in 10 seconds: hoping, not debugging.", "tolerance_ms": 45000}
+{"ts": 1800100974500, "should_have_spoken": false, "rationale": "Error changed: they found and broke the cycle themselves. Interrupting now steals the win.", "tolerance_ms": 60000}
+{"ts": 1800101064500, "should_have_spoken": false, "rationale": "Just went green. Nothing to add.", "tolerance_ms": 60000}

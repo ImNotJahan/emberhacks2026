@@ -1,0 +1,194 @@
+{"k": "file_open", "ts": 1790600000000, "path": "test_cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600000000, "path": "test_cart.py", "lang": "python"}
+{"k": "file_open", "ts": 1790600009975, "path": "cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600009975, "path": "cart.py", "lang": "python"}
+{"k": "edit", "ts": 1790600011947, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600012307, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600012726, "path": "cart.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1790600013027, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600013416, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600014071, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600014333, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1790600015080, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600015587, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600016326, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600016902, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600017813, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600018108, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1790600018500, "path": "cart.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1790600019374, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600019772, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600020599, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600021144, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1790600021654, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600022128, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600022892, "path": "cart.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1790600023139, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600023977, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1790600024334, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600025102, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600025606, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1790600025911, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600026404, "path": "cart.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1790600027320, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600028130, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600028471, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600029360, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600029747, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600030607, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600031515, "path": "cart.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1790600032113, "path": "cart.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1790600032409, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600032797, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1790600033205, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600033600, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600034329, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600034965, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1790600035668, "path": "cart.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1790600036054, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600036699, "path": "cart.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1790600037236, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600037717, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600038153, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600038855, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600039138, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600039954, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600040450, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600041303, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600041729, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600042654, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600042921, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600043815, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600044458, "path": "cart.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1790600044978, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1790600045270, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600045769, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1790600046112, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1790600046497, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600047074, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600047734, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1790600048207, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600048556, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1790600049429, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600049829, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1790600050409, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600050881, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600051706, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600052550, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600053475, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600054292, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1790600055143, "path": "cart.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1790600055420, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600055694, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600055972, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600056647, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600057462, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600057889, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600058389, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600059117, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 1}}
+{"k": "edit", "ts": 1790600059636, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600060457, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600061030, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600061617, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600062402, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600062662, "path": "cart.py", "lang": "python", "meta": {"added": 2, "removed": 0}}
+{"k": "edit", "ts": 1790600062975, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600063746, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600064636, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "edit", "ts": 1790600065202, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600066025, "path": "cart.py", "lang": "python", "meta": {"added": 3, "removed": 0}}
+{"k": "save", "ts": 1790600066756, "path": "cart.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1790600070000, "text": "pytest", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1790600071500, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/demo\r\ncollected 3 items\r\n\r\ntest_cart.py .F.                                                         [100%]\r\n\r\n=================================== FAILURES ===================================\r\n_________________________ test_each_cart_starts_empty __________________________\r\n\r\n    def test_each_cart_starts_empty():\r\n>       assert add_item((\"pear\", 2.00)) == [(\"pear\", 2.00)]\r\nE       AssertionError: assert [('apple', 1....('pear', 2.0)] == [('pear', 2.0)]\r\nE         \r\nE         At index 0 diff: ('apple', 1.5) != ('pear', 2.0)\r\nE         Left contains one more item: ('pear', 2.0)\r\nE         Use -v to get more diff\r\n\r\ntest_cart.py:9: AssertionError\r\n=========================== short test summary info ============================\r\nFAILED test_cart.py::test_each_cart_starts_empty - AssertionError: asser...\r\n========================= 1 failed, 2 passed in 0.01s ==========================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "edit", "ts": 1790600074500, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600076814, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600078285, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600079477, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600081907, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600083291, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "save", "ts": 1790600085687, "path": "cart.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1790600090742, "text": "pytest", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1790600092242, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/demo\r\ncollected 3 items\r\n\r\ntest_cart.py .F.                                                         [100%]\r\n\r\n=================================== FAILURES ===================================\r\n_________________________ test_each_cart_starts_empty __________________________\r\n\r\n    def test_each_cart_starts_empty():\r\n>       assert add_item((\"pear\", 2.00)) == [(\"pear\", 2.00)]\r\nE       AssertionError: assert [('apple', 1....('pear', 2.0)] == [('pear', 2.0)]\r\nE         \r\nE         At index 0 diff: ('apple', 1.5) != ('pear', 2.0)\r\nE         Left contains one more item: ('pear', 2.0)\r\nE         Use -v to get more diff\r\n\r\ntest_cart.py:9: AssertionError\r\n=========================== short test summary info ============================\r\nFAILED test_cart.py::test_each_cart_starts_empty - AssertionError: asser...\r\n========================= 1 failed, 2 passed in 0.01s ==========================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "edit", "ts": 1790600096242, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 6}}
+{"k": "save", "ts": 1790600098349, "path": "cart.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1790600103565, "text": "pytest", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1790600105065, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/demo\r\ncollected 3 items\r\n\r\ntest_cart.py .F.                                                         [100%]\r\n\r\n=================================== FAILURES ===================================\r\n_________________________ test_each_cart_starts_empty __________________________\r\n\r\n    def test_each_cart_starts_empty():\r\n>       assert add_item((\"pear\", 2.00)) == [(\"pear\", 2.00)]\r\nE       AssertionError: assert [('apple', 1....('pear', 2.0)] == [('pear', 2.0)]\r\nE         \r\nE         At index 0 diff: ('apple', 1.5) != ('pear', 2.0)\r\nE         Left contains one more item: ('pear', 2.0)\r\nE         Use -v to get more diff\r\n\r\ntest_cart.py:9: AssertionError\r\n=========================== short test summary info ============================\r\nFAILED test_cart.py::test_each_cart_starts_empty - AssertionError: asser...\r\n========================= 1 failed, 2 passed in 0.01s ==========================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "file_focus", "ts": 1790600109065, "path": "test_cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600115273, "path": "cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600119865, "path": "test_cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600125483, "path": "cart.py", "lang": "python"}
+{"k": "edit", "ts": 1790600126285, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600127618, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600129311, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "save", "ts": 1790600130727, "path": "cart.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1790600135700, "text": "pytest", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1790600137200, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/demo\r\ncollected 3 items\r\n\r\ntest_cart.py .F.                                                         [100%]\r\n\r\n=================================== FAILURES ===================================\r\n_________________________ test_each_cart_starts_empty __________________________\r\n\r\n    def test_each_cart_starts_empty():\r\n>       assert add_item((\"pear\", 2.00)) == [(\"pear\", 2.00)]\r\nE       AssertionError: assert [('apple', 1....('pear', 2.0)] == [('pear', 2.0)]\r\nE         \r\nE         At index 0 diff: ('apple', 1.5) != ('pear', 2.0)\r\nE         Left contains one more item: ('pear', 2.0)\r\nE         Use -v to get more diff\r\n\r\ntest_cart.py:9: AssertionError\r\n=========================== short test summary info ============================\r\nFAILED test_cart.py::test_each_cart_starts_empty - AssertionError: asser...\r\n========================= 1 failed, 2 passed in 0.01s ==========================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "file_focus", "ts": 1790600141200, "path": "test_cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600147736, "path": "cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600151665, "path": "test_cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600157720, "path": "cart.py", "lang": "python"}
+{"k": "edit", "ts": 1790600158602, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 3}}
+{"k": "save", "ts": 1790600160811, "path": "cart.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1790600165142, "text": "pytest", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1790600166642, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/demo\r\ncollected 3 items\r\n\r\ntest_cart.py .F.                                                         [100%]\r\n\r\n=================================== FAILURES ===================================\r\n_________________________ test_each_cart_starts_empty __________________________\r\n\r\n    def test_each_cart_starts_empty():\r\n>       assert add_item((\"pear\", 2.00)) == [(\"pear\", 2.00)]\r\nE       AssertionError: assert [('apple', 1....('pear', 2.0)] == [('pear', 2.0)]\r\nE         \r\nE         At index 0 diff: ('apple', 1.5) != ('pear', 2.0)\r\nE         Left contains one more item: ('pear', 2.0)\r\nE         Use -v to get more diff\r\n\r\ntest_cart.py:9: AssertionError\r\n=========================== short test summary info ============================\r\nFAILED test_cart.py::test_each_cart_starts_empty - AssertionError: asser...\r\n========================= 1 failed, 2 passed in 0.01s ==========================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "file_focus", "ts": 1790600170642, "path": "test_cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600177445, "path": "cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600182121, "path": "test_cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600188750, "path": "cart.py", "lang": "python"}
+{"k": "edit", "ts": 1790600190120, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600192074, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600193640, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600194933, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600197614, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600198849, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600200430, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "save", "ts": 1790600202947, "path": "cart.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1790600207507, "text": "pytest", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1790600209007, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/demo\r\ncollected 3 items\r\n\r\ntest_cart.py .F.                                                         [100%]\r\n\r\n=================================== FAILURES ===================================\r\n_________________________ test_each_cart_starts_empty __________________________\r\n\r\n    def test_each_cart_starts_empty():\r\n>       assert add_item((\"pear\", 2.00)) == [(\"pear\", 2.00)]\r\nE       AssertionError: assert [('apple', 1....('pear', 2.0)] == [('pear', 2.0)]\r\nE         \r\nE         At index 0 diff: ('apple', 1.5) != ('pear', 2.0)\r\nE         Left contains one more item: ('pear', 2.0)\r\nE         Use -v to get more diff\r\n\r\ntest_cart.py:9: AssertionError\r\n=========================== short test summary info ============================\r\nFAILED test_cart.py::test_each_cart_starts_empty - AssertionError: asser...\r\n========================= 1 failed, 2 passed in 0.01s ==========================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "file_focus", "ts": 1790600213007, "path": "test_cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600219762, "path": "cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600224157, "path": "test_cart.py", "lang": "python"}
+{"k": "file_focus", "ts": 1790600230610, "path": "cart.py", "lang": "python"}
+{"k": "edit", "ts": 1790600232218, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 7}}
+{"k": "save", "ts": 1790600234903, "path": "cart.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1790600240022, "text": "pytest", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1790600241522, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/demo\r\ncollected 3 items\r\n\r\ntest_cart.py .F.                                                         [100%]\r\n\r\n=================================== FAILURES ===================================\r\n_________________________ test_each_cart_starts_empty __________________________\r\n\r\n    def test_each_cart_starts_empty():\r\n>       assert add_item((\"pear\", 2.00)) == [(\"pear\", 2.00)]\r\nE       AssertionError: assert [('apple', 1....('pear', 2.0)] == [('pear', 2.0)]\r\nE         \r\nE         At index 0 diff: ('apple', 1.5) != ('pear', 2.0)\r\nE         Left contains one more item: ('pear', 2.0)\r\nE         Use -v to get more diff\r\n\r\ntest_cart.py:9: AssertionError\r\n=========================== short test summary info ============================\r\nFAILED test_cart.py::test_each_cart_starts_empty - AssertionError: asser...\r\n========================= 1 failed, 2 passed in 0.01s ==========================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 1, "meta": {"cmd": "pytest", "is_test": true}}
+{"k": "file_focus", "ts": 1790600355522, "path": "cart.py", "lang": "python"}
+{"k": "edit", "ts": 1790600357202, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600358254, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600360107, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600362700, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600363756, "path": "cart.py", "lang": "python", "meta": {"added": 0, "removed": 2}}
+{"k": "edit", "ts": 1790600366364, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600368003, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600369773, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600371188, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600373701, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600374894, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600376237, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600378701, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600381236, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600383191, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600384407, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600386994, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600389350, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600392070, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600393990, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600396281, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600398066, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600400080, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600402389, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600404078, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600405128, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600406703, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600408670, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600411535, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600414114, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600416265, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600419238, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600422072, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600425015, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "edit", "ts": 1790600427301, "path": "cart.py", "lang": "python", "meta": {"added": 1, "removed": 0}}
+{"k": "save", "ts": 1790600429212, "path": "cart.py", "lang": "python"}
+{"k": "terminal_cmd", "ts": 1790600429958, "text": "pytest", "meta": {"is_test": true}}
+{"k": "terminal_out", "ts": 1790600431458, "text": "============================= test session starts ==============================\r\nplatform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0\r\nrootdir: /Users/dev/demo\r\ncollected 3 items\r\n\r\ntest_cart.py ...  [100%]\r\n\r\n============================== 3 passed in 0.01s ===============================\r\n\r\n%                                                                                                                        \r \r", "exit_code": 0, "meta": {"cmd": "pytest", "is_test": true}}

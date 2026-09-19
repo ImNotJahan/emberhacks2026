@@ -1,6 +1,6 @@
 {
-  "name": "restraint",
-  "displayName": "Restraint",
+  "name": "big-brother",
+  "displayName": "Big Brother",
   "description": "Observes developer activity and decides when (rarely) to speak.",
   "version": "0.0.1",
   "publisher": "emberhacks",
@@ -14,92 +14,92 @@
   "contributes": {
     "commands": [
       {
-        "command": "restraint.menu",
-        "title": "Restraint: Menu"
+        "command": "bigBrother.menu",
+        "title": "Big Brother: Menu"
       },
       {
-        "command": "restraint.start",
-        "title": "Restraint: Start"
+        "command": "bigBrother.start",
+        "title": "Big Brother: Start"
       },
       {
-        "command": "restraint.stop",
-        "title": "Restraint: Stop"
+        "command": "bigBrother.stop",
+        "title": "Big Brother: Stop"
       },
       {
-        "command": "restraint.restart",
-        "title": "Restraint: Restart"
+        "command": "bigBrother.restart",
+        "title": "Big Brother: Restart"
       },
       {
-        "command": "restraint.showLog",
-        "title": "Restraint: Show Log"
+        "command": "bigBrother.showLog",
+        "title": "Big Brother: Show Log"
       },
       {
-        "command": "restraint.openDecisionLog",
-        "title": "Restraint: Open Decision Log"
+        "command": "bigBrother.openDecisionLog",
+        "title": "Big Brother: Open Decision Log"
       },
       {
-        "command": "restraint.openDashboard",
-        "title": "Restraint: Open Dashboard"
+        "command": "bigBrother.openDashboard",
+        "title": "Big Brother: Open Dashboard"
       },
       {
-        "command": "restraint.testNotification",
-        "title": "Restraint: Test Notification"
+        "command": "bigBrother.testNotification",
+        "title": "Big Brother: Test Notification"
       },
       {
-        "command": "restraint.openSidebar",
-        "title": "Restraint: Open Sidebar"
+        "command": "bigBrother.openSidebar",
+        "title": "Big Brother: Open Sidebar"
       }
     ],
     "configuration": {
-      "title": "Restraint",
+      "title": "Big Brother",
       "properties": {
-        "restraint.autoStart": {
+        "bigBrother.autoStart": {
           "type": "boolean",
           "default": true,
           "description": "Start the capture engine and judge when VS Code starts."
         },
-        "restraint.redaction.enabled": {
+        "bigBrother.redaction.enabled": {
           "type": "boolean",
           "default": true,
           "description": "Strip secrets (key/token/password string literals, .env contents) before anything leaves the editor process."
         },
-        "restraint.python": {
+        "bigBrother.python": {
           "type": "string",
           "default": "",
           "description": "Python executable for the capture engine and judge. Empty = auto-detect (.venv/venv in the extension folder, then python3, python, py)."
         },
-        "restraint.port": {
+        "bigBrother.port": {
           "type": "number",
           "default": 8765,
           "description": "Port for the local candidate-moment endpoint."
         },
-        "restraint.testSurface.enabled": {
+        "bigBrother.testSurface.enabled": {
           "type": "boolean",
           "default": true,
           "description": "TEMPORARY: show judge decisions from logs/*.jsonl as notifications and in the status bar. Testing only."
         },
-        "restraint.prompt": {
+        "bigBrother.prompt": {
           "type": "string",
           "default": "judge-v8",
           "description": "Judge prompt version passed to judge.live (see judge/prompts.py). Empty = the judge's default."
         },
-        "restraint.verbose": {
+        "bigBrother.verbose": {
           "type": "boolean",
           "default": false,
-          "description": "Log every raw editor event to the Restraint output channel (noisy)."
+          "description": "Log every raw editor event to the Big Brother output channel (noisy)."
         }
       }
     },
     "views": {
-      "restraint": [
+      "bigBrother": [
         {
           "type": "webview",
-          "id": "restraint.control",
+          "id": "bigBrother.control",
           "name": "Control"
         },
         {
           "type": "webview",
-          "id": "restraint.surface",
+          "id": "bigBrother.surface",
           "name": "Big Brother"
         }
       ]
@@ -107,9 +107,9 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "restraint",
-          "title": "Restraint",
-          "icon": "media/restraint.svg"
+          "id": "bigBrother",
+          "title": "Big Brother",
+          "icon": "media/bigbrother.svg"
         }
       ]
     }

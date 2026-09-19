@@ -18,7 +18,7 @@ let runner = null;
 
 function log(line) {
   out.appendLine(`${new Date().toLocaleTimeString()}  ${line}`);
-  console.log('[restraint] ' + line);
+  console.log('[big-brother] ' + line);
 }
 
 function relPath(uri) {
@@ -33,37 +33,37 @@ function send(ev) {
   ev.ts = ev.ts || Date.now();
   if (typeof ev.text === 'string' && ev.text.length > MAX_TEXT) ev.text = ev.text.slice(-MAX_TEXT);
   const line = JSON.stringify(ev);
-  if (vscode.workspace.getConfiguration('restraint').get('verbose', false)) log('raw ' + line.slice(0, 200));
+  if (vscode.workspace.getConfiguration('bigBrother').get('verbose', false)) log('raw ' + line.slice(0, 200));
   if (runner) runner.write(line);
 }
 
 function activate(context) {
-  out = vscode.window.createOutputChannel('Restraint');
+  out = vscode.window.createOutputChannel('Big Brother');
   context.subscriptions.push(out);
   log('activated');
 
   runner = new Runner(context, log);
   let surface = null;
-  if (vscode.workspace.getConfiguration('restraint').get('testSurface.enabled', true))
+  if (vscode.workspace.getConfiguration('bigBrother').get('testSurface.enabled', true))
     surface = testSurface.start(context, log); // TEMP: remove with testSurface.js. Counts come from the judge's own output (runner.parseJudgeLine)
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('restraint.showLog', () => out.show(true)),
-    vscode.commands.registerCommand('restraint.menu', () => runner.menu()),
-    vscode.commands.registerCommand('restraint.start', () => runner.start()),
-    vscode.commands.registerCommand('restraint.stop', () => runner.stop()),
-    vscode.commands.registerCommand('restraint.restart', () => runner.restart()),
-    vscode.commands.registerCommand('restraint.openDecisionLog', () => runner.openDecisionLog()),
-    vscode.commands.registerCommand('restraint.openDashboard', () => runner.openDashboard()),
-    vscode.commands.registerCommand('restraint.openSidebar', () => vscode.commands.executeCommand('workbench.view.extension.restraint')),
+    vscode.commands.registerCommand('bigBrother.showLog', () => out.show(true)),
+    vscode.commands.registerCommand('bigBrother.menu', () => runner.menu()),
+    vscode.commands.registerCommand('bigBrother.start', () => runner.start()),
+    vscode.commands.registerCommand('bigBrother.stop', () => runner.stop()),
+    vscode.commands.registerCommand('bigBrother.restart', () => runner.restart()),
+    vscode.commands.registerCommand('bigBrother.openDecisionLog', () => runner.openDecisionLog()),
+    vscode.commands.registerCommand('bigBrother.openDashboard', () => runner.openDashboard()),
+    vscode.commands.registerCommand('bigBrother.openSidebar', () => vscode.commands.executeCommand('workbench.view.extension.bigBrother')),
     vscode.window.registerWebviewViewProvider(SurfaceView.id, new SurfaceView()),
     vscode.window.registerWebviewViewProvider(ControlView.id, new ControlView(runner)),
-    vscode.commands.registerCommand('restraint.testNotification', () =>
-      surface ? surface.test() : vscode.window.showInformationMessage('Restraint: the test surface is disabled (restraint.testSurface.enabled).')),
+    vscode.commands.registerCommand('bigBrother.testNotification', () =>
+      surface ? surface.test() : vscode.window.showInformationMessage('Big Brother: the test surface is disabled (bigBrother.testSurface.enabled).')),
   );
 
   registerSources(context);
-  if (vscode.workspace.getConfiguration('restraint').get('autoStart', true)) runner.start();
+  if (vscode.workspace.getConfiguration('bigBrother').get('autoStart', true)) runner.start();
 }
 
 function registerSources(context) {

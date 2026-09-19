@@ -609,7 +609,7 @@ def replay(engine: Engine, lines, step_ms: int = 5000) -> list[CandidateMoment]:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Restraint capture engine")
+    ap = argparse.ArgumentParser(description="Big Brother capture engine")
     ap.add_argument("--port", type=int, default=8765)
     ap.add_argument("--no-redact", action="store_true", help="disable redaction (demo toggle)")
     ap.add_argument("--record", help="append raw stdin lines here (replayable trace)")

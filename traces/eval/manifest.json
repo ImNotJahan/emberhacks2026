@@ -1,0 +1,37 @@
+{
+  "stuck_import": {
+    "kind": "stuck",
+    "source": "scripted",
+    "description": "Adds a Product.price property; creates a models<->pricing import cycle. The traceback names pricing.py but the fix is to break the cycle."
+  },
+  "productive_tdd": {
+    "kind": "productive",
+    "source": "scripted",
+    "description": "Cart discounts by TDD. Every label False: any speech is a false positive. Contains the classic bait: same AssertionError 3x while pass count climbs."
+  },
+  "mixed_pagination": {
+    "kind": "mixed",
+    "source": "scripted",
+    "description": "Flow, then an off-by-one where the edits flip range bounds back and forth, then flow, then fetch_all loops forever (cursor never advanced)."
+  },
+  "explore_codebase": {
+    "kind": "productive",
+    "source": "scripted",
+    "description": "Day-one onboarding. Lots of opens, jumps, reading; every label False."
+  },
+  "env_hell": {
+    "kind": "stuck",
+    "source": "scripted",
+    "description": "Setting up a repo: psycopg2 won't build. Every attempt fails the same way; `psycopg2-binary` or `brew install libpq` is the answer."
+  },
+  "stuck_jest": {
+    "kind": "stuck",
+    "source": "scripted",
+    "description": "TypeScript: `this.lines` is undefined because the class field is declared but the constructor assigns `this.items`. Checks the capture engine beyond Python."
+  },
+  "dogfood": {
+    "kind": "mixed",
+    "source": "real",
+    "description": "Real editor capture (2026-09-19, ~41 min incl. an 11-min gap): a deliberately buggy FizzBuzz in Testing.py \u2014 infinite loop hit 7x, then `else if` SyntaxError rerun 9x in 5s. Staged by the developer, labelled from the trace (no video)."
+  }
+}

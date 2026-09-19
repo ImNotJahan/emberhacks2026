@@ -1,6 +1,6 @@
 // testSurface.js — TEMPORARY stand-in for Person 3's surface. Testing only.
 // Tails logs/*.jsonl (written by judge.live and judge.replay) and shows each
-// new decision: SPEAK as a notification, silence in the Restraint output
+// new decision: SPEAK as a notification, silence in the Big Brother output
 // channel. Delete this file and its lines in extension.js once the real
 // surface lands.
 const vscode = require('vscode');
@@ -25,15 +25,15 @@ function start(context, log, onDecision = () => {}) {
     }
     log(`decision SPEAK ${tag}\n    signals: ${signals}\n    why: ${d.reasoning}\n    says: ${d.content}`);
     const from = source.startsWith('live_') ? '' : ` (replay: ${source})`;
-    vscode.window.showInformationMessage(`Restraint${from}: ${d.content || '(no content generated)'}`, 'Why now?', 'Show log')
+    vscode.window.showInformationMessage(`Big Brother${from}: ${d.content || '(no content generated)'}`, 'Why now?', 'Show log')
       .then(pick => {
         if (pick === 'Why now?') {
-          vscode.window.showInformationMessage('Why Restraint spoke now', {
+          vscode.window.showInformationMessage('Why Big Brother spoke now', {
             modal: true,
             detail: `${d.reasoning}\n\nTrajectory: ${d.trajectory} (confidence ${Number(d.confidence).toFixed(2)})\nSignals: ${signals}`,
           });
         }
-        if (pick === 'Show log') vscode.commands.executeCommand('restraint.showLog');
+        if (pick === 'Show log') vscode.commands.executeCommand('bigBrother.showLog');
       });
   }
 

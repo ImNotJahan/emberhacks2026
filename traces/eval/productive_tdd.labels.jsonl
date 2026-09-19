@@ -1,0 +1,8 @@
+{"ts": 1800200098112, "should_have_spoken": false, "rationale": "Red on purpose: the first step of TDD.", "tolerance_ms": 60000}
+{"ts": 1800200224200, "should_have_spoken": false, "rationale": "Second identical failure right after a real edit; ordinary.", "tolerance_ms": 60000}
+{"ts": 1800200454200, "should_have_spoken": false, "rationale": "Same AssertionError 3 runs in a row, but each follows a real edit and the pass count climbs 12\u219213\u219214: converging.", "tolerance_ms": 45000}
+{"ts": 1800200504200, "should_have_spoken": false, "rationale": "Green. A natural pause, but there is nothing wrong.", "tolerance_ms": 60000}
+{"ts": 1800200687163, "should_have_spoken": false, "rationale": "Paused 2.5 min with a half-written line flagged by Pylance: looking something up, not stuck.", "tolerance_ms": 60000}
+{"ts": 1800200818009, "should_have_spoken": false, "rationale": "Six files in two minutes with diagnostics spiking: a planned rename, not file thrash.", "tolerance_ms": 60000}
+{"ts": 1800200888800, "should_have_spoken": false, "rationale": "Committed: a coarse breakpoint, but nothing to say.", "tolerance_ms": 60000}
+{"ts": 1800201114000, "should_have_spoken": false, "rationale": "Third red run in ~2 minutes on a brand-new test, and the error changed each time: normal TDD rhythm.", "tolerance_ms": 60000}

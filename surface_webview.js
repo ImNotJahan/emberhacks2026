@@ -76,6 +76,6 @@ class SurfaceView {
 </body></html>`;
   }
 }
-SurfaceView.id = 'restraint.surface';
+SurfaceView.id = 'bigBrother.surface';
 
 module.exports = { SurfaceView };
