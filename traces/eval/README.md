@@ -34,6 +34,8 @@ Results go to [calibration/EVAL.md](../../calibration/EVAL.md) and `calibration/
 
 Scripted sessions come from [judge/scenarios.py](../../judge/scenarios.py) (`python -m judge.scenarios` rewrites them). They are realistic in shape but written by us, so **never quote their numbers as real-world accuracy.**
 
+`demo_cart` is the live demo ([demo/SCRIPT.md](../../demo/SCRIPT.md)) as a trace. It is deliberately left out of the manifest, so it is never scored with the rest. Check the demo still works with `python -m judge.eval demo_cart --fresh`.
+
 ## Adding a recorded session
 
 1. Before recording, move old engine output aside. The files are appended to, not overwritten:

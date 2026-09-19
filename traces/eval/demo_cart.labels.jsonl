@@ -1,0 +1,5 @@
+{"ts": 1790600074500, "should_have_spoken": false, "rationale": "First failure: they have not tried anything yet.", "tolerance_ms": 20000}
+{"ts": 1790600109065, "should_have_spoken": false, "rationale": "3rd run: still 'how everyone debugs'. Silence is correct here.", "tolerance_ms": 20000}
+{"ts": 1790600170642, "should_have_spoken": true, "rationale": "5th identical failure, copy tweaks added and undone, hunting between files: speak.", "tolerance_ms": 45000}
+{"ts": 1790600355522, "should_have_spoken": true, "rationale": "Stalled after 7 identical failures, hands off the keyboard.", "tolerance_ms": 70000}
+{"ts": 1790600434458, "should_have_spoken": false, "rationale": "Green. Quiet.", "tolerance_ms": 30000}

@@ -28,6 +28,9 @@ recordings (traces/eval/README.md), never quote them as real-world accuracy.
   env_hell          stuck    17 min  pip wheel build fails with every flag they try
   stuck_jest        stuck    16 min  TypeScript/jest: same TypeError, oscillating edits
                                      (single-language scope check)
+
+  demo_cart (not scored) is demo/SCRIPT.md beat for beat, to check the live
+  demo still makes the bot speak:  python -m judge.eval demo_cart --fresh
 """
 
 from __future__ import annotations
@@ -548,6 +551,73 @@ def stuck_jest() -> Session:
     return s
 
 
+# ---------------------------------------------------------------------------
+# the live demo (demo/SCRIPT.md), not part of the scored set
+# ---------------------------------------------------------------------------
+
+DEMO_FAIL = """============================= test session starts ==============================
+platform darwin -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0
+rootdir: /Users/dev/demo
+collected 3 items
+
+test_cart.py .F.                                                         [100%]
+
+=================================== FAILURES ===================================
+_________________________ test_each_cart_starts_empty __________________________
+
+    def test_each_cart_starts_empty():
+>       assert add_item(("pear", 2.00)) == [("pear", 2.00)]
+E       AssertionError: assert [('apple', 1....('pear', 2.0)] == [('pear', 2.0)]
+E         
+E         At index 0 diff: ('apple', 1.5) != ('pear', 2.0)
+E         Left contains one more item: ('pear', 2.0)
+E         Use -v to get more diff
+
+test_cart.py:9: AssertionError
+=========================== short test summary info ============================
+FAILED test_cart.py::test_each_cart_starts_empty - AssertionError: asser...
+========================= 1 failed, 2 passed in 0.01s ==========================
+"""
+
+
+def demo_cart() -> Session:
+    """demo/SCRIPT.md beat for beat: keystroke edits, Cmd+Z reverts, the file
+    bounce between runs. Checks the demo still makes the bot speak."""
+    s = Session("demo_cart", "stuck", 1_790_600_000_000,
+                "The live demo: mutable default argument, three copy tweaks undone with Cmd+Z.")
+    keys = lambda n: [s.tweak(1, 0) for _ in range(n)]
+    s.open("test_cart.py").wait(8)
+    s.open("cart.py")
+    s.type(95, 55).save()                                  # beat 1: type cart.py
+    s.at("01:10").test("pytest", DEMO_FAIL)                # run 1
+    s.label(False, "First failure: they have not tried anything yet.", 20)
+    for i, (fix, n) in enumerate([("list(cart)", 6), (None, 6), ("cart[:]", 3),
+                                  (None, 3), ("cart.copy()", 7), (None, 7)]):
+        if i >= 2:                                         # beat 3: hunting between the files
+            s.focus("test_cart.py").wait(5).focus("cart.py").wait(3)
+            s.focus("test_cart.py").wait(5).focus("cart.py")
+        if fix:
+            keys(n)
+        else:
+            s.tweak(0, n)                                  # Cmd+Z
+        s.save().wait(4).test("pytest", DEMO_FAIL, think=4)
+        if i == 1:
+            s.label(False, "3rd run: still 'how everyone debugs'. Silence is correct here.", 20)
+        if i == 3:
+            s.label(True, "5th identical failure, copy tweaks added and undone, hunting between files: speak.", 45)
+    s.wait(110)                                            # beat 4: hands off, wait for it
+    s.label(True, "Stalled after 7 identical failures, hands off the keyboard.", 70)
+    s.focus("cart.py")
+    keys(4); s.tweak(0, 2); keys(30)                       # the real fix
+    s.save().test("pytest", DEMO_FAIL.split("\n\n")[0] + "\n\ntest_cart.py ...  [100%]\n\n"
+                  "============================== 3 passed in 0.01s ===============================\n")
+    s.label(False, "Green. Quiet.", 30)
+    return s
+
+
+DEMOS = [demo_cart]
+
+
 SESSIONS = [stuck_import, productive_tdd, mixed_pagination, explore_codebase, env_hell, stuck_jest]
 
 
@@ -570,3 +640,5 @@ if __name__ == "__main__":
               f"{len(s.labels):2d} labels ({n_true} speak)"
               + (f"  overran: {', '.join(s.overruns)}" if s.overruns else ""))
     write_manifest(built)
+    for f in DEMOS:                    # written next to the others, left out of the manifest
+        f().write()
