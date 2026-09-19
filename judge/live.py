@@ -6,8 +6,10 @@ Talks to extention.py's local endpoint (Person 1):
   GET  /candidates?since=<ts>   new CandidateMoments
   POST /budget                  the judge's bucket state, so the engine's next
                                 candidates carry the real budget
-Every decision goes to logs/<session>.jsonl (Person 3 renders it) and to
-stdout. Standard library only, besides the judge itself.
+Every decision goes to logs/<session>.jsonl and to stdout, and (unless
+--no-mailbox) to Person 3's surface mailbox, p3_server.py on :8766 (override
+with MAILBOX_URL). The surface's snooze button is honoured. Standard library
+only, besides the judge itself.
 """
 
 from __future__ import annotations
@@ -35,11 +37,19 @@ def _post(url: str, body: str) -> None:
     urllib.request.urlopen(req, timeout=5).read()
 
 
-def run(port: int, session_id: str, prompt: str, per_hour: int, poll_s: float) -> None:
+def run(port: int, session_id: str, prompt: str, per_hour: int, poll_s: float,
+        mailbox: bool = True) -> None:
     base = f"http://127.0.0.1:{port}"
-    judge = Judge(session_id, prompt, per_hour)
+    judge = Judge(session_id, prompt, per_hour, mailbox=mailbox)
     since = now_ms()          # only judge what happens from now on
     print(f"judge live: {base}  prompt={prompt}  log={judge.log.path}", flush=True)
+    if judge.mailbox:
+        try:
+            judge.mailbox._call("/state")
+            print(f"mailbox: {judge.mailbox.BASE_URL}", flush=True)
+        except Exception:
+            print(f"mailbox: {judge.mailbox.BASE_URL} unreachable; records go to "
+                  f"{judge.mailbox.FALLBACK_PATH} until it's up", flush=True)
     while True:
         try:
             batch = _get(f"{base}/candidates?since={since}")
@@ -67,5 +77,6 @@ if __name__ == "__main__":
     ap.add_argument("--prompt", default=LATEST)
     ap.add_argument("--per-hour", type=int, default=3)
     ap.add_argument("--poll", type=float, default=1.0)
+    ap.add_argument("--no-mailbox", action="store_true", help="don't talk to p3_server.py")
     a = ap.parse_args()
-    run(a.port, a.session or new_id("sess"), a.prompt, a.per_hour, a.poll)
+    run(a.port, a.session or new_id("sess"), a.prompt, a.per_hour, a.poll, not a.no_mailbox)

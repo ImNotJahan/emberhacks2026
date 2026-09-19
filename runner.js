@@ -1,10 +1,13 @@
 // runner.js — one-click lifecycle: finds Python, checks setup, starts the
-// capture engine (extention.py) and the live judge (judge.live), and keeps a
-// status bar item that always says what state Restraint is in.
+// capture engine (extention.py), Person 3's surface mailbox (p3_server.py) and
+// the live judge (judge.live), and keeps a status bar item that always says
+// what state Restraint is in.
 const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 const { spawn, spawnSync } = require('child_process');
+
+const MAILBOX_PORT = 8766;   // p3_server.py; surface_webview.js and p3_send.py assume it too
 
 const STATE = {
   starting: { icon: '$(loading~spin)', bg: undefined },
@@ -21,6 +24,7 @@ class Runner {
     this.log = log;
     this.engine = null;
     this.judge = null;
+    this.mailbox = null;
     this.python = null;
     this.session = null;
     this.state = 'stopped';
@@ -92,6 +96,11 @@ class Runner {
     return r.status === 0;
   }
 
+  hasMailboxDeps() {
+    const r = spawnSync(this.python, ['-c', 'import fastapi, uvicorn'], { cwd: this.dir, timeout: 15000 });
+    return r.status === 0;
+  }
+
   hasApiKey() {
     if (process.env.GEMINI_API_KEY) return true;
     try {
@@ -116,6 +125,7 @@ class Runner {
     this.log(`using python: ${this.python}`);
 
     const judgeProblem = !this.hasGenai() ? 'deps' : !this.hasApiKey() ? 'key' : null;
+    this.startMailbox();
     this.startEngine();
     if (judgeProblem) {
       const msg = judgeProblem === 'deps'
@@ -185,6 +195,28 @@ class Runner {
     });
   }
 
+  // The surface's server. Optional: without it the judge still decides and
+  // logs, and p3_send.py parks records in unsent.jsonl.
+  startMailbox() {
+    if (!this.hasMailboxDeps()) {
+      this.log('mailbox not started: fastapi/uvicorn missing (pip install -r requirements.txt); the surface will be empty');
+      return;
+    }
+    this.mailbox = this.spawnPy('mailbox', ['-m', 'uvicorn', 'p3_server:app',
+      '--host', '127.0.0.1', '--port', String(MAILBOX_PORT), '--log-level', 'warning']);
+    const mailbox = this.mailbox;
+    mailbox.on('exit', code => {
+      if (this.mailbox !== mailbox) return;
+      this.mailbox = null;
+      // Not fatal: most likely another window (or a manual run) already owns the port.
+      this.log(`mailbox exited (code ${code}); if port ${MAILBOX_PORT} is taken, the existing server is used`);
+    });
+  }
+
+  openDashboard() {
+    vscode.env.openExternal(vscode.Uri.parse(`http://localhost:${MAILBOX_PORT}/`));
+  }
+
   startJudge(port) {
     const cfg = this.cfg();
     const n = new Date(), pad = x => String(x).padStart(2, '0');   // local time, matches the clock on the wall
@@ -229,8 +261,8 @@ class Runner {
   }
 
   stop(silent = false) {
-    const procs = [this.judge, this.engine];
-    this.judge = this.engine = null;         // exit handlers ignore procs no longer current
+    const procs = [this.judge, this.engine, this.mailbox];
+    this.judge = this.engine = this.mailbox = null;         // exit handlers ignore procs no longer current
     for (const p of procs) if (p) p.kill();
     if (!silent) this.setState('stopped');
   }
@@ -273,6 +305,7 @@ class Runner {
       running ? { label: '$(debug-stop) Stop', id: 'stop' } : { label: '$(play) Start', id: 'start' },
       { label: '$(debug-restart) Restart', id: 'restart' },
       { label: '$(output) Show log', id: 'log' },
+      { label: '$(graph) Open dashboard', id: 'dashboard', description: `localhost:${MAILBOX_PORT}` },
       { label: '$(list-flat) Open decision log', id: 'decisions', description: this.session ? `logs/${this.session}.jsonl` : '' },
       { label: '$(bell) Test notification', id: 'test' },
       { label: '$(gear) Settings', id: 'settings' },
@@ -285,6 +318,7 @@ class Runner {
       restart: () => this.restart(),
       log: () => vscode.commands.executeCommand('restraint.showLog'),
       decisions: () => this.openDecisionLog(),
+      dashboard: () => this.openDashboard(),
       test: () => vscode.commands.executeCommand('restraint.testNotification'),
       settings: () => vscode.commands.executeCommand('workbench.action.openSettings', 'restraint'),
     })[pick.id]();

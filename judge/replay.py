@@ -3,6 +3,7 @@
     python -m judge.replay traces/refactor.candidates.jsonl [--prompt judge-v5]
         [--per-hour 3] [--no-content] [--session NAME]
     python -m judge.replay traces/stuck.raw.jsonl      # raw editor trace
+    python -m judge.replay traces/thrash.candidates.jsonl --mailbox   # also send to the surface
 
 A *.candidates.jsonl trace is CandidateMoments (contract.to_json per line).
 A *.raw.jsonl trace is Person 1's raw editor observations; it is run through
@@ -35,14 +36,15 @@ def load_candidates(trace: Path) -> list[CandidateMoment]:
 
 def replay(trace: str | Path, prompt_version: str = LATEST, per_hour: int = 3,
            with_content: bool = True, session_id: Optional[str] = None,
-           fresh: bool = True) -> tuple[Path, list[InterventionDecision]]:
+           fresh: bool = True, mailbox: bool = False) -> tuple[Path, list[InterventionDecision]]:
     trace = Path(trace)
     session_id = session_id or f"{trace.name.split('.')[0]}__{prompt_version}"
     path = LOG_DIR / f"{session_id}.jsonl"
     if fresh and path.exists():
         path.unlink()
     log = DecisionLog(session_id, path)
-    judge = Judge(session_id, prompt_version, per_hour, log=log, with_content=with_content)
+    judge = Judge(session_id, prompt_version, per_hour, log=log, with_content=with_content,
+                  mailbox=mailbox)
     decisions = [judge.decide(c) for c in load_candidates(trace)]
     return log.path, decisions
 
@@ -54,7 +56,10 @@ if __name__ == "__main__":
     ap.add_argument("--per-hour", type=int, default=3)
     ap.add_argument("--no-content", action="store_true")
     ap.add_argument("--session")
+    ap.add_argument("--mailbox", action="store_true",
+                    help="also send each DecisionRecord to p3_server.py (surface + dashboard)")
     a = ap.parse_args()
-    path, ds = replay(a.trace, a.prompt, a.per_hour, not a.no_content, a.session)
+    path, ds = replay(a.trace, a.prompt, a.per_hour, not a.no_content, a.session,
+                      mailbox=a.mailbox)
     print(pretty(str(path)))
     print(f"\n{sum(d.should_speak for d in ds)}/{len(ds)} spoke  ->  {path}")

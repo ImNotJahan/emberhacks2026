@@ -33,9 +33,16 @@ commands and output      stdin   → CandidateMoment                        → 
    - Only when the answer is yes, a second call writes the message.
 
    If anything fails, the judge stays silent: a broken judge must never interrupt anyone.
-4. **Surface**: *not built yet* (Person 3). This part will read `logs/<session>.jsonl`, show interventions in the editor, render the timeline, and write `FeedbackRecord`s.
+4. **Surface**: Person 3. [p3_server.py](p3_server.py) is a small FastAPI "mailbox" on `http://localhost:8766`:
+   - The live judge sends every `DecisionRecord` to it through [p3_send.py](p3_send.py).
+   - The judge posts `considering` before each model call.
+   - The judge checks the snooze state first; while snoozed it declines with `user_suppressed`.
+   - The mailbox serves:
+     - the intervention surface (`/surface`), shown in the **Restraint** view in the Explorer sidebar through [surface_webview.js](surface_webview.js)
+     - the restraint-log dashboard (`/`, or **Restraint: Open Dashboard**)
+   - Feedback from either page comes back as `FeedbackRecord`s. The mailbox persists everything to `logs/mailbox.jsonl`.
 
-   Until then, a **temporary test surface** ([testSurface.js](testSurface.js)) watches `logs/*.jsonl` for new lines and shows them in the editor. See [Running it live](#running-it-live-one-click).
+   If the mailbox is down, the judge still decides and logs, and `p3_send` parks records in `unsent.jsonl`. The **temporary test surface** ([testSurface.js](testSurface.js)) also still shows decisions as notifications. Turn it off with `restraint.testSurface.enabled`.
 
 ## The contract
 
@@ -55,7 +62,7 @@ After hour 3, the contract changes only with all four people present. Bump `CONT
 ## Setup
 
 ```bash
-pip install -r requirements.txt          # google-genai; everything else is stdlib
+pip install -r requirements.txt          # google-genai for the judge; fastapi + uvicorn for the surface mailbox
 echo 'GEMINI_API_KEY=...' > .env         # read by judge/env.py; real env vars win
 # optional: GEMINI_MODEL (default gemini-2.5-flash)
 ```
@@ -82,7 +89,7 @@ Open this repo in VS Code and press **F5** ("Run Restraint"). In the window that
 The extension then starts everything itself:
 1. It finds a Python interpreter.
 2. It checks that `google-genai` is installed and that `GEMINI_API_KEY` is set.
-3. It starts the capture engine (`extention.py`).
+3. It starts the surface mailbox (`p3_server.py` on :8766), if fastapi and uvicorn are installed, and the capture engine (`extention.py`).
 4. Once the engine is up, it starts the live judge (`judge.live`).
 
 A notification confirms that Restraint is running. The item at the left of the status bar always shows the current state:
@@ -107,7 +114,12 @@ Click the status bar item for a menu with Start/Stop, Restart, Show log, Open de
   **They are appended to, so move them aside between recording sessions.**
 - **Replays:** the notifications also fire for replays. While the extension is running, `python -m judge.replay traces/thrash.candidates.jsonl` makes its decisions appear in the editor, tagged `(replay: …)`. This is the fastest way to see the surface without real coding.
 
-To run the pieces by hand instead, set `restraint.autoStart` to false and run `python extention.py --port 8765` and `python -m judge.live --session NAME`.
+To run the pieces by hand instead, set `restraint.autoStart` to false and run:
+- `python -m uvicorn p3_server:app --port 8766`
+- `python extention.py --port 8765`
+- `python -m judge.live --session NAME`
+
+Pass `--no-mailbox` to `judge.live` to skip the surface. Replays send nothing to the mailbox unless you pass `--mailbox`. Panda's `p3_seed_demo.py` and `p3_live_demo.py` fill the surface with fake data without the judge.
 
 Engine endpoints: `GET /health`, `/candidates?since=<ts>`, `/candidates/latest`, `/events`, `/redaction`, and `POST /budget`.
 
@@ -223,7 +235,8 @@ The prompts are defined in [judge/prompts.py](judge/prompts.py). Each version ad
 ## Known limitations
 
 - **Telling exploration from being stuck is hard on real traces.** The judge has only been calibrated on synthetic traces.
-- **The surface layer and timeline don't exist yet.** Decisions only appear in the terminal and in the JSONL logs.
+- **The surface only shows the most recent session.** A live session and a replay sent with `--mailbox` share one mailbox. Pass `?session=<id>` to pick a session.
+- **The judge doesn't read feedback yet.** `FeedbackRecord`s (`bad_timing`, `wanted_help`, …) are stored for evaluation but don't change the judge's behaviour.
 - **No personalization.** The thresholds (budget, cooldown, signal gates) are the same for everyone.
 - **Single-language scope.** Error fingerprinting and test-count parsing are built around Python and pytest output.
 - **Terminals without shell integration produce no events.** An example is `cmd.exe`.
@@ -236,7 +249,13 @@ The prompts are defined in [judge/prompts.py](judge/prompts.py). Each version ad
 contract.py            shared data contract (stdlib only)
 extension.js           VS Code collector + command wiring
 runner.js              one-click lifecycle: Python detection, setup checks, engine + judge processes, status bar
-testSurface.js         TEMPORARY decision notifications (until the real surface lands)
+testSurface.js         TEMPORARY decision notifications (still on alongside the real surface)
+surface_webview.js     hosts the surface page in the Explorer sidebar
+p3_server.py           surface mailbox: /log, /records, /considering, /snooze, /state, pages
+p3_send.py             stdlib client the judge uses to reach the mailbox
+dashboard.html         restraint-log timeline (served at /)
+surface.html           intervention surface (served at /surface)
+p3_seed_demo.py, p3_live_demo.py   fake data for the surface
 extention.py           capture engine: redaction, episodes, signals, HTTP endpoint
 package.json           extension manifest
 test_capture.py        capture engine tests + synthetic raw traces

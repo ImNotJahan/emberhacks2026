@@ -11,6 +11,10 @@ Order of operations per candidate:
   3. judge call (timing), with the judge's memory of its last interruption
   4. content call (what to say) — only on should_speak=True
   5. spend a token, append to the decision log
+With mailbox=True the judge also talks to Person 3's surface (p3_server.py via
+p3_send): a snooze there declines with user_suppressed before anything else,
+"considering" is posted before the model call, and every DecisionRecord is
+forwarded so the surface and dashboard see it.
 Any failure fails SILENT: a broken judge must never interrupt anyone.
 """
 
@@ -38,7 +42,8 @@ from judge.schema import validate_verdict
 class Judge:
     def __init__(self, session_id: str, prompt_version: str = LATEST, per_hour: int = 3,
                  log: Optional[DecisionLog] = None, with_content: bool = True,
-                 model: str = gemini.DEFAULT_MODEL, cooldown_s: float = 240.0) -> None:
+                 model: str = gemini.DEFAULT_MODEL, cooldown_s: float = 240.0,
+                 mailbox: bool = False) -> None:
         self.session_id = session_id
         self.prompt_version = prompt_version
         self.system = PROMPTS[prompt_version]
@@ -49,12 +54,26 @@ class Judge:
         self.model = model
         self.cooldown_ms = int(cooldown_s * 1000)
         self.last_spoken: Optional[LastSpoken] = None
+        # Imported only when used: replays and calibration never touch the network.
+        self.mailbox = None
+        if mailbox:
+            import p3_send
+            self.mailbox = p3_send
 
     def decide(self, cand: CandidateMoment) -> InterventionDecision:
         t0 = time.perf_counter()
         cand.budget = self.bucket.state(cand.ts)
         extra: dict[str, Any] = {"prompt_version": self.prompt_version}
         signal_kinds = [s.kind for s in cand.signals]
+
+        if self.mailbox and self.mailbox.snoozed():
+            decision = self._decline(
+                cand, DeclineReason.USER_SUPPRESSED, Trajectory.UNKNOWN, 1.0,
+                "You snoozed me, so I'm staying quiet whatever the signals say.",
+                signal_kinds, t0)
+            extra["override"] = "snoozed from the surface; judge not called"
+            self._record(cand, decision, extra)
+            return decision
 
         if cand.budget.remaining < 1:
             decision = self._decline(
@@ -63,7 +82,7 @@ class Judge:
                 "I'm holding this one regardless of the signals.",
                 signal_kinds, t0)
             extra["override"] = "budget exhausted; judge not called"
-            self.log.append(cand, decision, extra)
+            self._record(cand, decision, extra)
             return decision
 
         if self.last_spoken and cand.ts - self.last_spoken.ts < self.cooldown_ms:
@@ -74,9 +93,11 @@ class Judge:
                 f"{cand.budget.remaining} interruption(s) rather than stacking another.",
                 signal_kinds, t0)
             extra["override"] = f"cooldown ({self.cooldown_ms // 1000}s); judge not called"
-            self.log.append(cand, decision, extra)
+            self._record(cand, decision, extra)
             return decision
 
+        if self.mailbox:
+            self.mailbox.considering(cand)
         try:
             res = gemini.call(self.system, render_candidate(cand, last_spoken=self.last_spoken),
                               schema=self.schema,
@@ -87,7 +108,7 @@ class Judge:
                 cand, DeclineReason.LOW_CONFIDENCE, Trajectory.UNKNOWN, 0.0,
                 "The judge was unavailable, so I stayed quiet.", signal_kinds, t0)
             extra["error"] = f"{type(e).__name__}: {e}"
-            self.log.append(cand, decision, extra)
+            self._record(cand, decision, extra)
             return decision
 
         v = dict(res.data) if isinstance(res.data, dict) else {}
@@ -108,7 +129,7 @@ class Judge:
                 "The judge returned an unusable answer, so I stayed quiet.",
                 signal_kinds, t0)
             extra["error"] = f"invalid verdict: {errs}"
-            self.log.append(cand, decision, extra)
+            self._record(cand, decision, extra)
             return decision
 
         speak = v["should_speak"]
@@ -147,8 +168,14 @@ class Judge:
             model=res.model,
             prompt_version=self.prompt_version,
         )
-        self.log.append(cand, decision, extra)
+        self._record(cand, decision, extra)
         return decision
+
+    def _record(self, cand: CandidateMoment, decision: InterventionDecision,
+                extra: dict[str, Any]) -> None:
+        rec = self.log.append(cand, decision, extra)
+        if self.mailbox:
+            self.mailbox.log(rec)      # never raises; falls back to unsent.jsonl
 
     def _decline(self, cand: CandidateMoment, reason: DeclineReason, traj: Trajectory,
                  conf: float, why: str, cited: list[SignalKind], t0: float

@@ -5,6 +5,7 @@
 const vscode = require('vscode');
 const path = require('path');
 const { Runner } = require('./runner');
+const { SurfaceView } = require('./surface_webview');
 const testSurface = require('./testSurface'); // TEMP: remove with testSurface.js
 
 const MAX_TEXT = 1500;
@@ -52,6 +53,8 @@ function activate(context) {
     vscode.commands.registerCommand('restraint.stop', () => runner.stop()),
     vscode.commands.registerCommand('restraint.restart', () => runner.restart()),
     vscode.commands.registerCommand('restraint.openDecisionLog', () => runner.openDecisionLog()),
+    vscode.commands.registerCommand('restraint.openDashboard', () => runner.openDashboard()),
+    vscode.window.registerWebviewViewProvider(SurfaceView.id, new SurfaceView()),
     vscode.commands.registerCommand('restraint.testNotification', () =>
       surface ? surface.test() : vscode.window.showInformationMessage('Restraint: the test surface is disabled (restraint.testSurface.enabled).')),
   );
